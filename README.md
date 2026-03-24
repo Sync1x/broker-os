@@ -1,6 +1,9 @@
 Method 1: easiest, all in the browser
+
 Open your GitHub CRM repo.
+
 Create a new branch for the change. Name it something like mobile-fix or contacts-fix.
+
 Open the file you want to replace, like index.html.
 Click the pencil/edit button in GitHub’s file view to edit it directly in the browser. GitHub supports editing files right in the repo UI.
 Paste in the updated code.
