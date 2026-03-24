@@ -145,8 +145,31 @@
   .contact-card.selected .contact-check { display: block; }
 
   .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 12px; margin-top: 16px; }
-  .file-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 9px; padding: 18px; text-align: center; cursor: pointer; transition: all .14s; }
+  .file-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 9px; padding: 18px; text-align: left; transition: all .14s; }
   .file-card:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .file-meta { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
+  .file-connect-title { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin: 14px 0 8px; }
+  .file-link-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .file-link-pill { display: inline-block; font-size: 10.5px; padding: 3px 7px; border-radius: 999px; margin-top: 8px; margin-right: 5px; background: rgba(255,255,255,0.06); color: var(--text-muted); }
+  .file-link-pill strong { color: var(--text); font-weight: 600; }
+
+  .lead-link-btn { background:none; border:none; color:var(--text); font:inherit; font-weight:600; cursor:pointer; padding:0; text-align:left; }
+  .lead-link-btn:hover { color: var(--amber); }
+  .lead-file-list, .profile-files-list { display:grid; gap:8px; margin-top:12px; }
+  .mini-file-row { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--navy-border); border-radius:8px; background: var(--navy-light); cursor:pointer; }
+  .mini-file-row:hover { border-color: var(--amber); }
+  .detail-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin:14px 0; }
+  .detail-card { background: var(--navy-light); border:1px solid var(--navy-border); border-radius:9px; padding:12px; }
+  .detail-label { font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); font-weight:700; margin-bottom:6px; }
+  .detail-value { font-size:12.5px; color: var(--text); line-height:1.55; word-break:break-word; }
+  .viewer-shell { display:grid; gap:14px; }
+  .viewer-meta { display:flex; flex-wrap:wrap; gap:8px; }
+  .viewer-stage { background: rgba(0,0,0,0.18); border:1px solid var(--navy-border); border-radius:10px; min-height:220px; overflow:hidden; }
+  .viewer-stage iframe, .viewer-stage img { width:100%; display:block; border:0; }
+  .viewer-stage iframe { min-height:420px; background:#fff; }
+  .viewer-empty { padding:26px; color: var(--text-muted); font-size:12.5px; line-height:1.6; }
+  .viewer-textarea { width:100%; min-height:420px; resize:vertical; border:none; outline:none; background: transparent; color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12.5px; line-height:1.6; padding:16px; }
+  .viewer-toolbar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
 
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
   .modal-overlay.open { display: flex; }
@@ -578,6 +601,22 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-leadProfile">
+  <div class="modal wide">
+    <div class="modal-title">Lead Profile</div><div class="modal-sub" id="leadProfileSub">Full lead details and attached downloads.</div>
+    <div id="leadProfileBody"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('leadProfile')">Close</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-fileViewer">
+  <div class="modal wide">
+    <div class="modal-title" id="fileViewerTitle">File Viewer</div><div class="modal-sub" id="fileViewerSub">Read, review, and edit supported files.</div>
+    <div id="fileViewerBody"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('fileViewer')">Close</button><button class="btn btn-primary" id="saveFileBtn" onclick="saveOpenFileEdits()" style="display:none;">Save Changes</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -590,6 +629,7 @@
 <script>
 // ── STATE ──────────────────────────────────────────────────────
 let leads=[], listings=[], files=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
+let selectedLeadId=null, openFileId=null;
 let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
 
 function hasRecognizedMLSConnection(){
@@ -608,7 +648,20 @@ function load() {
   try {
     leads = JSON.parse(localStorage.getItem('bos_leads')||'[]');
     listings = JSON.parse(localStorage.getItem('bos_listings')||'[]');
-    files = JSON.parse(localStorage.getItem('bos_files')||'[]');
+    files = JSON.parse(localStorage.getItem('bos_files')||'[]').map(f=>({
+      id: f.id || (Date.now()+Math.random()),
+      name: f.name || 'Untitled file',
+      size: f.size || '—',
+      date: f.date || new Date().toLocaleDateString(),
+      leadId: f.leadId || '',
+      listingId: f.listingId || '',
+      type: f.type || detectMimeFromName(f.name || ''),
+      ext: f.ext || ((f.name||'').split('.').pop()||'').toLowerCase(),
+      content: typeof f.content==='string' ? f.content : '',
+      dataUrl: typeof f.dataUrl==='string' ? f.dataUrl : '',
+      editable: typeof f.editable==='boolean' ? f.editable : isEditableExt((f.name||'').split('.').pop()||''),
+      truncated: !!f.truncated
+    }));
     cfg = JSON.parse(localStorage.getItem('bos_cfg')||'{"proxy":"","url":"","user":"","key":"","area":"","connected":false,"lastSync":""}');
     if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
     activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
@@ -694,15 +747,18 @@ function renderLeads(){
   const f=leads.filter(l=>!q||l.name.toLowerCase().includes(q)||(l.email||'').toLowerCase().includes(q)||l.preferences.join(' ').toLowerCase().includes(q));
   if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
   emp.style.display='none';
-  tb.innerHTML=f.map(l=>`<tr>
-    <td><strong>${l.name}</strong>${l.fromContacts?' <span style="font-size:10px;color:var(--text-dim);">📱</span>':''}</td>
-    <td style="color:var(--text-muted);font-size:11.5px;">${l.email||'—'}<br>${l.phone||'—'}</td>
-    <td>${dot(l.status,'lead')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
-    <td style="font-size:12px;color:var(--text-muted);">$${fmt(l.budgetMin)}–$${fmt(l.budgetMax)}</td>
-    <td>${l.preferences.map(tagHtml).join('')}</td>
-    <td style="font-size:11.5px;color:var(--text-muted);max-width:130px;">${l.notes||'—'}</td>
-    <td><button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteLead(${l.id})">✕</button></td>
-  </tr>`).join('');
+  tb.innerHTML=f.map(l=>{
+    const leadFiles = files.filter(file=>String(file.leadId)===String(l.id));
+    return `<tr>
+      <td><button class="lead-link-btn" onclick="openLeadProfile('${l.id}')">${escapeHtml(l.name)}</button>${l.fromContacts?' <span style="font-size:10px;color:var(--text-dim);">📱</span>':''}${leadFiles.length?`<div style="font-size:10.5px;color:var(--amber);margin-top:3px;">${leadFiles.length} file${leadFiles.length!==1?'s':''} attached</div>`:''}</td>
+      <td style="color:var(--text-muted);font-size:11.5px;">${escapeHtml(l.email||'—')}<br>${escapeHtml(l.phone||'—')}</td>
+      <td>${dot(l.status,'lead')} <span style="font-size:12px;text-transform:capitalize;">${escapeHtml(l.status)}</span></td>
+      <td style="font-size:12px;color:var(--text-muted);">$${fmt(l.budgetMin)}–$${fmt(l.budgetMax)}</td>
+      <td>${l.preferences.map(tagHtml).join('')}</td>
+      <td style="font-size:11.5px;color:var(--text-muted);max-width:130px;">${escapeHtml(l.notes||'—')}</td>
+      <td style="display:flex;gap:6px;align-items:center;"><button class="btn btn-secondary" style="font-size:11px;padding:4px 8px;" onclick="openLeadProfile('${l.id}')">Open</button><button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteLead(${l.id})">✕</button></td>
+    </tr>`;
+  }).join('');
 }
 
 function deleteLead(id){leads=leads.filter(l=>l.id!==id);persist();renderAll();}
@@ -736,10 +792,170 @@ function renderFiles(){
   const g=document.getElementById('filesGrid'),e=document.getElementById('filesEmpty');
   if(!files.length){g.innerHTML='';e.style.display='block';return;}
   e.style.display='none';
-  g.innerHTML=files.map(f=>`<div class="file-card"><div style="font-size:28px;margin-bottom:9px;">${fileIcon(f.name)}</div><div style="font-size:12.5px;font-weight:500;margin-bottom:3px;word-break:break-word;">${f.name}</div><div style="font-size:10.5px;color:var(--text-dim);">${f.size} · ${f.date}</div></div>`).join('');
+  g.innerHTML=files.map(f=>{
+    const linkedLead = leads.find(l=>String(l.id)===String(f.leadId));
+    const linkedListing = listings.find(l=>String(l.id)===String(f.listingId));
+    return `<div class="file-card">
+      <div onclick="openFileViewer('${f.id}')" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <div style="font-size:28px;line-height:1;flex-shrink:0;">${fileIcon(f.name)}</div>
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:12.5px;font-weight:500;word-break:break-word;">${escapeHtml(f.name)}</div>
+          <div class="file-meta">${escapeHtml(f.size)} · ${escapeHtml(f.date)}</div>
+          <div style="font-size:10.5px;color:var(--amber);margin-top:5px;">Click to open${f.editable?' & edit':''}</div>
+        </div>
+      </div>
+      <div class="file-connect-title">Connect to listings or people</div>
+      <div class="file-link-row">
+        <select class="form-select" onchange="linkFileToLead('${f.id}', this.value)">
+          <option value="">— Connect to person —</option>
+          ${leads.map(l=>`<option value="${l.id}" ${String(f.leadId)===String(l.id)?'selected':''}>${escapeHtml(l.name)}</option>`).join('')}
+        </select>
+        <select class="form-select" onchange="linkFileToListing('${f.id}', this.value)">
+          <option value="">— Connect to listing —</option>
+          ${listings.map(l=>`<option value="${l.id}" ${String(f.listingId)===String(l.id)?'selected':''}>${escapeHtml(l.address)}</option>`).join('')}
+        </select>
+      </div>
+      ${(linkedLead||linkedListing)?`<div>${linkedLead?`<span class="file-link-pill">Person: <strong>${escapeHtml(linkedLead.name)}</strong></span>`:''}${linkedListing?`<span class="file-link-pill">Listing: <strong>${escapeHtml(linkedListing.address)}</strong></span>`:''}</div>`:''}
+    </div>`;
+  }).join('');
 }
 
-function uploadFiles(e){Array.from(e.target.files).forEach(f=>{files.push({name:f.name,size:fmtBytes(f.size),date:new Date().toLocaleDateString()});});persist();renderAll();toast(`${e.target.files.length} file(s) uploaded ✓`);}
+async function uploadFiles(e){
+  const selected = Array.from(e.target.files||[]);
+  if(!selected.length) return;
+  let added = 0;
+  for (const file of selected) {
+    const saved = await buildStoredFile(file);
+    files.push(saved);
+    added++;
+  }
+  e.target.value='';
+  persist();renderAll();toast(`${added} file(s) uploaded ✓`);
+}
+
+function linkFileToLead(fileId, leadId){
+  const file = files.find(f=>String(f.id)===String(fileId));
+  if(!file) return;
+  file.leadId = leadId || '';
+  persist();
+  renderFiles();
+  const lead = leads.find(l=>String(l.id)===String(leadId));
+  toast(lead ? `Connected to ${lead.name} ✓` : 'Person link removed ✓');
+}
+
+function linkFileToListing(fileId, listingId){
+  const file = files.find(f=>String(f.id)===String(fileId));
+  if(!file) return;
+  file.listingId = listingId || '';
+  persist();
+  renderFiles();
+  const listing = listings.find(l=>String(l.id)===String(listingId));
+  toast(listing ? 'Connected to listing ✓' : 'Listing link removed ✓');
+}
+
+function getLeadFiles(leadId){ return files.filter(f=>String(f.leadId)===String(leadId)); }
+
+function openLeadProfile(leadId){
+  selectedLeadId = String(leadId);
+  const lead = leads.find(l=>String(l.id)===String(leadId));
+  if(!lead) return;
+  const linkedFiles = getLeadFiles(leadId);
+  document.getElementById('leadProfileSub').textContent = `${lead.email || lead.phone || 'Lead details'}${linkedFiles.length ? ` · ${linkedFiles.length} attached file${linkedFiles.length!==1?'s':''}` : ''}`;
+  document.getElementById('leadProfileBody').innerHTML = `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;">${escapeHtml(lead.name)}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${dot(lead.status,'lead')}<span style="text-transform:capitalize;">${escapeHtml(lead.status)}</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--amber);font-weight:600;">$${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card"><div class="detail-label">Email</div><div class="detail-value">${escapeHtml(lead.email||'—')}</div></div>
+      <div class="detail-card"><div class="detail-label">Phone</div><div class="detail-value">${escapeHtml(lead.phone||'—')}</div></div>
+      <div class="detail-card"><div class="detail-label">Preferences</div><div class="detail-value">${lead.preferences.length ? lead.preferences.map(tagHtml).join(' ') : '—'}</div></div>
+      <div class="detail-card"><div class="detail-label">Notes</div><div class="detail-value">${escapeHtml(lead.notes||'—')}</div></div>
+    </div>
+    <div style="margin-top:18px;">
+      <div class="section-title" style="font-size:14px;">Attached Downloads</div>
+      ${linkedFiles.length ? `<div class="profile-files-list">${linkedFiles.map(f=>`<div class="mini-file-row" onclick="openFileViewer('${f.id}')"><div style="font-size:22px;">${fileIcon(f.name)}</div><div style="flex:1;min-width:0;"><div style="font-size:12.5px;font-weight:500;word-break:break-word;">${escapeHtml(f.name)}</div><div class="file-meta">${escapeHtml(f.size)} · ${escapeHtml(f.date)}</div></div><div style="font-size:11px;color:var(--amber);">Open</div></div>`).join('')}</div>` : `<div class="viewer-empty" style="padding:16px 0 0;">No files attached to this lead yet. Go to Documents & Files and connect one to this person.</div>`}
+    </div>`;
+  openModal('leadProfile');
+}
+
+function openFileViewer(fileId){
+  openFileId = String(fileId);
+  const file = files.find(f=>String(f.id)===String(fileId));
+  if(!file) return;
+  const linkedLead = leads.find(l=>String(l.id)===String(file.leadId));
+  const linkedListing = listings.find(l=>String(l.id)===String(file.listingId));
+  document.getElementById('fileViewerTitle').textContent = file.name || 'File Viewer';
+  document.getElementById('fileViewerSub').textContent = 'Read, review, and edit supported files.';
+  const saveBtn = document.getElementById('saveFileBtn');
+  saveBtn.style.display = file.editable ? 'inline-block' : 'none';
+  let stage = '';
+  if (isImageFile(file)) {
+    stage = file.dataUrl ? `<div class="viewer-stage"><img src="${file.dataUrl}" alt="${escapeHtml(file.name)}"></div>` : `<div class="viewer-stage"><div class="viewer-empty">Image preview unavailable for this file.</div></div>`;
+  } else if (file.editable) {
+    stage = `<div class="viewer-stage"><textarea class="viewer-textarea" id="fileEditorInput" spellcheck="false">${escapeTextarea(file.content||'')}</textarea></div>`;
+  } else if (isPdfFile(file) && file.dataUrl) {
+    stage = `<div class="viewer-stage"><iframe src="${file.dataUrl}"></iframe></div>`;
+  } else if (file.dataUrl) {
+    stage = `<div class="viewer-stage"><iframe src="${file.dataUrl}"></iframe></div>`;
+  } else {
+    stage = `<div class="viewer-stage"><div class="viewer-empty">This file type is stored for reference but doesn’t have an inline editable preview here yet.</div></div>`;
+  }
+  document.getElementById('fileViewerBody').innerHTML = `
+    <div class="viewer-shell">
+      <div class="viewer-toolbar">
+        <div class="viewer-meta">
+          <span class="file-link-pill">Size: <strong>${escapeHtml(file.size)}</strong></span>
+          <span class="file-link-pill">Date: <strong>${escapeHtml(file.date)}</strong></span>
+          ${linkedLead ? `<span class="file-link-pill">Person: <strong>${escapeHtml(linkedLead.name)}</strong></span>` : ''}
+          ${linkedListing ? `<span class="file-link-pill">Listing: <strong>${escapeHtml(linkedListing.address)}</strong></span>` : ''}
+          ${file.truncated ? `<span class="file-link-pill">Stored: <strong>preview only</strong></span>` : ''}
+        </div>
+        <div>${file.dataUrl ? `<a class="btn btn-secondary" href="${file.dataUrl}" download="${escapeHtml(file.name)}">Download</a>` : ''}</div>
+      </div>
+      ${stage}
+    </div>`;
+  openModal('fileViewer');
+}
+
+function saveOpenFileEdits(){
+  const file = files.find(f=>String(f.id)===String(openFileId));
+  const input = document.getElementById('fileEditorInput');
+  if(!file || !input) return;
+  file.content = input.value;
+  file.size = fmtBytes(new Blob([file.content], {type:file.type || 'text/plain'}).size);
+  file.date = new Date().toLocaleDateString();
+  file.dataUrl = `data:${file.type || 'text/plain'};charset=utf-8,${encodeURIComponent(file.content)}`;
+  persist();
+  renderAll();
+  if(selectedLeadId && document.getElementById('modal-leadProfile').classList.contains('open')) openLeadProfile(selectedLeadId);
+  toast('File changes saved ✓');
+}
+
+async function buildStoredFile(file){
+  const ext = ((file.name||'').split('.').pop()||'').toLowerCase();
+  const type = file.type || detectMimeFromName(file.name || '');
+  const editable = isEditableExt(ext) || (type && type.startsWith('text/'));
+  const stored = {
+    id: Date.now()+Math.random(),
+    name: file.webkitRelativePath || file.name,
+    size: fmtBytes(file.size||0),
+    date: new Date().toLocaleDateString(),
+    leadId:'', listingId:'',
+    type, ext, editable,
+    content:'', dataUrl:'', truncated:false
+  };
+  if (editable) {
+    stored.content = await readFileAsText(file);
+    stored.dataUrl = `data:${type || 'text/plain'};charset=utf-8,${encodeURIComponent(stored.content)}`;
+  } else if (isImageExt(ext) || isPdfExt(ext)) {
+    stored.dataUrl = await readFileAsDataURL(file);
+  }
+  return stored;
+}
 
 // ── MLS CONNECTION ─────────────────────────────────────────────
 async function saveMLS(){
@@ -1066,7 +1282,17 @@ function dot(s,type){if(type==='lead'){const c=s==='hot'?'dot-hot':s==='warm'?'d
 function tagHtml(tag){const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${tag}</span>`;}
 function fmt(n){return Number(n||0).toLocaleString();}
 function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
-function fileIcon(n){const e=(n.split('.').pop()||'').toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',csv:'📋'}[e]||'📁';}
+function fileIcon(n){const e=(n.split('.').pop()||'').toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',txt:'📝',md:'📝',html:'📝',js:'📝',css:'📝',json:'📝',xls:'📊',xlsx:'📊',csv:'📋',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🖼️',webp:'🖼️'}[e]||'📁';}
+function isEditableExt(ext){return ['txt','md','csv','json','html','htm','js','css','xml','yml','yaml','ini','log'].includes(String(ext||'').toLowerCase());}
+function isImageExt(ext){return ['jpg','jpeg','png','gif','webp','bmp','svg'].includes(String(ext||'').toLowerCase());}
+function isPdfExt(ext){return String(ext||'').toLowerCase()==='pdf';}
+function isImageFile(file){return isImageExt(file.ext) || String(file.type||'').startsWith('image/');}
+function isPdfFile(file){return isPdfExt(file.ext) || String(file.type||'').includes('pdf');}
+function detectMimeFromName(name){const ext=((name||'').split('.').pop()||'').toLowerCase();return {txt:'text/plain',md:'text/markdown',csv:'text/csv',json:'application/json',html:'text/html',htm:'text/html',js:'text/javascript',css:'text/css',xml:'application/xml',pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml'}[ext] || 'application/octet-stream';}
+function readFileAsText(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(String(e.target.result||''));r.onerror=()=>reject(r.error||new Error('Read failed'));r.readAsText(file);});}
+function readFileAsDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(String(e.target.result||''));r.onerror=()=>reject(r.error||new Error('Read failed'));r.readAsDataURL(file);});}
+function escapeHtml(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function escapeTextarea(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 
 function showAuth(message='',type=''){
