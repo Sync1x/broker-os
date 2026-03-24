@@ -1,4 +1,4 @@
-Method 1: easiest, all in the browser
+### Method 1: easiest, all in the browser
 
 Open your GitHub CRM repo.
 
@@ -20,7 +20,7 @@ Open a Pull Request from that branch into main.
 Netlify will automatically generate a Deploy Preview for that pull request on the connected site. By default, Netlify builds Deploy Previews when you open a pull request in a connected GitHub repo.
 
 
-At that point:
+### At that point:
 
 
 you test the preview link
@@ -32,7 +32,7 @@ production does not change until you merge the PR into main
 How to find the preview link
 
 
-Usually one of these happens:
+## Usually one of these happens:
 
 
 Netlify posts the preview in the PR checks/status
@@ -45,7 +45,7 @@ When it goes live
 It only goes live when you merge the pull request into main. Deploy Previews are for review; production comes from your production branch.
 
 
-What not to do
+### What not to do:
 
 Do not commit straight to main if you only want a preview.
 
@@ -53,10 +53,10 @@ Do not manually drag and drop to Netlify for every test if you want to avoid pro
 
 Do not delete the old file from the repo first unless you are actually removing it. Just open the file and replace its contents in the editor, then commit that change. GitHub supports direct file editing and committing in place.
 
-Example exact flow
+###### Example exact flow
 
 
-Say you want me to fix index.html:
+### Say you want me to fix index.html:
 
 
 Open repo
