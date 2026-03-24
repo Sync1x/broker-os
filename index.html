@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Broker OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a; --navy-mid: #142032; --navy-light: #1c2e45; --navy-border: #243650;
+    --amber: #e8a030; --amber-light: #f0b84a; --amber-dim: rgba(232,160,48,0.12);
+    --text: #e8edf2; --text-muted: #7a90a8; --text-dim: #4a6278;
+    --green: #3dba7e; --red: #e05c5c; --blue: #4a9eda; --purple: #9b6dda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  html { -webkit-text-size-adjust: 100%; }
+  html { overflow: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    display: flex;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .sidebar { width: 224px; min-width: 224px; background: var(--navy-mid); border-right: 1px solid var(--navy-border); display: flex; flex-direction: column; }
+  .sidebar-logo { padding: 26px 22px 18px; border-bottom: 1px solid var(--navy-border); }
+  .sidebar-logo .wordmark { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+  .sidebar-logo .tagline { font-size: 9px; color: var(--amber); letter-spacing: 2.5px; text-transform: uppercase; margin-top: 3px; font-weight: 600; }
+  .sidebar-nav { padding: 14px 10px; flex: 1; overflow-y: auto; }
+  .nav-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 12px 5px; font-weight: 700; }
+  .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 7px; cursor: pointer; font-size: 13.5px; color: var(--text-muted); transition: all .14s; margin-bottom: 1px; }
+  .nav-item:hover { background: var(--navy-light); color: var(--text); }
+  .nav-item.active { background: var(--amber-dim); color: var(--amber); font-weight: 500; }
+  .nav-item .icon { font-size: 14px; width: 17px; text-align: center; }
+  .nav-badge { margin-left: auto; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 20px; min-width: 18px; text-align: center; }
+  .nav-badge.green { background: var(--green); color: #fff; }
+  .mls-status { margin: 12px 10px 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--navy-border); font-size: 11px; }
+  .mls-status.connected { border-color: rgba(61,186,126,0.3); background: rgba(61,186,126,0.06); }
+  .mls-status.disconnected { border-color: rgba(224,92,92,0.3); background: rgba(224,92,92,0.08); }
+  .mls-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+  .mls-dot.on { background: var(--green); box-shadow: 0 0 5px var(--green); }
+  .mls-dot.off { background: var(--red); box-shadow: 0 0 5px rgba(224,92,92,0.45); }
+
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; min-height: 0; height: 100%; }
+  .topbar { height: 58px; border-bottom: 1px solid var(--navy-border); display: flex; align-items: center; padding: max(env(safe-area-inset-top), 0px) 26px 0; gap: 14px; background: var(--navy-mid); flex-shrink: 0; position: sticky; top: 0; z-index: 30; }
+  .topbar-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; }
+  .topbar-sub { font-size: 12px; color: var(--text-muted); }
+  .topbar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .content { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 24px 26px calc(24px + env(safe-area-inset-bottom) + 80px); }
+  .view { display: none; } .view.active { display: block; }
+
+  .btn { padding: 8px 15px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .14s; }
+  .btn-primary { background: var(--amber); color: var(--navy); } .btn-primary:hover { background: var(--amber-light); }
+  .btn-secondary { background: var(--navy-light); color: var(--text-muted); border: 1px solid var(--navy-border); } .btn-secondary:hover { color: var(--text); }
+  .btn-green { background: rgba(61,186,126,0.14); color: var(--green); border: 1px solid rgba(61,186,126,0.25); } .btn-green:hover { background: rgba(61,186,126,0.24); }
+  .btn-danger { background: rgba(224,92,92,0.1); color: var(--red); border: 1px solid rgba(224,92,92,0.2); } .btn-danger:hover { background: rgba(224,92,92,0.2); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  button, .btn, .nav-item, .contact-card, .mobile-menu-btn, .toggle { touch-action: manipulation; }
+
+
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 22px; }
+  .stat-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
+  .stat-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 7px; }
+  .stat-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; }
+  .stat-value.amber { color: var(--amber); } .stat-value.green { color: var(--green); } .stat-value.blue { color: var(--blue); }
+
+  .table-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; overflow: hidden; }
+  .table-header { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--navy-border); gap: 10px; flex-wrap: wrap; }
+  .table-title { font-size: 13px; font-weight: 600; }
+  .table-actions { margin-left: auto; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .search-input { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 6px; padding: 7px 11px; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text); outline: none; width: 170px; }
+  .search-input::placeholder { color: var(--text-dim); } .search-input:focus { border-color: var(--amber); }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 9.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; padding: 9px 18px; text-align: left; border-bottom: 1px solid var(--navy-border); background: rgba(0,0,0,0.1); }
+  td { padding: 12px 18px; font-size: 12.5px; border-bottom: 1px solid rgba(36,54,80,0.5); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; } tr:hover td { background: rgba(255,255,255,0.018); }
+
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 500; margin: 1px; }
+  .tag-lake { background: rgba(74,158,218,0.14); color: var(--blue); }
+  .tag-mountain { background: rgba(61,186,126,0.13); color: var(--green); }
+  .tag-luxury { background: rgba(232,160,48,0.14); color: var(--amber); }
+  .tag-family { background: rgba(155,109,218,0.14); color: var(--purple); }
+  .tag-condo { background: rgba(224,92,92,0.11); color: #e08080; }
+  .tag-default { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+  .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; }
+  .dot-hot { background: var(--amber); box-shadow: 0 0 5px var(--amber); }
+  .dot-warm { background: var(--green); } .dot-cold { background: var(--text-dim); }
+  .dot-active { background: var(--green); box-shadow: 0 0 5px var(--green); }
+  .dot-pending { background: var(--amber); } .dot-sold { background: var(--text-dim); }
+
+  .empty-state { text-align: center; padding: 52px 20px; color: var(--text-dim); }
+  .empty-state .emoji { font-size: 32px; margin-bottom: 12px; }
+  .empty-state h3 { font-size: 15px; color: var(--text-muted); margin-bottom: 7px; }
+  .empty-state p { font-size: 12.5px; line-height: 1.55; }
+
+  .match-hero { background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.05)); border: 1px solid var(--navy-border); border-radius: 12px; padding: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }
+  .match-hero-icon { width: 52px; height: 52px; background: var(--amber-dim); border: 1px solid rgba(232,160,48,0.25); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .match-hero h2 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; margin-bottom: 5px; }
+  .match-hero p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+  .match-select { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 7px; padding: 9px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; width: 100%; margin-bottom: 12px; }
+  .match-select:focus { border-color: var(--amber); }
+  .match-results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 13px; margin-top: 18px; }
+  .match-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px; transition: border-color .18s; animation: fadeUp .28s ease both; }
+  .match-card:hover { border-color: var(--amber); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+  .match-score { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--amber); }
+  .match-score-label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .match-reason { background: rgba(0,0,0,0.18); border-left: 3px solid var(--amber); border-radius: 0 5px 5px 0; padding: 9px 11px; font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin: 10px 0; font-style: italic; }
+
+  .settings-section { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
+  .settings-section-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .settings-section-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 5px; }
+  .form-input, .form-select { width: 100%; background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 7px; padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; }
+  .form-input:focus, .form-select:focus { border-color: var(--amber); }
+  .form-input::placeholder { color: var(--text-dim); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .pw-wrap { position: relative; }
+  .pw-wrap input { padding-right: 36px; }
+  .pw-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-dim); font-size: 13px; user-select: none; }
+
+  .sync-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 12.5px; }
+  .sync-banner.info { background: var(--amber-dim); border: 1px solid rgba(232,160,48,0.2); color: var(--amber); }
+  .sync-banner.success { background: rgba(61,186,126,0.07); border: 1px solid rgba(61,186,126,0.2); color: var(--green); }
+  .sync-banner.error { background: rgba(224,92,92,0.07); border: 1px solid rgba(224,92,92,0.2); color: var(--red); }
+  .spinner { width: 15px; height: 15px; border: 2px solid rgba(232,160,48,0.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .75s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .contacts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 9px; margin-top: 12px; max-height: 360px; overflow-y: auto; }
+  .contact-card { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 8px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all .13s; }
+  .contact-card:hover { border-color: var(--amber); }
+  .contact-card.selected { border-color: var(--green); background: rgba(61,186,126,0.06); }
+  .contact-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--navy-border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; color: var(--text-muted); }
+  .contact-name { font-size: 12.5px; font-weight: 500; margin-bottom: 1px; }
+  .contact-phone { font-size: 11px; color: var(--text-muted); }
+  .contact-check { margin-left: auto; color: var(--green); font-size: 15px; display: none; }
+  .contact-card.selected .contact-check { display: block; }
+
+  .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 12px; margin-top: 16px; }
+  .file-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 9px; padding: 18px; text-align: center; cursor: pointer; transition: all .14s; }
+  .file-card:hover { border-color: var(--amber); transform: translateY(-2px); }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 13px; padding: 26px; width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; animation: modalIn .18s ease; }
+  .modal.wide { width: 620px; }
+  @keyframes modalIn { from { opacity:0; transform:scale(.96) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+  .modal-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 20px; justify-content: flex-end; }
+
+  .tag-input-area { display: flex; flex-wrap: wrap; gap: 5px; background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 7px; padding: 7px 9px; min-height: 40px; cursor: text; }
+  .tag-input-area:focus-within { border-color: var(--amber); }
+  .tag-pill { background: var(--amber-dim); color: var(--amber); padding: 2px 7px; border-radius: 4px; font-size: 11px; display: flex; align-items: center; gap: 3px; }
+  .tag-pill .remove { cursor: pointer; opacity: .6; font-size: 13px; line-height: 1; }
+  .tag-pill .remove:hover { opacity: 1; }
+  .tag-text-input { background: transparent; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text); min-width: 80px; flex: 1; }
+  .tag-text-input::placeholder { color: var(--text-dim); }
+
+  .csv-drop { border: 2px dashed var(--navy-border); border-radius: 9px; padding: 26px; text-align: center; cursor: pointer; transition: all .18s; margin-bottom: 14px; }
+  .csv-drop:hover, .csv-drop.dragover { border-color: var(--amber); background: var(--amber-dim); }
+  .csv-sample { font-size: 10.5px; color: var(--text-dim); background: rgba(0,0,0,0.22); border-radius: 6px; padding: 9px 11px; font-family: monospace; line-height: 1.65; text-align: left; }
+
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; }
+
+  .new-matches-banner { background: linear-gradient(135deg, rgba(61,186,126,0.1), rgba(61,186,126,0.04)); border: 1px solid rgba(61,186,126,0.25); border-radius: 9px; padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .15s; }
+  .new-matches-banner:hover { border-color: var(--green); }
+
+  .onboarding-card { background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
+  .onboarding-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .onboarding-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; max-width: 460px; margin-left: auto; margin-right: auto; }
+  .onboarding-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+  .onboarding-step { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 9px; padding: 14px; text-align: left; }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
+  .step-title { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
+  .step-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+
+  .toggle { width: 38px; height: 21px; border-radius: 11px; background: var(--navy-border); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
+  .toggle.on { background: var(--green); }
+  .toggle::after { content:''; position:absolute; width:15px; height:15px; background:#fff; border-radius:50%; top:3px; left:3px; transition: left .2s; }
+  .toggle.on::after { left:20px; }
+  .auto-match-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px solid var(--navy-border); }
+
+  .mls-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(74,158,218,0.13); color: var(--blue); letter-spacing: .5px; }
+  .match-listing-card { background: linear-gradient(135deg,var(--navy-light),rgba(232,160,48,0.04)); border: 1px solid rgba(232,160,48,0.22); border-radius: 10px; padding: 16px 18px; margin-bottom: 18px; }
+
+  .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy-light); border: 1px solid var(--navy-border); border-left: 3px solid var(--green); border-radius: 8px; padding: 11px 16px; font-size: 12.5px; z-index: 200; transform: translateX(130%); transition: transform .22s ease; max-width: 300px; }
+  .toast.show { transform: translateX(0); }
+  .toast.err { border-left-color: var(--red); }
+
+  @supports (height: 100dvh) {
+    body { min-height: 100dvh; }
+  }
+
+  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
+
+  /* Proxy URL hint box */
+  .hint-box { background: rgba(74,158,218,0.07); border: 1px solid rgba(74,158,218,0.2); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+  .hint-box strong { color: var(--blue); }
+  .step-badge { display: inline-block; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
+
+
+  .mobile-menu-btn { display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--navy-border); background:var(--navy-light); color:var(--text); font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
+  .mobile-sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.58); z-index:40; opacity:0; pointer-events:none; transition:opacity .18s ease; }
+  .mobile-sidebar-overlay.open { opacity:1; pointer-events:auto; }
+
+  @media (max-width: 980px) {
+    body { overflow: hidden; min-height: 100svh; min-height: 100dvh; }
+    body.mobile-nav-open { overflow: hidden; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform .22s ease;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    body.mobile-nav-open .sidebar { transform: translateX(0); }
+    .mobile-sidebar-overlay { display:block; }
+    body.mobile-nav-open .mobile-sidebar-overlay.open { display:block; }
+    .main { width:100%; min-width:0; height:100%; min-height:0; }
+    .mobile-menu-btn { display:inline-flex; }
+    .form-input, .form-select, .search-input, .match-select, .tag-text-input { font-size: 16px; }
+    .topbar { padding: max(env(safe-area-inset-top), 0px) 14px 0; height:auto; min-height:58px; }
+    .topbar-title { font-size: 16px; }
+    .topbar-sub { font-size: 11px; }
+    .content { padding: 14px 14px calc(14px + env(safe-area-inset-bottom) + 96px); }
+    .stats-row, .onboarding-steps, .form-row { grid-template-columns: 1fr 1fr; }
+    .match-hero, .new-matches-banner, .section-header, .auto-match-row { flex-wrap: wrap; }
+    .table-header { padding: 12px 14px; }
+    th, td { padding-left: 14px; padding-right: 14px; }
+    .table-card { overflow-x: auto; }
+    table { min-width: 760px; }
+    .contacts-grid, .match-results-grid, .files-grid { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
+    .modal { width: calc(100vw - 18px); padding: 18px; }
+    .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+  }
+
+  @media (max-width: 640px) {
+    .content { padding: 12px 12px calc(12px + env(safe-area-inset-bottom) + 108px); }
+    .stats-row, .onboarding-steps, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
+    .table-actions { margin-left: 0; width: 100%; }
+    .table-actions > * { flex: 1 1 100%; }
+    .search-input { width: 100%; }
+    .btn { width: 100%; }
+    .match-hero { padding: 18px; gap: 14px; }
+    .match-hero-icon { width: 46px; height: 46px; font-size: 20px; }
+    .settings-section, .stat-card, .onboarding-card { padding: 16px; }
+    .onboarding-card h2 { font-size: 20px; }
+    .new-matches-banner { padding: 14px; }
+    .section-header { gap: 10px; }
+    .section-header .btn { width: auto; }
+    .modal-actions { flex-direction: column; }
+    .modal-actions .btn { width: 100%; }
+  }
+
+
+
+  .auth-shell {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+      radial-gradient(circle at top left, rgba(232,160,48,0.08), transparent 28%),
+      linear-gradient(135deg, rgba(13,27,42,0.98), rgba(20,32,50,0.98));
+  }
+  .auth-shell.hidden { display: none; }
+  .auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-border);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  }
+  .auth-brand { margin-bottom: 18px; }
+  .auth-brand .wordmark { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .auth-brand .tagline { font-size: 10px; color: var(--amber); letter-spacing: 2.6px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
+  .auth-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 7px; }
+  .auth-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+  .auth-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .auth-note { margin-top: 14px; font-size: 11.5px; color: var(--text-dim); line-height: 1.55; text-align: center; }
+  .auth-status {
+    display: none;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    border: 1px solid var(--navy-border);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+  }
+  .auth-status.show { display: block; }
+  .auth-status.success { border-color: rgba(61,186,126,0.25); background: rgba(61,186,126,0.08); color: var(--green); }
+  .auth-status.error { border-color: rgba(224,92,92,0.25); background: rgba(224,92,92,0.08); color: var(--red); }
+
+</style>
+</head>
+<body>
+<div class="auth-shell" id="authShell">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="wordmark">Broker OS</div>
+      <div class="tagline">Deal Intelligence</div>
+    </div>
+    <div class="auth-title">Sign in to Broker OS</div>
+    <div class="auth-sub">Secure your workspace with email and password access. Once your auth logic is wired in, this screen can gate the full app before data loads.</div>
+    <div class="auth-status" id="authStatus"></div>
+    <div class="form-group">
+      <div class="form-label">Email</div>
+      <input class="form-input" id="authEmail" type="email" placeholder="broker@email.com" autocomplete="email">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <div class="form-label">Password</div>
+      <div class="pw-wrap">
+        <input class="form-input" id="authPassword" type="password" placeholder="Enter password" autocomplete="current-password" style="width:100%;">
+        <span class="pw-eye" onclick="togglePw('authPassword')">👁</span>
+      </div>
+    </div>
+    <div class="auth-actions">
+      <button class="btn btn-secondary" type="button" id="authSignupBtn">Create Account</button>
+      <button class="btn btn-primary" type="button" id="authSigninBtn">Sign In</button>
+    </div>
+    <div class="auth-note">Replace the Supabase placeholders with your real project URL and anon key. Then connect these buttons to your signup and sign-in JS.</div>
+  </div>
+</div>
+
+<div class="mobile-sidebar-overlay" id="mobileSidebarOverlay" onclick="closeMobileNav()"></div>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="wordmark">Broker OS</div>
+    <div class="tagline">Deal Intelligence</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-label">Workspace</div>
+    <div class="nav-item active" onclick="nav('dashboard')" id="nav-dashboard"><span class="icon">◈</span> Dashboard</div>
+    <div class="nav-item" onclick="nav('leads')" id="nav-leads"><span class="icon">◉</span> Leads <span class="nav-badge" id="badge-leads">0</span></div>
+    <div class="nav-item" onclick="nav('listings')" id="nav-listings"><span class="icon">⌂</span> Listings <span class="nav-badge" id="badge-listings">0</span></div>
+    <div class="nav-label" style="margin-top:10px;">Intelligence</div>
+    <div class="nav-item" onclick="nav('match')" id="nav-match"><span class="icon">✦</span> Match Engine <span class="nav-badge green" id="badge-matches" style="display:none;"></span></div>
+    <div class="nav-label" style="margin-top:10px;">Manage</div>
+    <div class="nav-item" onclick="nav('files')" id="nav-files"><span class="icon">▤</span> Documents <span class="nav-badge" id="badge-files">0</span></div>
+    <div class="nav-item" onclick="nav('settings')" id="nav-settings"><span class="icon">⚙</span> Settings</div>
+    <div class="mls-status disconnected" id="mlsBadge">
+      <span class="mls-dot off" id="mlsDot"></span><span id="mlsTxt" style="color:var(--red);">MLS Not Live Yet</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <button class="mobile-menu-btn" type="button" onclick="toggleMobileNav()">☰</button>
+    <div><div class="topbar-title" id="tbTitle">Dashboard</div><div class="topbar-sub" id="tbSub">Overview</div></div>
+    <div class="topbar-actions" id="tbActions"></div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div id="onboardBlock"></div>
+      <div id="matchBanner" style="display:none;" class="new-matches-banner" onclick="nav('match')">
+        <div><div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--green);" id="matchBannerCount">0</div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);font-weight:700;">New Matches</div></div>
+        <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">New listing matches ready</div><div style="font-size:12px;color:var(--text-muted);">AI found leads that fit newly synced listings. Click to review.</div></div>
+        <div style="font-size:18px;color:var(--green);">→</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Total Leads</div><div class="stat-value amber" id="s-leads">0</div></div>
+        <div class="stat-card"><div class="stat-label">Active Listings</div><div class="stat-value blue" id="s-listings">0</div></div>
+        <div class="stat-card"><div class="stat-label">Hot Leads</div><div class="stat-value green" id="s-hot">0</div></div>
+        <div class="stat-card"><div class="stat-label">MLS Synced</div><div class="stat-value" id="s-synced">—</div></div>
+      </div>
+      <div class="table-card"><div class="table-header"><div class="table-title">Recent Activity</div></div><div id="activityEl" style="padding:18px 20px;font-size:13px;color:var(--text-muted);">Connect MLS and add leads to get started.</div></div>
+    </div>
+
+    <!-- LEADS -->
+    <div class="view" id="view-leads">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">All Leads</div>
+          <div class="table-actions">
+            <input class="search-input" type="text" placeholder="Search…" id="leadSearch" oninput="renderLeads()">
+            <button class="btn btn-green" onclick="openContactPicker()">📱 Contacts</button>
+            <button class="btn btn-secondary" onclick="openModal('importLeads')">↑ CSV</button>
+            <button class="btn btn-primary" onclick="openModal('addLead')">+ Add</button>
+          </div>
+        </div>
+        <table><thead><tr><th>Name</th><th>Contact</th><th>Status</th><th>Budget</th><th>Preferences</th><th>Notes</th><th></th></tr></thead><tbody id="leadsTable"></tbody></table>
+        <div id="leadsEmpty" class="empty-state" style="display:none;"><div class="emoji">👥</div><h3>No leads yet</h3><p>Import from contacts, add manually, or upload CSV.</p></div>
+      </div>
+    </div>
+
+    <!-- LISTINGS -->
+    <div class="view" id="view-listings">
+      <div id="listingsBanner"></div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">All Listings</div>
+          <div class="table-actions">
+            <input class="search-input" type="text" placeholder="Search…" id="listingSearch" oninput="renderListings()">
+            <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
+            <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
+            <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
+          </div>
+        </div>
+        <table><thead><tr><th>Address</th><th>Price</th><th>Status</th><th>Beds/Baths</th><th>Source</th><th>Tags</th><th></th></tr></thead><tbody id="listingsTable"></tbody></table>
+        <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
+      </div>
+    </div>
+
+    <!-- MATCH -->
+    <div class="view" id="view-match">
+      <div class="match-hero"><div class="match-hero-icon">✦</div><div><h2>AI Match Engine</h2><p>Pick a listing — AI scores every lead in your database and explains why each one fits or doesn't.</p></div></div>
+      <div class="table-card" style="padding:22px;">
+        <div class="form-group"><div class="form-label">Select Listing</div><select class="match-select" id="matchSel"><option value="">— Choose a listing —</option></select></div>
+        <button class="btn btn-primary" onclick="runMatch()" style="width:100%;padding:11px;font-size:14px;">✦ &nbsp;Run AI Match</button>
+      </div>
+      <div id="matchOutput" style="margin-top:18px;"></div>
+    </div>
+
+    <!-- FILES -->
+    <div class="view" id="view-files">
+      <div class="section-header">
+        <div class="section-title">Documents & Files</div>
+        <button class="btn btn-primary" onclick="document.getElementById('fileIn').click()">+ Upload</button>
+        <input type="file" id="fileIn" multiple style="display:none" onchange="uploadFiles(event)">
+      </div>
+      <div class="files-grid" id="filesGrid"></div>
+      <div id="filesEmpty" class="empty-state"><div class="emoji">📁</div><h3>No files yet</h3><p>Upload contracts, disclosures, photos, or deal docs.</p></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="view" id="view-settings">
+
+      <!-- PROXY + MLS -->
+      <div class="settings-section">
+        <div class="settings-section-title">🔗 PrimeMLS Connection</div>
+        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. You need two things: your proxy server URL (from Railway/Render — free) and your PrimeMLS credentials. See the steps below.</div>
+
+        <div class="hint-box">
+          <span class="step-badge">Step 1</span> <strong>Deploy the proxy</strong> — Upload the <code>broker-proxy</code> folder to GitHub, then connect it to Railway or Render (free). They give you a URL like <code>https://broker-proxy-xxx.up.railway.app</code><br><br>
+          <span class="step-badge">Step 2</span> <strong>Get MLS credentials</strong> — Log into PrimeMLS → Member Tools → IDX/API Access. If no API tab, call them at (603) 930-3220 and ask for RESO Web API credentials.<br><br>
+          <span class="step-badge">Step 3</span> <strong>Paste both below</strong> and hit Save & Test.
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">Your Proxy URL</div>
+          <input class="form-input" id="cfg-proxy" placeholder="https://your-proxy.up.railway.app">
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">The URL Railway or Render gives you after deploying the proxy server.</div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">PrimeMLS API Base URL</div>
+          <input class="form-input" id="cfg-url" placeholder="https://api.primemls.com/reso/odata" value="https://api.primemls.com/reso/odata">
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="form-label">MLS Username</div><input class="form-input" id="cfg-user" placeholder="Your PrimeMLS username"></div>
+          <div class="form-group"><div class="form-label">MLS API Key / Password</div>
+            <div class="pw-wrap"><input class="form-input" id="cfg-key" type="password" placeholder="Your API key" style="width:100%;"><span class="pw-eye" onclick="togglePw('cfg-key')">👁</span></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Area Filter (optional)</div>
+          <input class="form-input" id="cfg-area" placeholder="Northeast Kingdom, Caledonia County, VT">
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Only pull listings from this area. Leave blank for all your listings.</div>
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="saveMLS()">Save & Test Connection</button>
+          <button class="btn btn-secondary" onclick="loadDemo()">Load Demo Data Instead</button>
+        </div>
+        <div id="mlsResult" style="display:none;margin-top:12px;font-size:12.5px;padding:10px 14px;border-radius:7px;"></div>
+      </div>
+
+      <!-- AUTO MATCH -->
+      <div class="settings-section">
+        <div class="settings-section-title">✦ Auto-Match</div>
+        <div class="settings-section-sub">When new listings sync from MLS, automatically score them against all leads and show a banner on your dashboard.</div>
+        <div class="auto-match-row">
+          <div class="toggle on" id="tog-automatch"></div>
+          <div><div style="font-size:13px;font-weight:500;">Auto-match on MLS sync</div><div style="font-size:11.5px;color:var(--text-muted);">Runs silently every time listings update</div></div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="settings-section">
+        <div class="settings-section-title">👤 Broker Profile</div>
+        <div class="settings-section-sub">Your name appears in match reports.</div>
+        <div class="form-row">
+          <div class="form-group"><div class="form-label">Name</div><input class="form-input" id="p-name" placeholder="Tom Whitfield"></div>
+          <div class="form-group"><div class="form-label">Brokerage</div><input class="form-input" id="p-brokerage" placeholder="Northeast Kingdom Realty"></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+
+      <!-- DANGER -->
+      <div class="settings-section">
+        <div class="settings-section-title" style="color:var(--red);">⚠ Clear Data</div>
+        <div class="settings-section-sub">Permanently delete data. Cannot be undone.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-danger" onclick="clearData('leads')">Clear Leads</button>
+          <button class="btn btn-danger" onclick="clearData('listings')">Clear Listings</button>
+          <button class="btn btn-danger" onclick="clearData('all')">Clear Everything</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-addLead">
+  <div class="modal">
+    <div class="modal-title">Add Lead</div><div class="modal-sub">Contact info and property preferences</div>
+    <div class="form-row"><div class="form-group"><div class="form-label">First Name</div><input class="form-input" id="l-fn" placeholder="Jane"></div><div class="form-group"><div class="form-label">Last Name</div><input class="form-input" id="l-ln" placeholder="Smith"></div></div>
+    <div class="form-row"><div class="form-group"><div class="form-label">Email</div><input class="form-input" id="l-em" type="email" placeholder="jane@email.com"></div><div class="form-group"><div class="form-label">Phone</div><input class="form-input" id="l-ph" placeholder="(802) 555-0100"></div></div>
+    <div class="form-row"><div class="form-group"><div class="form-label">Budget Min ($)</div><input class="form-input" id="l-bmin" placeholder="200000"></div><div class="form-group"><div class="form-label">Budget Max ($)</div><input class="form-input" id="l-bmax" placeholder="500000"></div></div>
+    <div class="form-group"><div class="form-label">Status</div><select class="form-select" id="l-st"><option value="hot">🔥 Hot</option><option value="warm" selected>✅ Warm</option><option value="cold">❄️ Cold</option></select></div>
+    <div class="form-group"><div class="form-label">Preferences (Enter to add)</div><div class="tag-input-area" id="lTagArea" onclick="document.getElementById('lTagIn').focus()"><input type="text" class="tag-text-input" id="lTagIn" placeholder="lakefront, 3BR, garage…" onkeydown="addTag(event,'lead')"></div></div>
+    <div class="form-group"><div class="form-label">Notes</div><input class="form-input" id="l-no" placeholder="Any context…"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addLead')">Cancel</button><button class="btn btn-primary" onclick="saveLead()">Save Lead</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-addListing">
+  <div class="modal">
+    <div class="modal-title">Add Listing</div><div class="modal-sub">Property details and matching tags</div>
+    <div class="form-group"><div class="form-label">Address</div><input class="form-input" id="p-ad" placeholder="123 Lake Shore Rd, Westmore, VT"></div>
+    <div class="form-row"><div class="form-group"><div class="form-label">Price ($)</div><input class="form-input" id="p-pr" placeholder="450000"></div><div class="form-group"><div class="form-label">Status</div><select class="form-select" id="p-st"><option value="active">Active</option><option value="pending">Pending</option><option value="sold">Sold</option></select></div></div>
+    <div class="form-row"><div class="form-group"><div class="form-label">Beds</div><input class="form-input" id="p-bd" placeholder="3"></div><div class="form-group"><div class="form-label">Baths</div><input class="form-input" id="p-ba" placeholder="2"></div></div>
+    <div class="form-group"><div class="form-label">Tags (Enter to add)</div><div class="tag-input-area" id="pTagArea" onclick="document.getElementById('pTagIn').focus()"><input type="text" class="tag-text-input" id="pTagIn" placeholder="lakefront, dock, mountain view…" onkeydown="addTag(event,'listing')"></div></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addListing')">Cancel</button><button class="btn btn-primary" onclick="saveListing()">Save Listing</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-importLeads">
+  <div class="modal"><div class="modal-title">Import Leads CSV</div><div class="modal-sub">Upload a spreadsheet of existing contacts</div>
+    <div class="csv-drop" onclick="document.getElementById('lcsvIn').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropCsv(event,'leads')"><div style="font-size:26px;margin-bottom:8px;">📋</div><div style="font-size:13px;color:var(--text-muted);">Click or drag & drop a <strong style="color:var(--amber);">.csv</strong></div><input type="file" id="lcsvIn" accept=".csv" style="display:none" onchange="readCsv(event,'leads')"></div>
+    <div class="csv-sample">name, email, phone, budget_min, budget_max, status, preferences, notes<br>Jane Smith, jane@em.com, 8025550100, 200000, 500000, hot, "lakefront;3BR", Vacation home</div>
+    <div id="lcsvStatus" style="display:none;margin-top:10px;font-size:12.5px;color:var(--green);"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('importLeads')">Done</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-importListings">
+  <div class="modal"><div class="modal-title">Import Listings CSV</div><div class="modal-sub">Upload a spreadsheet of active listings</div>
+    <div class="csv-drop" onclick="document.getElementById('pcsvIn').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropCsv(event,'listings')"><div style="font-size:26px;margin-bottom:8px;">🏠</div><div style="font-size:13px;color:var(--text-muted);">Click or drag & drop a <strong style="color:var(--amber);">.csv</strong></div><input type="file" id="pcsvIn" accept=".csv" style="display:none" onchange="readCsv(event,'listings')"></div>
+    <div class="csv-sample">address, price, status, beds, baths, tags<br>123 Lake Rd, 450000, active, 3, 2, "lakefront;dock"</div>
+    <div id="pcsvStatus" style="display:none;margin-top:10px;font-size:12.5px;color:var(--green);"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('importListings')">Done</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-contacts">
+  <div class="modal wide"><div class="modal-title">📱 Import from Contacts</div><div class="modal-sub" id="contactSub">Select contacts from your phone to add as leads. You can fill in budget, notes, and preferences later.</div>
+    <input class="search-input" style="width:100%;margin-bottom:12px;" type="text" placeholder="Search contacts…" id="contactSearch" oninput="filterContacts()">
+    <div class="contacts-grid" id="contactsGrid"></div>
+    <div id="contactsEmpty" style="display:none;text-align:center;padding:28px;font-size:13px;color:var(--text-dim);"></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--navy-border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:12px;color:var(--text-muted);"><span id="selCount">0</span> selected</div>
+      <div style="display:flex;gap:8px;"><button class="btn btn-secondary" onclick="closeModal('contacts')">Cancel</button><button class="btn btn-primary" id="importCBtn" onclick="importSelected()" disabled>Add as Leads</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  const SUPABASE_URL = "https://bodxyrrvfwzgnbiqkvtb.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_c88I_bgPQe5tNHkwbIsxPA_AOvxUq82";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+let leads=[], listings=[], files=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
+let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
+
+// ── BOOT ───────────────────────────────────────────────────────
+function init() {
+  load();
+  populateSettingsFields();
+  renderAll();
+  buildOnboard();
+}
+
+function load() {
+  try {
+    leads = JSON.parse(localStorage.getItem('bos_leads')||'[]');
+    listings = JSON.parse(localStorage.getItem('bos_listings')||'[]');
+    files = JSON.parse(localStorage.getItem('bos_files')||'[]');
+    cfg = JSON.parse(localStorage.getItem('bos_cfg')||'{"proxy":"","url":"","user":"","key":"","area":"","connected":false,"lastSync":""}');
+    activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
+    newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
+    const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
+    if(p.name) document.getElementById('p-name').value=p.name;
+    if(p.brokerage) document.getElementById('p-brokerage').value=p.brokerage;
+  } catch(e){}
+}
+
+function populateSettingsFields() {
+  if(cfg.proxy) document.getElementById('cfg-proxy').value=cfg.proxy;
+  if(cfg.url) document.getElementById('cfg-url').value=cfg.url;
+  if(cfg.user) document.getElementById('cfg-user').value=cfg.user;
+  if(cfg.area) document.getElementById('cfg-area').value=cfg.area;
+}
+
+function persist() {
+  localStorage.setItem('bos_leads',JSON.stringify(leads));
+  localStorage.setItem('bos_listings',JSON.stringify(listings));
+  localStorage.setItem('bos_files',JSON.stringify(files));
+  localStorage.setItem('bos_cfg',JSON.stringify(cfg));
+  localStorage.setItem('bos_log',JSON.stringify(activityLog.slice(-60)));
+  localStorage.setItem('bos_nm',newMatchCount);
+}
+
+// ── NAV ────────────────────────────────────────────────────────
+const titles = {dashboard:'Dashboard',leads:'Leads',listings:'Listings',match:'Match Engine',files:'Documents',settings:'Settings'};
+const subs = {dashboard:'Overview',leads:'All contacts',listings:'All properties',match:'AI-powered lead matching',files:'Contracts & documents',settings:'Configuration'};
+
+function nav(name) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  const ni = document.getElementById('nav-'+name);
+  if(ni) ni.classList.add('active');
+  document.getElementById('tbTitle').textContent=titles[name]||name;
+  document.getElementById('tbSub').textContent=subs[name]||'';
+  if(name==='match'){populateMatchSel();newMatchCount=0;document.getElementById('badge-matches').style.display='none';document.getElementById('matchBanner').style.display='none';persist();}
+  if(name==='listings') renderListingsBanner();
+  const contentEl = document.querySelector('.content');
+  if(contentEl) contentEl.scrollTop = 0;
+  if (window.innerWidth <= 980) closeMobileNav();
+}
+
+// ── RENDER ─────────────────────────────────────────────────────
+function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();}
+
+function renderStats(){
+  document.getElementById('s-leads').textContent=leads.length;
+  document.getElementById('s-listings').textContent=listings.filter(l=>l.status==='active').length;
+  document.getElementById('s-hot').textContent=leads.filter(l=>l.status==='hot').length;
+  const n=listings.filter(l=>l.source==='mls').length;
+  document.getElementById('s-synced').textContent=n||'—';
+}
+
+function renderBadges(){
+  document.getElementById('badge-leads').textContent=leads.length;
+  document.getElementById('badge-listings').textContent=listings.length;
+  document.getElementById('badge-files').textContent=files.length;
+  if(newMatchCount>0){const b=document.getElementById('badge-matches');b.style.display='inline-block';b.textContent=newMatchCount;}
+}
+
+function renderActivity(){
+  const el=document.getElementById('activityEl');
+  if(!activityLog.length){el.innerHTML='<span style="color:var(--text-muted);">Connect MLS and add leads to get started.</span>';return;}
+  el.innerHTML='<div>'+activityLog.slice(-8).reverse().map(a=>`<div style="padding:9px 0;border-bottom:1px solid var(--navy-border);font-size:12.5px;"><span style="color:var(--text-dim);font-size:11px;margin-right:8px;">${a.t}</span>${a.m}</div>`).join('')+'</div>';
+}
+
+function log(m){activityLog.push({m,t:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});renderActivity();}
+
+function updateMLSBadge(){
+  const badge=document.getElementById('mlsBadge'),dot=document.getElementById('mlsDot'),txt=document.getElementById('mlsTxt');
+  if(cfg.connected){badge.className='mls-status connected';dot.className='mls-dot on';txt.style.color='var(--green)';txt.textContent='MLS Live';}
+  else{badge.className='mls-status disconnected';dot.className='mls-dot off';txt.style.color='var(--red)';txt.textContent='MLS Not Live Yet';}
+}
+
+// ── LEADS RENDER ───────────────────────────────────────────────
+function renderLeads(){
+  const q=(document.getElementById('leadSearch')?.value||'').toLowerCase();
+  const tb=document.getElementById('leadsTable'),emp=document.getElementById('leadsEmpty');
+  const f=leads.filter(l=>!q||l.name.toLowerCase().includes(q)||(l.email||'').toLowerCase().includes(q)||l.preferences.join(' ').toLowerCase().includes(q));
+  if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
+  emp.style.display='none';
+  tb.innerHTML=f.map(l=>`<tr>
+    <td><strong>${l.name}</strong>${l.fromContacts?' <span style="font-size:10px;color:var(--text-dim);">📱</span>':''}</td>
+    <td style="color:var(--text-muted);font-size:11.5px;">${l.email||'—'}<br>${l.phone||'—'}</td>
+    <td>${dot(l.status,'lead')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
+    <td style="font-size:12px;color:var(--text-muted);">$${fmt(l.budgetMin)}–$${fmt(l.budgetMax)}</td>
+    <td>${l.preferences.map(tagHtml).join('')}</td>
+    <td style="font-size:11.5px;color:var(--text-muted);max-width:130px;">${l.notes||'—'}</td>
+    <td><button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteLead(${l.id})">✕</button></td>
+  </tr>`).join('');
+}
+
+function deleteLead(id){leads=leads.filter(l=>l.id!==id);persist();renderAll();}
+
+// ── LISTINGS RENDER ────────────────────────────────────────────
+function renderListings(){
+  const q=(document.getElementById('listingSearch')?.value||'').toLowerCase();
+  const tb=document.getElementById('listingsTable'),emp=document.getElementById('listingsEmpty');
+  const f=listings.filter(l=>!q||l.address.toLowerCase().includes(q)||l.tags.join(' ').toLowerCase().includes(q));
+  if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
+  emp.style.display='none';
+  tb.innerHTML=f.map(l=>`<tr>
+    <td><strong style="font-size:12.5px;">${l.address}</strong></td>
+    <td style="color:var(--amber);font-weight:600;">$${fmt(l.price)}</td>
+    <td>${dot(l.status,'listing')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
+    <td style="font-size:12px;color:var(--text-muted);">${l.beds}bd/${l.baths}ba</td>
+    <td>${l.source==='mls'?'<span class="mls-badge">MLS</span>':'<span style="font-size:11px;color:var(--text-dim);">Manual</span>'}</td>
+    <td>${l.tags.slice(0,4).map(tagHtml).join('')}</td>
+    <td><button class="btn btn-secondary" style="font-size:11px;padding:4px 9px;white-space:nowrap;" onclick="matchFrom(${l.id})">Match ✦</button></td>
+  </tr>`).join('');
+}
+
+function renderListingsBanner(){
+  const el=document.getElementById('listingsBanner');
+  if(!cfg.connected){el.innerHTML=`<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings</strong> to auto-sync live listings.</div></div>`;}
+  else{el.innerHTML=`<div class="sync-banner success"><span class="mls-dot on"></span>PrimeMLS connected${cfg.area?' · '+cfg.area:''}. Last sync: ${cfg.lastSync||'Never'} &nbsp;<button class="btn btn-green" style="font-size:11px;padding:4px 10px;" onclick="syncMLS()">Sync Now</button></div>`;}
+}
+
+// ── FILES ──────────────────────────────────────────────────────
+function renderFiles(){
+  const g=document.getElementById('filesGrid'),e=document.getElementById('filesEmpty');
+  if(!files.length){g.innerHTML='';e.style.display='block';return;}
+  e.style.display='none';
+  g.innerHTML=files.map(f=>`<div class="file-card"><div style="font-size:28px;margin-bottom:9px;">${fileIcon(f.name)}</div><div style="font-size:12.5px;font-weight:500;margin-bottom:3px;word-break:break-word;">${f.name}</div><div style="font-size:10.5px;color:var(--text-dim);">${f.size} · ${f.date}</div></div>`).join('');
+}
+
+function uploadFiles(e){Array.from(e.target.files).forEach(f=>{files.push({name:f.name,size:fmtBytes(f.size),date:new Date().toLocaleDateString()});});persist();renderAll();toast(`${e.target.files.length} file(s) uploaded ✓`);}
+
+// ── MLS CONNECTION ─────────────────────────────────────────────
+async function saveMLS(){
+  const proxy=document.getElementById('cfg-proxy').value.trim();
+  const url=document.getElementById('cfg-url').value.trim();
+  const user=document.getElementById('cfg-user').value.trim();
+  const key=document.getElementById('cfg-key').value.trim();
+  const area=document.getElementById('cfg-area').value.trim();
+  const res=document.getElementById('mlsResult');
+
+  if(!proxy){res.style.display='block';res.style.background='rgba(224,92,92,0.1)';res.style.color='var(--red)';res.textContent='⚠ Enter your proxy URL first. Deploy the broker-proxy server to Railway/Render to get this URL.';return;}
+  if(!url||!user||!key){toast('Fill in all MLS fields.',true);return;}
+
+  res.style.display='block';res.style.background='var(--amber-dim)';res.style.color='var(--amber)';res.textContent='⏳ Testing connection via proxy…';
+
+  try {
+    const r=await fetch(proxy.replace(/\/$/,'')+'/mls-test',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url,user,key})
+    });
+    const data=await r.json();
+    if(!r.ok||data.error) throw new Error(data.error||'Bad response');
+
+    cfg={proxy,url,user,key,area,connected:true,lastSync:new Date().toLocaleString()};
+    persist();updateMLSBadge();
+    res.style.background='rgba(61,186,126,0.08)';res.style.color='var(--green)';
+    res.innerHTML=`✓ Connected to PrimeMLS! ${data.sample?'Sample listing: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync listings now →</strong>`;
+    log('PrimeMLS connected successfully');
+  } catch(e) {
+    res.style.background='rgba(224,92,92,0.08)';res.style.color='var(--red)';
+    res.textContent='✗ Connection failed: '+e.message+'. Check proxy URL and MLS credentials.';
+    cfg={...cfg,proxy,url,user,key,area,connected:false};persist();
+  }
+}
+
+async function syncMLS(){
+  if(!cfg.connected){toast('Connect MLS in Settings first.',true);nav('settings');return;}
+  toast('Syncing listings from PrimeMLS…');
+  try {
+    const r=await fetch(cfg.proxy.replace(/\/$/,'')+'/mls-sync',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url:cfg.url,user:cfg.user,key:cfg.key,area:cfg.area,top:100})
+    });
+    if(!r.ok) throw new Error('Proxy returned '+r.status);
+    const data=await r.json();
+    const props=data.value||[];
+    const existing=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
+    let added=0;
+    props.forEach(p=>{
+      if(existing.has(p.ListingId)) return;
+      listings.push({id:Date.now()+Math.random(),mlsId:p.ListingId,address:p.UnparsedAddress||'Unknown',price:p.ListPrice||0,status:(p.StandardStatus||'Active').toLowerCase(),beds:p.BedroomsTotal||0,baths:p.BathroomsFullCount||0,tags:mlsTags(p),source:'mls'});
+      added++;
+    });
+    cfg.lastSync=new Date().toLocaleString();
+    persist();renderAll();populateMatchSel();
+    log(`MLS sync: ${added} new listing${added!==1?'s':''} added`);
+    toast(`Synced — ${added} new listing${added!==1?'s':''} added ✓`);
+    if(document.getElementById('tog-automatch').classList.contains('on')&&added>0&&leads.length>0) await autoMatch(added);
+  } catch(e){toast('Sync failed: '+e.message,true);}
+}
+
+function mlsTags(p){
+  const t=[];
+  if(p.WaterfrontYN||p.WaterBodyName) t.push('lakefront','waterfront');
+  if(p.ViewYN) t.push('mountain view');
+  if(p.BedroomsTotal) t.push(p.BedroomsTotal+'BR');
+  if(p.ListPrice>600000) t.push('luxury');
+  if(Array.isArray(p.ListingFeatures)) p.ListingFeatures.forEach(f=>{if(f)t.push(f.toLowerCase());});
+  return [...new Set(t)];
+}
+
+async function autoMatch(newCount){
+  const recent=listings.filter(l=>l.source==='mls').slice(-newCount);
+  let found=0;
+  recent.forEach(l=>{found+=fallbackScore(l).filter(r=>r.score>=50).length;});
+  if(found>0){newMatchCount+=found;persist();renderBadges();document.getElementById('matchBannerCount').textContent=newMatchCount;document.getElementById('matchBanner').style.display='flex';log(`Auto-match: ${found} strong match${found!==1?'es':''} found`);}
+}
+
+// DEMO DATA
+function loadDemo(){
+  const demo=[
+    {id:Date.now()+1,mlsId:'ML001',address:'14 Willoughby Lake Rd, Westmore, VT',price:489000,status:'active',beds:3,baths:2,tags:['lakefront','dock','mountain view','3BR','garage'],source:'mls'},
+    {id:Date.now()+2,mlsId:'ML002',address:'88 Mountain View Dr, Burke, VT',price:275000,status:'active',beds:4,baths:2,tags:['mountain view','rural','4BR','land'],source:'mls'},
+    {id:Date.now()+3,mlsId:'ML003',address:'5 Maple St #2B, St. Johnsbury, VT',price:189000,status:'active',beds:2,baths:1,tags:['condo','in-town','walkable'],source:'mls'},
+    {id:Date.now()+4,mlsId:'ML004',address:'220 Echo Lake Rd, Charleston, VT',price:625000,status:'active',beds:5,baths:3,tags:['lakefront','dock','luxury','5BR','garage','waterfront'],source:'mls'},
+    {id:Date.now()+5,mlsId:'ML005',address:'37 Kingdom Farm Rd, Craftsbury, VT',price:340000,status:'active',beds:3,baths:2,tags:['rural','barn','land','mountain view','3BR'],source:'mls'},
+  ];
+  const ex=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
+  listings.push(...demo.filter(d=>!ex.has(d.mlsId)));
+  if(!leads.length) leads=[
+    {id:1,name:'Michael Torres',email:'mtorres@email.com',phone:'(802) 555-0141',budgetMin:300000,budgetMax:550000,status:'hot',preferences:['lakefront','dock','3BR','mountain view'],notes:'Vacation property'},
+    {id:2,name:'Sarah & Jim Okafor',email:'sokafor@gmail.com',phone:'(802) 555-0188',budgetMin:400000,budgetMax:700000,status:'hot',preferences:['lakefront','waterfront','luxury','4BR'],notes:'Moving from Boston'},
+    {id:3,name:'Dana Whitfield',email:'dwhitfield@email.com',phone:'(802) 555-0122',budgetMin:150000,budgetMax:280000,status:'warm',preferences:['mountain view','rural','land'],notes:'Pre-approved 275k'},
+    {id:4,name:'Craig Hensley',email:'chensley@email.com',phone:'(802) 555-0165',budgetMin:500000,budgetMax:900000,status:'warm',preferences:['lakefront','luxury','dock','5BR'],notes:'Cash buyer'},
+    {id:5,name:'Priya Nair',email:'pnair@email.com',phone:'(802) 555-0109',budgetMin:200000,budgetMax:350000,status:'cold',preferences:['condo','in-town','walkable'],notes:'Paused til fall'},
+  ];
+  cfg.connected=true;cfg.lastSync=new Date().toLocaleString();
+  persist();renderAll();populateMatchSel();
+  document.getElementById('onboardBlock').innerHTML='';
+  document.getElementById('mlsResult').style.display='block';document.getElementById('mlsResult').style.background='rgba(61,186,126,0.08)';document.getElementById('mlsResult').style.color='var(--green)';document.getElementById('mlsResult').textContent='✓ Demo data loaded. Go to Match Engine to try it.';
+  log('Demo data loaded');toast('Demo ready — try the Match Engine ✓');
+}
+
+// ── CONTACT PICKER ─────────────────────────────────────────────
+async function openContactPicker(){
+  selectedContacts=new Set();
+
+  const supported = !!(window.isSecureContext && 'contacts' in navigator && 'ContactsManager' in window && navigator.contacts && typeof navigator.contacts.select === 'function');
+  if(!supported){
+    toast('Real phone contact import is not supported in this browser/web-app. It works on some Android browsers, but not iPhone Safari web apps.', true);
+    return;
+  }
+
+  try{
+    let props = ['name','tel','email'];
+    if(typeof navigator.contacts.getProperties === 'function'){
+      const available = await navigator.contacts.getProperties();
+      props = props.filter(p => available.includes(p));
+    }
+    const c = await navigator.contacts.select(props, { multiple:true });
+    if(c && c.length){
+      await importDirect(c);
+      return;
+    }
+    toast('No contacts selected.', true);
+  }catch(e){
+    if(e && (e.name === 'AbortError' || e.name === 'NotAllowedError')){
+      toast('Contact import was cancelled.', true);
+      return;
+    }
+    console.error(e);
+    toast('Contact import failed on this device/browser.', true);
+  }
+}
+
+async function importDirect(contacts){
+  let added=0;
+  const importedLeads=[];
+  contacts.forEach(c=>{
+    const name=(c.name&&c.name[0])||'Unknown',phone=(c.tel&&c.tel[0])||'',email=(c.email&&c.email[0])||'';
+    if(!leads.find(l=>l.phone===phone||(email&&l.email===email))){
+      const lead={id:Date.now()+Math.random(),name,email,phone,budgetMin:0,budgetMax:999999,status:'warm',preferences:[],notes:'',fromContacts:true};
+      leads.push(lead);importedLeads.push(lead);added++;
+    }
+  });
+  persist();renderAll();
+  try { await saveImportedLeadsToAccount(importedLeads); } catch (e) { console.error(e); toast('Contacts imported, but account save failed.', true); }
+  log(`Imported ${added} contacts as leads`);toast(`${added} contact${added!==1?'s':''} added ✓`);
+}
+
+function showContactModal(){
+  pendingContacts=[];
+  selectedContacts = new Set();
+  document.getElementById('contactSearch').value = '';
+  document.getElementById('selCount').textContent = '0';
+  document.getElementById('importCBtn').disabled = true;
+  document.getElementById('contactSub').textContent='Real phone contact import is only available in supported mobile browsers. On unsupported browsers, use Add or CSV import instead.';
+  renderContactGrid(pendingContacts);
+  const empty=document.getElementById('contactsEmpty');
+  empty.style.display='block';
+  empty.innerHTML='Native phone contact access is not available in this browser/web-app.<br><br>Use <strong style="color:var(--amber);">+ Add</strong> or <strong style="color:var(--amber);">CSV</strong> instead.';
+  openModal('contacts');
+}
+
+function renderContactGrid(contacts){
+  const g=document.getElementById('contactsGrid'),e=document.getElementById('contactsEmpty');
+  if(!contacts.length){g.innerHTML='';e.style.display='block';e.textContent='No contacts found.';return;}
+  e.style.display='none';
+  g.innerHTML=contacts.map(c=>`<div class="contact-card ${selectedContacts.has(c.id)?'selected':''}" onclick="toggleContact(${c.id})" id="cc-${c.id}"><div class="contact-avatar">${c.name.charAt(0).toUpperCase()}</div><div style="flex:1;min-width:0;"><div class="contact-name">${c.name}</div><div class="contact-phone">${c.phone||c.email||''}</div></div><div class="contact-check">✓</div></div>`).join('');
+}
+
+function filterContacts(){const q=document.getElementById('contactSearch').value.toLowerCase();renderContactGrid(pendingContacts.filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)));}
+function toggleContact(id){selectedContacts.has(id)?selectedContacts.delete(id):selectedContacts.add(id);const c=document.getElementById('cc-'+id);if(c)c.classList.toggle('selected',selectedContacts.has(id));document.getElementById('selCount').textContent=selectedContacts.size;document.getElementById('importCBtn').disabled=selectedContacts.size===0;}
+async function importSelected(){
+  let added=0;
+  const importedLeads=[];
+  pendingContacts.filter(c=>selectedContacts.has(c.id)).forEach(c=>{
+    if(!leads.find(l=>l.phone===c.phone||(c.email&&l.email===c.email))){
+      const lead={id:Date.now()+Math.random(),name:c.name,email:c.email||'',phone:c.phone||'',budgetMin:0,budgetMax:999999,status:'warm',preferences:[],notes:'',fromContacts:true};
+      leads.push(lead);importedLeads.push(lead);added++;
+    }
+  });
+  closeModal('contacts');persist();renderAll();
+  try { await saveImportedLeadsToAccount(importedLeads); } catch (e) { console.error(e); toast('Contacts imported, but account save failed.', true); }
+  log(`Imported ${added} contacts as leads`);toast(`${added} contact${added!==1?'s':''} added ✓`);
+}
+
+// ── ADD LEAD / LISTING ─────────────────────────────────────────
+function saveLead(){
+  const name=(document.getElementById('l-fn').value+' '+document.getElementById('l-ln').value).trim();
+  if(!name){toast('Name required.',true);return;}
+  leads.push({id:Date.now(),name,email:document.getElementById('l-em').value.trim(),phone:document.getElementById('l-ph').value.trim(),budgetMin:parseInt(document.getElementById('l-bmin').value)||0,budgetMax:parseInt(document.getElementById('l-bmax').value)||999999,status:document.getElementById('l-st').value,preferences:[...leadTags],notes:document.getElementById('l-no').value.trim()});
+  leadTags=[];document.getElementById('lTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
+  ['l-fn','l-ln','l-em','l-ph','l-bmin','l-bmax','l-no'].forEach(id=>document.getElementById(id).value='');
+  closeModal('addLead');persist();renderAll();log('Lead added: '+name);toast(name+' added ✓');
+}
+
+function saveListing(){
+  const addr=document.getElementById('p-ad').value.trim();if(!addr){toast('Address required.',true);return;}
+  listings.push({id:Date.now(),address:addr,price:parseInt(document.getElementById('p-pr').value)||0,status:document.getElementById('p-st').value,beds:parseInt(document.getElementById('p-bd').value)||0,baths:parseInt(document.getElementById('p-ba').value)||0,tags:[...listingTags],source:'manual'});
+  listingTags=[];document.getElementById('pTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
+  ['p-ad','p-pr','p-bd','p-ba'].forEach(id=>document.getElementById(id).value='');
+  closeModal('addListing');persist();renderAll();populateMatchSel();log('Listing added: '+addr);toast('Listing added ✓');
+}
+
+// ── TAGS ───────────────────────────────────────────────────────
+function addTag(e,type){
+  if(e.key!=='Enter'&&e.key!==',') return;e.preventDefault();
+  const val=e.target.value.trim().replace(/,/g,'');if(!val) return;
+  const arr=type==='lead'?leadTags:listingTags,aId=type==='lead'?'lTagArea':'pTagArea',iId=type==='lead'?'lTagIn':'pTagIn';
+  if(arr.includes(val)) return;arr.push(val);
+  const pill=document.createElement('span');pill.className='tag-pill';pill.innerHTML=`${val}<span class="remove" onclick="rmTag('${val}','${type}',this)">×</span>`;
+  document.getElementById(iId).before(pill);e.target.value='';
+}
+function rmTag(tag,type,el){if(type==='lead')leadTags=leadTags.filter(t=>t!==tag);else listingTags=listingTags.filter(t=>t!==tag);el.parentElement.remove();}
+
+// ── CSV ────────────────────────────────────────────────────────
+function dropCsv(e,type){e.preventDefault();e.currentTarget.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)parseCsv(f,type);}
+function readCsv(e,type){const f=e.target.files[0];if(f)parseCsv(f,type);}
+function parseCsv(file,type){
+  const r=new FileReader();
+  r.onload=e=>{
+    const lines=e.target.result.split('\n').filter(l=>l.trim());
+    const hdrs=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
+    let count=0;
+    for(let i=1;i<lines.length;i++){
+      const vals=csvSplit(lines[i]),row={};
+      hdrs.forEach((h,idx)=>row[h]=(vals[idx]||'').replace(/"/g,'').trim());
+      if(type==='leads'){const prefs=(row.preferences||row.tags||'').split(';').map(p=>p.trim()).filter(Boolean);leads.push({id:Date.now()+i,name:row.name||'Unknown',email:row.email||'',phone:row.phone||'',budgetMin:parseInt(row.budget_min||0),budgetMax:parseInt(row.budget_max||999999),status:row.status||'warm',preferences:prefs,notes:row.notes||''});}
+      else{const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);listings.push({id:Date.now()+i,address:row.address||'Unknown',price:parseInt(row.price||0),status:row.status||'active',beds:parseInt(row.beds||0),baths:parseInt(row.baths||0),tags,source:'manual'});}
+      count++;
+    }
+    const sel=type==='leads'?'lcsvStatus':'pcsvStatus';document.getElementById(sel).style.display='block';document.getElementById(sel).textContent=`✓ Imported ${count} ${type}`;
+    persist();renderAll();populateMatchSel();log(`CSV: ${count} ${type} imported`);toast(`${count} ${type} imported ✓`);
+  };r.readAsText(file);
+}
+function csvSplit(line){const r=[];let cur='',q=false;for(const c of line){if(c==='"'){q=!q;continue;}if(c===','&&!q){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
+
+// ── MATCH ENGINE ───────────────────────────────────────────────
+function populateMatchSel(){
+  const s=document.getElementById('matchSel');if(!s) return;
+  s.innerHTML='<option value="">— Choose a listing —</option>';
+  listings.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=`${l.address} — $${fmt(l.price)}`;s.appendChild(o);});
+}
+
+function matchFrom(id){nav('match');setTimeout(()=>{document.getElementById('matchSel').value=id;runMatch();},120);}
+
+async function runMatch(){
+  const id=parseFloat(document.getElementById('matchSel').value);
+  if(!id){toast('Select a listing first.',true);return;}
+  const listing=listings.find(l=>l.id==id);
+  if(!listing||!leads.length){toast('Need at least one lead.',true);return;}
+  const out=document.getElementById('matchOutput');
+  out.innerHTML=`<div class="sync-banner info"><div class="spinner"></div>AI analyzing ${leads.length} leads against: ${listing.tags.join(', ')}…</div>`;
+  const prompt=`You are a real estate CRM assistant. Score each lead's fit for this listing.
+LISTING: ${listing.address} | $${listing.price} | ${listing.beds}bd/${listing.baths}ba | Tags: ${listing.tags.join(', ')}
+LEADS:
+${leads.map(l=>`ID:${l.id} | ${l.name} | Budget:$${l.budgetMin}-$${l.budgetMax} | Prefs:${l.preferences.join(',')} | Status:${l.status} | Notes:${l.notes}`).join('\n')}
+Return ONLY a JSON array. Each object: {id,score(0-100),reason(1-2 sentences specific to tag/budget match)}. Order by score desc. No markdown.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    renderMatchResults(listing,JSON.parse(raw.replace(/```json|```/g,'').trim()));
+  }catch(e){renderMatchResults(listing,fallbackScore(listing));}
+}
+
+function fallbackScore(listing){
+  return leads.map(lead=>{
+    const lt=listing.tags.map(t=>t.toLowerCase()),lp=lead.preferences.map(p=>p.toLowerCase());
+    const matched=lp.filter(p=>lt.some(t=>t.includes(p)||p.includes(t)));
+    let score=Math.round((matched.length/Math.max(lp.length,1))*60);
+    if(listing.price>=lead.budgetMin&&listing.price<=lead.budgetMax)score+=30;else if(listing.price<=lead.budgetMax*1.1)score+=10;
+    if(lead.status==='hot')score+=10;else if(lead.status==='warm')score+=5;
+    score=Math.min(100,score);
+    const reason=matched.length>0?`Matches on: ${matched.join(', ')}. Price $${fmt(listing.price)} ${listing.price<=lead.budgetMax?'is within budget':'is slightly above budget'}.`:`No direct preference overlap. Budget ${listing.price<=lead.budgetMax?'fits':'may be high'} at $${fmt(listing.price)}.`;
+    return{id:lead.id,score,reason};
+  }).sort((a,b)=>b.score-a.score);
+}
+
+function renderMatchResults(listing,results){
+  const out=document.getElementById('matchOutput');
+  const strong=results.filter(r=>r.score>=50).length;
+  out.innerHTML=`<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${listing.address}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${listing.source==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${listing.tags.map(tagHtml).join('')}</div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;">${strong} strong match${strong!==1?'es':''} of ${leads.length} leads</div><div style="font-size:11.5px;color:var(--text-muted);">Sorted by fit score</div></div>
+  <div class="match-results-grid">${results.map((r,i)=>{const lead=leads.find(l=>l.id==r.id);if(!lead)return'';return`<div class="match-card" style="animation-delay:${i*.05}s;opacity:${r.score<15?.4:1}"><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">${lead.name}</div><div style="font-size:11.5px;color:var(--text-muted);">${lead.email||lead.phone||''} · ${dot(lead.status,'lead')}${lead.status}</div></div><div style="text-align:right;flex-shrink:0;"><div class="match-score">${r.score}</div><div class="match-score-label">Match %</div></div></div><div class="match-reason">${r.reason}</div><div style="font-size:11px;color:var(--text-dim);margin-bottom:9px;">Budget: $${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div><div style="margin-bottom:11px;">${lead.preferences.map(tagHtml).join('')}</div><div style="display:flex;gap:7px;"><button style="flex:1;padding:7px;background:var(--amber);color:var(--navy);border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;" onclick="copyText('${lead.email||lead.phone}')">📋 Copy Contact</button><button style="flex:1;padding:7px;background:var(--navy-light);color:var(--text-muted);border:1px solid var(--navy-border);border-radius:6px;font-size:11.5px;cursor:pointer;">Notes</button></div></div>`;}).join('')}</div>`;
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────
+function saveProfile(){const n=document.getElementById('p-name').value.trim(),b=document.getElementById('p-brokerage').value.trim();localStorage.setItem('bos_profile',JSON.stringify({name:n,brokerage:b}));toast('Profile saved ✓');}
+function clearData(type){if(!confirm(`Clear all ${type}? Cannot be undone.`))return;if(type==='leads'||type==='all')leads=[];if(type==='listings'||type==='all')listings=[];if(type==='all'){files=[];activityLog=[];}persist();renderAll();toast(type==='all'?'All data cleared.':type+' cleared.');}
+function togglePw(id){const el=document.getElementById(id);el.type=el.type==='password'?'text':'password';}
+
+// ── ONBOARDING ─────────────────────────────────────────────────
+function buildOnboard(){
+  const b=document.getElementById('onboardBlock');
+  if(leads.length>0&&listings.length>0){b.innerHTML='';return;}
+  b.innerHTML=`<div class="onboarding-card"><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div class="onboarding-steps"><div class="onboarding-step"><div class="step-num">01</div><div class="step-title">Deploy Proxy + Connect MLS</div><div class="step-desc">Deploy the proxy server to Railway (free), then enter your PrimeMLS credentials in Settings.</div></div><div class="onboarding-step"><div class="step-num">02</div><div class="step-title">Import Leads</div><div class="step-desc">Pull from your phone contacts or upload a CSV of your existing client database.</div></div><div class="onboarding-step"><div class="step-num">03</div><div class="step-title">Run Matches</div><div class="step-desc">New listing hits MLS → Broker OS surfaces your best prospects automatically.</div></div></div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo();document.getElementById('onboardBlock').innerHTML=''">Try Demo First</button></div></div>`;
+}
+
+
+function toggleMobileNav(){
+  document.body.classList.toggle('mobile-nav-open');
+  const overlay = document.getElementById('mobileSidebarOverlay');
+  if(overlay) overlay.classList.toggle('open', document.body.classList.contains('mobile-nav-open'));
+}
+function closeMobileNav(){
+  document.body.classList.remove('mobile-nav-open');
+  const overlay = document.getElementById('mobileSidebarOverlay');
+  if(overlay) overlay.classList.remove('open');
+}
+window.addEventListener('resize',()=>{ if(window.innerWidth>980) closeMobileNav(); });
+
+// ── HELPERS ────────────────────────────────────────────────────
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+
+function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'')+' show';setTimeout(()=>t.classList.remove('show'),2800);}
+function copyText(v){navigator.clipboard.writeText(v).then(()=>toast('Copied: '+v));}
+function dot(s,type){if(type==='lead'){const c=s==='hot'?'dot-hot':s==='warm'?'dot-warm':'dot-cold';return`<span class="status-dot ${c}"></span>`;}const c=s==='active'?'dot-active':s==='pending'?'dot-pending':'dot-sold';return`<span class="status-dot ${c}"></span>`;}
+function tagHtml(tag){const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${tag}</span>`;}
+function fmt(n){return Number(n||0).toLocaleString();}
+function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+function fileIcon(n){const e=(n.split('.').pop()||'').toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',csv:'📋'}[e]||'📁';}
+
+
+function showAuth(message='',type=''){
+  const shell=document.getElementById('authShell');
+  if(shell) shell.classList.remove('hidden');
+  setAuthStatus(message,type);
+}
+function hideAuth(){
+  const shell=document.getElementById('authShell');
+  if(shell) shell.classList.add('hidden');
+  setAuthStatus('','');
+}
+function setAuthStatus(message='',type=''){
+  const box=document.getElementById('authStatus');
+  if(!box) return;
+  box.className='auth-status'+(message?' show':'')+(type?' '+type:'');
+  box.textContent=message||'';
+}
+
+async function signUp(email, password) {
+  const { data, error } = await sb.auth.signUp({ email, password });
+  if (error) throw error;
+  return data;
+}
+
+async function signIn(email, password) {
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data;
+}
+
+async function signOutUser() {
+  const { error } = await sb.auth.signOut();
+  if (error) throw error;
+}
+
+async function getCurrentUser() {
+  const { data, error } = await sb.auth.getUser();
+  if (error) throw error;
+  return data.user;
+}
+
+async function ensureProfile() {
+  const { data: userData, error: userError } = await sb.auth.getUser();
+  if (userError) throw userError;
+  const user = userData.user;
+  if (!user) return;
+
+  const { error } = await sb
+    .from('profiles')
+    .upsert([{ id: user.id, email: user.email || '' }]);
+
+  if (error) throw error;
+}
+
+
+function mapSupabaseLead(row){
+  return {
+    id: typeof row.id === 'number' ? row.id : (row.id || (Date.now() + Math.random())),
+    name: row.name || '',
+    email: row.email || '',
+    phone: row.phone || '',
+    budgetMin: Number(row.budget_min || 0),
+    budgetMax: Number(row.budget_max || 999999),
+    status: row.status || 'warm',
+    preferences: Array.isArray(row.tags) ? row.tags : [],
+    notes: row.notes || '',
+    fromContacts: true
+  };
+}
+
+async function loadLeadsFromAccount() {
+  const user = await getCurrentUser();
+  if (!user) return;
+  const { data, error } = await sb
+    .from('leads')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  if (Array.isArray(data) && data.length) {
+    leads = data.map(mapSupabaseLead);
+    persist();
+    renderAll();
+  }
+}
+
+async function saveImportedLeadsToAccount(importedLeads) {
+  const user = await getCurrentUser();
+  if (!user || !importedLeads.length) return;
+  const rows = importedLeads.map(lead => ({
+    user_id: user.id,
+    name: lead.name || '',
+    email: lead.email || '',
+    phone: lead.phone || '',
+    budget_min: Number(lead.budgetMin || 0),
+    budget_max: Number(lead.budgetMax || 999999),
+    status: lead.status || 'warm',
+    tags: Array.isArray(lead.preferences) ? lead.preferences : [],
+    notes: lead.notes || ''
+  }));
+  const { error } = await sb.from('leads').insert(rows);
+  if (error) throw error;
+}
+
+async function handleSignUp() {
+  const emailEl = document.getElementById('authEmail');
+  const passEl = document.getElementById('authPassword');
+  const email = (emailEl?.value || '').trim();
+  const password = passEl?.value || '';
+
+  if (!email || !password) {
+    setAuthStatus('Enter email and password.', 'error');
+    return;
+  }
+
+  try {
+    setAuthStatus('Creating account...', '');
+    const result = await signUp(email, password);
+    if (result?.user) {
+      try { await ensureProfile(); } catch (_) {}
+    }
+    if (result?.session?.user) {
+      hideAuth();
+      setAuthStatus('', '');
+    } else {
+      setAuthStatus('Account created. Check email if confirmation is enabled, then sign in.', 'success');
+    }
+  } catch (err) {
+    setAuthStatus(err.message || 'Sign up failed.', 'error');
+  }
+}
+
+async function handleSignIn() {
+  const emailEl = document.getElementById('authEmail');
+  const passEl = document.getElementById('authPassword');
+  const email = (emailEl?.value || '').trim();
+  const password = passEl?.value || '';
+
+  if (!email || !password) {
+    setAuthStatus('Enter email and password.', 'error');
+    return;
+  }
+
+  try {
+    setAuthStatus('Signing in...', '');
+    await signIn(email, password);
+    try { await ensureProfile(); await loadLeadsFromAccount(); } catch (_) {}
+    hideAuth();
+    setAuthStatus('', '');
+  } catch (err) {
+    setAuthStatus(err.message || 'Sign in failed.', 'error');
+  }
+}
+
+async function bootAuth() {
+  try {
+    const user = await getCurrentUser();
+    if (user) {
+      hideAuth();
+      try { await ensureProfile(); await loadLeadsFromAccount(); } catch (_) {}
+    } else {
+      showAuth();
+    }
+  } catch (err) {
+    showAuth('Could not verify session.', 'error');
+  }
+}
+
+function handleAuthEnter(e) {
+  if (e.key === 'Enter') handleSignIn();
+}
+
+document.getElementById('authEmail')?.addEventListener('keydown', handleAuthEnter);
+document.getElementById('authPassword')?.addEventListener('keydown', handleAuthEnter);
+document.getElementById('authSigninBtn')?.addEventListener('click', handleSignIn);
+document.getElementById('authSignupBtn')?.addEventListener('click', handleSignUp);
+
+sb.auth.onAuthStateChange(async (_event, session) => {
+  if (session?.user) {
+    hideAuth();
+    try { await loadLeadsFromAccount(); } catch (_) {}
+  } else {
+    showAuth();
+  }
+});
+
+init();
+bootAuth();
+</script>
+</body>
+</html>
