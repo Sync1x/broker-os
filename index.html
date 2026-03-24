@@ -592,6 +592,10 @@
 let leads=[], listings=[], files=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
 let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
 
+function hasRecognizedMLSConnection(){
+  return !!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key);
+}
+
 // ── BOOT ───────────────────────────────────────────────────────
 function init() {
   load();
@@ -606,6 +610,7 @@ function load() {
     listings = JSON.parse(localStorage.getItem('bos_listings')||'[]');
     files = JSON.parse(localStorage.getItem('bos_files')||'[]');
     cfg = JSON.parse(localStorage.getItem('bos_cfg')||'{"proxy":"","url":"","user":"","key":"","area":"","connected":false,"lastSync":""}');
+    if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
     activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
     newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
     const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
@@ -677,7 +682,8 @@ function log(m){activityLog.push({m,t:new Date().toLocaleTimeString([],{hour:'2-
 
 function updateMLSBadge(){
   const badge=document.getElementById('mlsBadge'),dot=document.getElementById('mlsDot'),txt=document.getElementById('mlsTxt');
-  if(cfg.connected){badge.className='mls-status connected';dot.className='mls-dot on';txt.style.color='var(--green)';txt.textContent='MLS Live';}
+  const live = hasRecognizedMLSConnection();
+  if(live){badge.className='mls-status connected';dot.className='mls-dot on';txt.style.color='var(--green)';txt.textContent='MLS Live';}
   else{badge.className='mls-status disconnected';dot.className='mls-dot off';txt.style.color='var(--red)';txt.textContent='MLS Not Live Yet';}
 }
 
@@ -721,7 +727,7 @@ function renderListings(){
 
 function renderListingsBanner(){
   const el=document.getElementById('listingsBanner');
-  if(!cfg.connected){el.innerHTML=`<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings</strong> to auto-sync live listings.</div></div>`;}
+  if(!hasRecognizedMLSConnection()){el.innerHTML=`<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings</strong> to auto-sync live listings.</div></div>`;}
   else{el.innerHTML=`<div class="sync-banner success"><span class="mls-dot on"></span>PrimeMLS connected${cfg.area?' · '+cfg.area:''}. Last sync: ${cfg.lastSync||'Never'} &nbsp;<button class="btn btn-green" style="font-size:11px;padding:4px 10px;" onclick="syncMLS()">Sync Now</button></div>`;}
 }
 
