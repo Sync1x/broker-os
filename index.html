@@ -11,6 +11,22 @@
     --amber: #e8a030; --amber-light: #f0b84a; --amber-dim: rgba(232,160,48,0.12);
     --text: #e8edf2; --text-muted: #7a90a8; --text-dim: #4a6278;
     --green: #3dba7e; --red: #e05c5c; --blue: #4a9eda; --purple: #9b6dda;
+    --surface-0: rgba(0,0,0,0.1); --surface-1: rgba(255,255,255,0.018); --surface-2: rgba(0,0,0,0.18);
+    --overlay: rgba(0,0,0,0.72); --auth-glow: rgba(232,160,48,0.08); --auth-bg-a: rgba(13,27,42,0.98); --auth-bg-b: rgba(20,32,50,0.98);
+    --shadow-strong: 0 24px 60px rgba(0,0,0,0.35); --sidebar-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    --glass-blue: rgba(74,158,218,0.07); --glass-blue-border: rgba(74,158,218,0.2);
+    --contact-selected: rgba(61,186,126,0.06); --file-hover-lift: translateY(-2px);
+  }
+  html[data-theme="light"] {
+    --navy: #f6f8fc; --navy-mid: #ffffff; --navy-light: #eef3f9; --navy-border: #d7e2ee;
+    --amber: #cb8618; --amber-light: #dd9931; --amber-dim: rgba(203,134,24,0.12);
+    --text: #172536; --text-muted: #4e647a; --text-dim: #8aa0b4;
+    --green: #22885a; --red: #c24c4c; --blue: #2f79c7; --purple: #8057c5;
+    --surface-0: rgba(23,37,54,0.03); --surface-1: rgba(23,37,54,0.02); --surface-2: rgba(23,37,54,0.05);
+    --overlay: rgba(23,37,54,0.2); --auth-glow: rgba(203,134,24,0.08); --auth-bg-a: rgba(246,248,252,0.98); --auth-bg-b: rgba(237,242,248,0.98);
+    --shadow-strong: 0 20px 48px rgba(23,37,54,0.10); --sidebar-shadow: 0 16px 40px rgba(23,37,54,0.16);
+    --glass-blue: rgba(47,121,199,0.08); --glass-blue-border: rgba(47,121,199,0.18);
+    --contact-selected: rgba(34,136,90,0.08); --file-hover-lift: translateY(-2px);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -41,7 +57,7 @@
   .nav-badge { margin-left: auto; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 20px; min-width: 18px; text-align: center; }
   .nav-badge.green { background: var(--green); color: #fff; }
   .mls-status { margin: 12px 10px 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--navy-border); font-size: 11px; }
-  .mls-status.connected { border-color: rgba(61,186,126,0.3); background: rgba(61,186,126,0.06); }
+  .mls-status.connected { border-color: rgba(61,186,126,0.3); background: var(--contact-selected); }
   .mls-status.disconnected { border-color: rgba(224,92,92,0.3); background: rgba(224,92,92,0.08); }
   .mls-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
   .mls-dot.on { background: var(--green); box-shadow: 0 0 5px var(--green); }
@@ -78,9 +94,9 @@
   .search-input { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 6px; padding: 7px 11px; font-family: 'DM Sans', sans-serif; font-size: 12.5px; color: var(--text); outline: none; width: 170px; }
   .search-input::placeholder { color: var(--text-dim); } .search-input:focus { border-color: var(--amber); }
   table { width: 100%; border-collapse: collapse; }
-  th { font-size: 9.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; padding: 9px 18px; text-align: left; border-bottom: 1px solid var(--navy-border); background: rgba(0,0,0,0.1); }
+  th { font-size: 9.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; padding: 9px 18px; text-align: left; border-bottom: 1px solid var(--navy-border); background: var(--surface-0); }
   td { padding: 12px 18px; font-size: 12.5px; border-bottom: 1px solid rgba(36,54,80,0.5); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; } tr:hover td { background: rgba(255,255,255,0.018); }
+  tr:last-child td { border-bottom: none; } tr:hover td { background: var(--surface-1); }
 
   .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 500; margin: 1px; }
   .tag-lake { background: rgba(74,158,218,0.14); color: var(--blue); }
@@ -112,7 +128,7 @@
   @keyframes fadeUp { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
   .match-score { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--amber); }
   .match-score-label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
-  .match-reason { background: rgba(0,0,0,0.18); border-left: 3px solid var(--amber); border-radius: 0 5px 5px 0; padding: 9px 11px; font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin: 10px 0; font-style: italic; }
+  .match-reason { background: var(--surface-2); border-left: 3px solid var(--amber); border-radius: 0 5px 5px 0; padding: 9px 11px; font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin: 10px 0; font-style: italic; }
 
   .settings-section { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
   .settings-section-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
@@ -137,7 +153,7 @@
   .contacts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 9px; margin-top: 12px; max-height: 360px; overflow-y: auto; }
   .contact-card { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 8px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all .13s; }
   .contact-card:hover { border-color: var(--amber); }
-  .contact-card.selected { border-color: var(--green); background: rgba(61,186,126,0.06); }
+  .contact-card.selected { border-color: var(--green); background: var(--contact-selected); }
   .contact-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--navy-border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; color: var(--text-muted); }
   .contact-name { font-size: 12.5px; font-weight: 500; margin-bottom: 1px; }
   .contact-phone { font-size: 11px; color: var(--text-muted); }
@@ -146,9 +162,9 @@
 
   .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 12px; margin-top: 16px; }
   .file-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 9px; padding: 18px; text-align: center; cursor: pointer; transition: all .14s; }
-  .file-card:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .file-card:hover { border-color: var(--amber); transform: var(--file-hover-lift); }
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 13px; padding: 26px; width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; animation: modalIn .18s ease; }
   .modal.wide { width: 620px; }
@@ -167,7 +183,7 @@
 
   .csv-drop { border: 2px dashed var(--navy-border); border-radius: 9px; padding: 26px; text-align: center; cursor: pointer; transition: all .18s; margin-bottom: 14px; }
   .csv-drop:hover, .csv-drop.dragover { border-color: var(--amber); background: var(--amber-dim); }
-  .csv-sample { font-size: 10.5px; color: var(--text-dim); background: rgba(0,0,0,0.22); border-radius: 6px; padding: 9px 11px; font-family: monospace; line-height: 1.65; text-align: left; }
+  .csv-sample { font-size: 10.5px; color: var(--text-dim); background: var(--surface-2); border-radius: 6px; padding: 9px 11px; font-family: monospace; line-height: 1.65; text-align: left; }
 
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .section-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; }
@@ -204,7 +220,7 @@
   ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
 
   /* Proxy URL hint box */
-  .hint-box { background: rgba(74,158,218,0.07); border: 1px solid rgba(74,158,218,0.2); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+  .hint-box { background: var(--glass-blue); border: 1px solid var(--glass-blue-border); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
   .hint-box strong { color: var(--blue); }
   .step-badge { display: inline-block; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
 
@@ -224,7 +240,7 @@
       z-index: 50;
       transform: translateX(-100%);
       transition: transform .22s ease;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      box-shadow: var(--sidebar-shadow);
     }
     body.mobile-nav-open .sidebar { transform: translateX(0); }
     .mobile-sidebar-overlay { display:block; }
@@ -263,6 +279,22 @@
     .section-header .btn { width: auto; }
     .modal-actions { flex-direction: column; }
     .modal-actions .btn { width: 100%; }
+
+    .discover-hero { padding: 18px; margin-bottom: 14px; }
+    .discover-hero h2 { font-size: 20px; line-height: 1.2; }
+    .discover-hero p { font-size: 12.5px; line-height: 1.6; }
+    .discover-kpis { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+    .discover-kpi { padding: 14px 16px; }
+    .discover-kpi .value { font-size: 22px; }
+    .discover-filter-row { width: 100%; gap: 8px; }
+    .discover-filter-row .pill-btn { flex: 1 1 calc(50% - 4px); text-align: center; }
+    .discover-filter-row .btn { width: 100%; }
+    .news-card { padding: 14px; }
+    .news-title { font-size: 15px; line-height: 1.4; }
+    .news-summary { font-size: 12px; line-height: 1.6; }
+    .discover-side-card { padding: 16px; }
+    .discover-side-title { font-size: 15px; }
+    .brief-item, .mini-item a { font-size: 11.5px; }
   }
 
 
@@ -276,8 +308,8 @@
     justify-content: center;
     padding: 24px;
     background:
-      radial-gradient(circle at top left, rgba(232,160,48,0.08), transparent 28%),
-      linear-gradient(135deg, rgba(13,27,42,0.98), rgba(20,32,50,0.98));
+      radial-gradient(circle at top left, var(--auth-glow), transparent 28%),
+      linear-gradient(135deg, var(--auth-bg-a), var(--auth-bg-b));
   }
   .auth-shell.hidden { display: none; }
   .auth-card {
@@ -287,7 +319,7 @@
     border: 1px solid var(--navy-border);
     border-radius: 16px;
     padding: 28px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    box-shadow: var(--shadow-strong);
   }
   .auth-brand { margin-bottom: 18px; }
   .auth-brand .wordmark { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
@@ -310,6 +342,52 @@
   .auth-status.show { display: block; }
   .auth-status.success { border-color: rgba(61,186,126,0.25); background: rgba(61,186,126,0.08); color: var(--green); }
   .auth-status.error { border-color: rgba(224,92,92,0.25); background: rgba(224,92,92,0.08); color: var(--red); }
+
+
+
+  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); gap: 18px; }
+  .discover-hero { background: linear-gradient(135deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
+  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 760px; }
+  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .discover-kpi { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
+  .discover-kpi .label { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
+  .discover-kpi .value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; }
+  .discover-kpi .sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+  .discover-filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .pill-btn { padding: 7px 11px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 11.5px; cursor: pointer; transition: all .14s; }
+  .pill-btn:hover { color: var(--text); border-color: var(--amber); }
+  .pill-btn.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
+  .discover-list { display: flex; flex-direction: column; gap: 12px; }
+  .news-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; transition: border-color .14s, transform .14s; }
+  .news-card:hover { border-color: var(--amber); transform: translateY(-1px); }
+  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+  .news-source { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
+  .news-source.news { background: rgba(74,158,218,0.13); color: var(--blue); }
+  .news-source.rates { background: rgba(61,186,126,0.13); color: var(--green); }
+  .news-time { font-size: 11px; color: var(--text-dim); }
+  .news-title { font-size: 16px; font-weight: 600; line-height: 1.45; margin-bottom: 8px; }
+  .news-title a { color: var(--text); text-decoration: none; }
+  .news-title a:hover { color: var(--amber); }
+  .news-summary { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .discover-side-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .brief-list { display: flex; flex-direction: column; gap: 10px; }
+  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 10px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .mini-list { display: flex; flex-direction: column; gap: 9px; }
+  .mini-item { padding-bottom: 9px; border-bottom: 1px solid rgba(36,54,80,0.52); }
+  .mini-item:last-child { padding-bottom: 0; border-bottom: none; }
+  .mini-item a { color: var(--text); text-decoration: none; font-size: 12.5px; line-height: 1.45; }
+  .mini-item a:hover { color: var(--amber); }
+  .mini-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 4px; }
+  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; }
+  .discover-empty .emoji { font-size: 30px; margin-bottom: 10px; }
+
+  @media (max-width: 980px) {
+    .discover-shell { grid-template-columns: 1fr; gap: 14px; }
+    .discover-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .discover-side-card { margin-bottom: 12px; }
+  }
 
 </style>
 </head>
@@ -355,6 +433,7 @@
     <div class="nav-item" onclick="nav('leads')" id="nav-leads"><span class="icon">◉</span> Leads <span class="nav-badge" id="badge-leads">0</span></div>
     <div class="nav-item" onclick="nav('listings')" id="nav-listings"><span class="icon">⌂</span> Listings <span class="nav-badge" id="badge-listings">0</span></div>
     <div class="nav-label" style="margin-top:10px;">Intelligence</div>
+    <div class="nav-item" onclick="nav('discover')" id="nav-discover"><span class="icon">◌</span> Discover</div>
     <div class="nav-item" onclick="nav('match')" id="nav-match"><span class="icon">✦</span> Match Engine <span class="nav-badge green" id="badge-matches" style="display:none;"></span></div>
     <div class="nav-label" style="margin-top:10px;">Manage</div>
     <div class="nav-item" onclick="nav('files')" id="nav-files"><span class="icon">▤</span> Documents <span class="nav-badge" id="badge-files">0</span></div>
@@ -388,6 +467,57 @@
         <div class="stat-card"><div class="stat-label">MLS Synced</div><div class="stat-value" id="s-synced">—</div></div>
       </div>
       <div class="table-card"><div class="table-header"><div class="table-title">Recent Activity</div></div><div id="activityEl" style="padding:18px 20px;font-size:13px;color:var(--text-muted);">Connect MLS and add leads to get started.</div></div>
+    </div>
+
+    <!-- DISCOVER -->
+    <div class="view" id="view-discover">
+      <div class="discover-hero">
+        <h2>Your real estate morning brief</h2>
+        <p>Wake up, open Broker OS, and scan what actually changed. Discover is wired to your Mortgage News Daily RSS feed so you can check daily market movement, mortgage-rate coverage, and fresh housing headlines in one clean place.</p>
+      </div>
+      <div class="discover-kpis">
+        <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
+        <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
+        <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+      </div>
+      <div class="discover-shell">
+        <div>
+          <div class="table-card" style="margin-bottom:16px;">
+            <div class="table-header">
+              <div class="table-title">Market feed</div>
+              <div class="table-actions discover-filter-row">
+                <button class="pill-btn active" id="discoverFilter-all" onclick="setDiscoverFilter('all')">All</button>
+                <button class="pill-btn" id="discoverFilter-news" onclick="setDiscoverFilter('news')">Daily News</button>
+                <button class="pill-btn" id="discoverFilter-rates" onclick="setDiscoverFilter('rates')">Rates</button>
+                <button class="btn btn-secondary" onclick="refreshDiscoverFeed()">Refresh</button>
+              </div>
+            </div>
+          </div>
+          <div class="discover-list" id="discoverList"></div>
+          <div id="discoverEmpty" class="discover-empty" style="display:none;">
+            <div class="emoji">📰</div>
+            <h3 style="font-size:15px;color:var(--text-muted);margin-bottom:6px;">No Discover items yet</h3>
+            <p style="font-size:12.5px;color:var(--text-dim);line-height:1.6;">Broker OS will try your live Mortgage News Daily feed directly here. If the feed is blocked by browser CORS, the next clean upgrade is a Supabase Edge Function cache into <strong style="color:var(--amber);">discover_items</strong>.</p>
+          </div>
+        </div>
+        <div>
+          <div class="discover-side-card">
+            <div class="discover-side-title">This morning</div>
+            <div class="brief-list" id="discoverBriefs"></div>
+          </div>
+          <div class="discover-side-card">
+            <div class="discover-side-title">Rate watch</div>
+            <div class="mini-list" id="discoverRatesMini"></div>
+          </div>
+          <div class="discover-side-card" style="margin-bottom:0;">
+            <div class="discover-side-title">Sources</div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.7;">
+              <div style="margin-bottom:7px;"><strong style="color:var(--text);">Mortgage News Daily</strong><br>Live custom RSS feed connected through your RSS.app link.</div>
+              <div><strong style="color:var(--text);">Broker OS Discover</strong><br>Same app style, same flow, but now with a live market feed layered into your workspace.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- LEADS -->
@@ -508,6 +638,16 @@
         <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
       </div>
 
+      <!-- APPEARANCE -->
+      <div class="settings-section">
+        <div class="settings-section-title">◐ Appearance</div>
+        <div class="settings-section-sub">Switch between the original dark look and a matching light theme. Your choice saves automatically on this device.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
+          <button class="btn btn-secondary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+        </div>
+      </div>
+
       <!-- DANGER -->
       <div class="settings-section">
         <div class="settings-section-title" style="color:var(--red);">⚠ Clear Data</div>
@@ -589,7 +729,9 @@
 
 <script>
 // ── STATE ──────────────────────────────────────────────────────
-let leads=[], listings=[], files=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
+let leads=[], listings=[], files=[], discoverItems=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
+let discoverFilter='all';
+let currentTheme='dark';
 let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
 
 function hasRecognizedMLSConnection(){
@@ -599,9 +741,11 @@ function hasRecognizedMLSConnection(){
 // ── BOOT ───────────────────────────────────────────────────────
 function init() {
   load();
+  applyTheme(currentTheme);
   populateSettingsFields();
   renderAll();
   buildOnboard();
+  loadDiscoverFromAccount().catch(err=>console.warn('Discover load failed.', err));
 }
 
 function load() {
@@ -613,6 +757,7 @@ function load() {
     if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
     activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
     newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
+    currentTheme = localStorage.getItem('bos_theme') || 'dark';
     const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
     if(p.name) document.getElementById('p-name').value=p.name;
     if(p.brokerage) document.getElementById('p-brokerage').value=p.brokerage;
@@ -633,11 +778,34 @@ function persist() {
   localStorage.setItem('bos_cfg',JSON.stringify(cfg));
   localStorage.setItem('bos_log',JSON.stringify(activityLog.slice(-60)));
   localStorage.setItem('bos_nm',newMatchCount);
+  localStorage.setItem('bos_theme',currentTheme);
 }
 
+function applyTheme(theme){
+  currentTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const darkBtn = document.getElementById('theme-dark-btn');
+  const lightBtn = document.getElementById('theme-light-btn');
+  if(darkBtn){
+    darkBtn.className = `btn ${currentTheme==='dark' ? 'btn-primary' : 'btn-secondary'}`;
+    darkBtn.setAttribute('aria-pressed', currentTheme==='dark' ? 'true' : 'false');
+  }
+  if(lightBtn){
+    lightBtn.className = `btn ${currentTheme==='light' ? 'btn-primary' : 'btn-secondary'}`;
+    lightBtn.setAttribute('aria-pressed', currentTheme==='light' ? 'true' : 'false');
+  }
+}
+
+function setTheme(theme){
+  applyTheme(theme);
+  persist();
+  toast(`${currentTheme==='light' ? 'White' : 'Dark'} theme active ✓`);
+}
+
+
 // ── NAV ────────────────────────────────────────────────────────
-const titles = {dashboard:'Dashboard',leads:'Leads',listings:'Listings',match:'Match Engine',files:'Documents',settings:'Settings'};
-const subs = {dashboard:'Overview',leads:'All contacts',listings:'All properties',match:'AI-powered lead matching',files:'Contracts & documents',settings:'Configuration'};
+const titles = {dashboard:'Dashboard',discover:'Discover',leads:'Leads',listings:'Listings',match:'Match Engine',files:'Documents',settings:'Settings'};
+const subs = {dashboard:'Overview',discover:'Real estate news and market pulse',leads:'All contacts',listings:'All properties',match:'AI-powered lead matching',files:'Contracts & documents',settings:'Configuration'};
 
 function nav(name) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -655,7 +823,7 @@ function nav(name) {
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
-function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();}
+function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
 
 function renderStats(){
   document.getElementById('s-leads').textContent=leads.length;
@@ -685,6 +853,227 @@ function updateMLSBadge(){
   const live = hasRecognizedMLSConnection();
   if(live){badge.className='mls-status connected';dot.className='mls-dot on';txt.style.color='var(--green)';txt.textContent='MLS Live';}
   else{badge.className='mls-status disconnected';dot.className='mls-dot off';txt.style.color='var(--red)';txt.textContent='MLS Not Live Yet';}
+}
+
+// ── DISCOVER ───────────────────────────────────────────────────
+const DISCOVER_RSS_URL = 'https://rss.app/feeds/GZmHICn6jx0eX9ZS.xml';
+const DISCOVER_RSS_SOURCE_NAME = 'Mortgage News Daily';
+const DISCOVER_CACHE_KEY = 'bos_discover_rss_cache_v1';
+const DISCOVER_CACHE_TIME_KEY = 'bos_discover_rss_cache_time_v1';
+const DISCOVER_CACHE_TTL_MS = 15 * 60 * 1000;
+
+function setDiscoverFilter(type){
+  discoverFilter = type;
+  ['all','news','rates'].forEach(k=>{
+    const el=document.getElementById('discoverFilter-'+k);
+    if(el) el.classList.toggle('active', k===type);
+  });
+  renderDiscover();
+}
+
+function relativeTime(dateStr){
+  if(!dateStr) return 'No timestamp';
+  const d = new Date(dateStr);
+  if(Number.isNaN(d.getTime())) return 'No timestamp';
+  const diff = Date.now() - d.getTime();
+  const mins = Math.round(diff / 60000);
+  if(mins < 60) return `${Math.max(mins,1)}m ago`;
+  const hrs = Math.round(mins / 60);
+  if(hrs < 24) return `${hrs}h ago`;
+  const days = Math.round(hrs / 24);
+  if(days < 7) return `${days}d ago`;
+  return d.toLocaleDateString();
+}
+
+function cleanSummary(text=''){
+  return String(text || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+}
+
+function htmlEscape(str=''){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function safeHref(url=''){
+  const value = String(url || '').trim();
+  if(!value) return '#';
+  try {
+    const parsed = new URL(value);
+    if(parsed.protocol === 'http:' || parsed.protocol === 'https:') return parsed.href;
+  } catch(_) {}
+  return '#';
+}
+
+function normalizeDiscoverType(item={}){
+  const haystack = [item.source_type, item.source_name, item.title, item.summary, item.category].map(v => String(v || '').toLowerCase()).join(' ');
+  return /rate|mortgage|mbs|yield|refi|refinanc/.test(haystack) ? 'rates' : 'news';
+}
+
+function normalizeDiscoverItem(item={}){
+  const type = normalizeDiscoverType(item);
+  return {
+    source_name: item.source_name || DISCOVER_RSS_SOURCE_NAME,
+    source_type: type,
+    title: String(item.title || 'Untitled item').trim(),
+    summary: cleanSummary(item.summary || item.description || ''),
+    link: safeHref(item.link || item.url || '#'),
+    published_at: item.published_at || item.pubDate || item.isoDate || null,
+    category: item.category || '',
+    raw_guid: item.raw_guid || item.guid || item.link || item.title || Math.random().toString(36).slice(2)
+  };
+}
+
+function dedupeDiscoverItems(items=[]){
+  const seen = new Set();
+  return items.map(normalizeDiscoverItem).filter(item => {
+    const key = `${item.raw_guid}::${item.link}`;
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return !!item.title;
+  }).sort((a,b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
+}
+
+function discoverDisplayItems(){
+  if(discoverFilter==='all') return discoverItems;
+  return discoverItems.filter(item => (item.source_type || 'news') === discoverFilter);
+}
+
+function renderDiscover(){
+  const list=document.getElementById('discoverList');
+  const empty=document.getElementById('discoverEmpty');
+  const briefs=document.getElementById('discoverBriefs');
+  const ratesMini=document.getElementById('discoverRatesMini');
+  if(!list || !empty || !briefs || !ratesMini) return;
+
+  const items = discoverDisplayItems();
+  const newsCount = discoverItems.filter(i => (i.source_type || 'news') === 'news').length;
+  const ratesCount = discoverItems.filter(i => (i.source_type || 'news') === 'rates').length;
+  const latestPublished = discoverItems[0]?.published_at || null;
+
+  const totalEl=document.getElementById('discoverTotal');
+  const newsEl=document.getElementById('discoverNewsCount');
+  const ratesEl=document.getElementById('discoverRatesCount');
+  const lastEl=document.getElementById('discoverLastUpdated');
+  if(totalEl) totalEl.textContent = discoverItems.length;
+  if(newsEl) newsEl.textContent = newsCount;
+  if(ratesEl) ratesEl.textContent = ratesCount;
+  if(lastEl) lastEl.textContent = latestPublished ? relativeTime(latestPublished) : '—';
+
+  if(!items.length){
+    list.innerHTML='';
+    empty.style.display='block';
+  } else {
+    empty.style.display='none';
+    list.innerHTML = items.map(item => {
+      const type = item.source_type || 'news';
+      const source = htmlEscape(item.source_name || (type === 'rates' ? 'Rate Watch' : 'News'));
+      const summary = htmlEscape(cleanSummary(item.summary).slice(0, 280) || 'No summary available yet.');
+      const title = htmlEscape(item.title || 'Untitled item');
+      const link = safeHref(item.link || '#');
+      return `<article class="news-card"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div></article>`;
+    }).join('');
+  }
+
+  const latest = discoverItems.slice(0,3);
+  briefs.innerHTML = latest.length ? latest.map((item, idx)=>`<div class="brief-item">${idx+1}. <strong style="color:var(--text);">${htmlEscape(item.title || 'Untitled item')}</strong><br>${htmlEscape(cleanSummary(item.summary).slice(0, 120) || 'Fresh market coverage is available in your feed.')}</div>`).join('') : '<div class="brief-item">Your daily brief will appear here once the live feed loads.</div>' ;
+
+  const rateItems = discoverItems.filter(i => (i.source_type || 'news') === 'rates').slice(0,4);
+  ratesMini.innerHTML = rateItems.length ? rateItems.map(item => `<div class="mini-item"><a href="${safeHref(item.link || '#')}" target="_blank" rel="noopener noreferrer">${htmlEscape(item.title || 'Untitled rate item')}</a><div class="mini-sub">${relativeTime(item.published_at)}</div></div>`).join('') : '<div class="mini-item"><div class="mini-sub">No rate-watch items yet.</div></div>' ;
+}
+
+function getCachedDiscoverItems(){
+  try {
+    const raw = localStorage.getItem(DISCOVER_CACHE_KEY);
+    const cachedAt = Number(localStorage.getItem(DISCOVER_CACHE_TIME_KEY) || '0');
+    if(!raw || !cachedAt || (Date.now() - cachedAt > DISCOVER_CACHE_TTL_MS)) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? dedupeDiscoverItems(parsed) : [];
+  } catch(_) {
+    return [];
+  }
+}
+
+function cacheDiscoverItems(items=[]){
+  try {
+    localStorage.setItem(DISCOVER_CACHE_KEY, JSON.stringify(items));
+    localStorage.setItem(DISCOVER_CACHE_TIME_KEY, String(Date.now()));
+  } catch(_) {}
+}
+
+function parseFeedText(xmlText=''){
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, 'application/xml');
+  if(xml.querySelector('parsererror')) throw new Error('Could not parse feed XML.');
+  const nodes = [...xml.querySelectorAll('item, entry')];
+  return nodes.map(node => {
+    const getText = (...selectors) => {
+      for(const sel of selectors){
+        const el = node.querySelector(sel);
+        if(el && el.textContent && el.textContent.trim()) return el.textContent.trim();
+      }
+      return '';
+    };
+    const linkNode = node.querySelector('link');
+    const href = linkNode?.getAttribute?.('href');
+    return normalizeDiscoverItem({
+      source_name: DISCOVER_RSS_SOURCE_NAME,
+      title: getText('title'),
+      summary: getText('description','summary','content'),
+      link: href || getText('link'),
+      published_at: getText('pubDate','published','updated'),
+      category: [...node.querySelectorAll('category')].map(el => el.textContent.trim()).filter(Boolean).join(', '),
+      raw_guid: getText('guid','id') || href || getText('link') || getText('title')
+    });
+  }).filter(item => item.title && item.link);
+}
+
+async function loadDiscoverFromRSS(force=false){
+  const cached = !force ? getCachedDiscoverItems() : [];
+  if(cached.length) return cached;
+  const response = await fetch(DISCOVER_RSS_URL, { cache: 'no-store' });
+  if(!response.ok) throw new Error(`RSS request failed (${response.status})`);
+  const xmlText = await response.text();
+  const items = dedupeDiscoverItems(parseFeedText(xmlText));
+  cacheDiscoverItems(items);
+  return items;
+}
+
+async function loadDiscoverFromAccount(){
+  let dbItems = [];
+  try {
+    const { data, error } = await sb.from('discover_items').select('*').order('published_at', { ascending: false }).limit(60);
+    if(error) throw error;
+    dbItems = Array.isArray(data) ? dedupeDiscoverItems(data) : [];
+  } catch(e) {
+    console.warn('Supabase discover read failed, falling back to RSS feed.', e);
+  }
+
+  if(dbItems.length){
+    discoverItems = dbItems;
+    renderDiscover();
+    return discoverItems;
+  }
+
+  const rssItems = await loadDiscoverFromRSS();
+  discoverItems = rssItems;
+  renderDiscover();
+  return discoverItems;
+}
+
+async function refreshDiscoverFeed(){
+  try {
+    const rssItems = await loadDiscoverFromRSS(true);
+    discoverItems = rssItems.length ? rssItems : discoverItems;
+    renderDiscover();
+    toast('Discover refreshed ✓');
+  } catch (rssErr) {
+    try {
+      await loadDiscoverFromAccount();
+      toast('Discover refreshed ✓');
+    } catch (e) {
+      console.error(e);
+      toast('Could not refresh Discover feed.', true);
+    }
+  }
 }
 
 // ── LEADS RENDER ───────────────────────────────────────────────
@@ -1214,7 +1603,7 @@ async function handleSignIn() {
   try {
     setAuthStatus('Signing in...', '');
     await signIn(email, password);
-    try { await ensureProfile(); await loadLeadsFromAccount(); } catch (_) {}
+    try { await ensureProfile(); await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
     hideAuth();
     setAuthStatus('', '');
   } catch (err) {
@@ -1227,7 +1616,7 @@ async function bootAuth() {
     const user = await getCurrentUser();
     if (user) {
       hideAuth();
-      try { await ensureProfile(); await loadLeadsFromAccount(); } catch (_) {}
+      try { await ensureProfile(); await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
     } else {
       showAuth();
     }
@@ -1248,7 +1637,7 @@ document.getElementById('authSignupBtn')?.addEventListener('click', handleSignUp
 sb.auth.onAuthStateChange(async (_event, session) => {
   if (session?.user) {
     hideAuth();
-    try { await loadLeadsFromAccount(); } catch (_) {}
+    try { await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
   } else {
     showAuth();
   }
