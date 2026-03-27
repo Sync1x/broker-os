@@ -21,7 +21,7 @@
     --navy: #f6f8fc; --navy-mid: #ffffff; --navy-light: #eef3f9; --navy-border: #d7e2ee;
     --amber: #cb8618; --amber-light: #dd9931; --amber-dim: rgba(203,134,24,0.12);
     --text: #172536; --text-muted: #4e647a; --text-dim: #8aa0b4;
-    --green: #22885a; --red: #c24c4c; --blue: #2f79c7; --purple: #8057c5;
+    --green: #22885a; --red: #c24c4c; --b≤lue: #2f79c7; --purple: #8057c5;
     --surface-0: rgba(23,37,54,0.03); --surface-1: rgba(23,37,54,0.02); --surface-2: rgba(23,37,54,0.05);
     --overlay: rgba(23,37,54,0.2); --auth-glow: rgba(203,134,24,0.08); --auth-bg-a: rgba(246,248,252,0.98); --auth-bg-b: rgba(237,242,248,0.98);
     --shadow-strong: 0 20px 48px rgba(23,37,54,0.10); --sidebar-shadow: 0 16px 40px rgba(23,37,54,0.16);
@@ -191,14 +191,11 @@
   .new-matches-banner { background: linear-gradient(135deg, rgba(61,186,126,0.1), rgba(61,186,126,0.04)); border: 1px solid rgba(61,186,126,0.25); border-radius: 9px; padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .15s; }
   .new-matches-banner:hover { border-color: var(--green); }
 
-  .onboarding-card { background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
+  .onboarding-card { position: relative; background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
   .onboarding-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
   .onboarding-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; max-width: 460px; margin-left: auto; margin-right: auto; }
-  .onboarding-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
-  .onboarding-step { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 9px; padding: 14px; text-align: left; }
-  .step-num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
-  .step-title { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
-  .step-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+  .onboarding-close { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 18px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .15s; }
+  .onboarding-close:hover { color: var(--text); border-color: var(--amber); }
 
   .toggle { width: 38px; height: 21px; border-radius: 11px; background: var(--navy-border); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
   .toggle.on { background: var(--green); }
@@ -222,7 +219,6 @@
   /* Proxy URL hint box */
   .hint-box { background: var(--glass-blue); border: 1px solid var(--glass-blue-border); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
   .hint-box strong { color: var(--blue); }
-  .step-badge { display: inline-block; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
 
 
   .mobile-menu-btn { display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--navy-border); background:var(--navy-light); color:var(--text); font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
@@ -252,7 +248,7 @@
     .topbar-title { font-size: 16px; }
     .topbar-sub { font-size: 11px; }
     .content { padding: 14px 14px calc(14px + env(safe-area-inset-bottom) + 96px); }
-    .stats-row, .onboarding-steps, .form-row { grid-template-columns: 1fr 1fr; }
+    .stats-row, .form-row { grid-template-columns: 1fr 1fr; }
     .match-hero, .new-matches-banner, .section-header, .auto-match-row { flex-wrap: wrap; }
     .table-header { padding: 12px 14px; }
     th, td { padding-left: 14px; padding-right: 14px; }
@@ -265,7 +261,7 @@
 
   @media (max-width: 640px) {
     .content { padding: 12px 12px calc(12px + env(safe-area-inset-bottom) + 108px); }
-    .stats-row, .onboarding-steps, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
+    .stats-row, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
     .table-actions { margin-left: 0; width: 100%; }
     .table-actions > * { flex: 1 1 100%; }
     .search-input { width: 100%; }
@@ -281,7 +277,7 @@
     .modal-actions .btn { width: 100%; }
 
     .discover-hero { padding: 18px; margin-bottom: 14px; }
-    .discover-hero h2 { font-size: 20px; line-height: 1.2; }
+    .discover-hero h2 { font-size: 22px; line-height: 1.2; }
     .discover-hero p { font-size: 12.5px; line-height: 1.6; }
     .discover-kpis { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
     .discover-kpi { padding: 14px 16px; }
@@ -289,12 +285,26 @@
     .discover-filter-row { width: 100%; gap: 8px; }
     .discover-filter-row .pill-btn { flex: 1 1 calc(50% - 4px); text-align: center; }
     .discover-filter-row .btn { width: 100%; }
-    .news-card { padding: 14px; }
-    .news-title { font-size: 15px; line-height: 1.4; }
+    .discover-feed-title { font-size: 17px; }
+    .discover-feed-sub { font-size: 11.5px; }
+    .discover-feed-head { padding: 15px; }
+    .discover-list { padding: 12px; gap: 12px; }
+    .news-card { padding: 11px; border-radius: 14px; }
+    .news-meta { gap: 6px; }
+    .news-title { font-size: 17px; line-height: 1.4; }
     .news-summary { font-size: 12px; line-height: 1.6; }
+    .news-footer { align-items: flex-start; }
+    .news-link { width: 100%; justify-content: flex-start; }
+    .news-media { min-height: 200px; }
     .discover-side-card { padding: 16px; }
     .discover-side-title { font-size: 15px; }
-    .brief-item, .mini-item a { font-size: 11.5px; }
+    .brief-item { font-size: 11.5px; }
+    .market-panel { padding: 16px; border-radius: 18px; }
+    .market-panel-title { font-size: 22px; }
+    .market-panel-sub { margin-bottom: 12px; }
+    .market-card { padding: 11px; }
+    .market-card-value { font-size: 22px; }
+    .market-grid { grid-template-columns: 1fr; }
   }
 
 
@@ -345,12 +355,14 @@
 
 
 
-  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); gap: 18px; }
-  .discover-hero { background: linear-gradient(135deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
-  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 760px; }
-  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .discover-kpi { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
+  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, .8fr); gap: 22px; align-items: start; }
+  .discover-main { min-width: 0; }
+  .discover-aside { min-width: 0; position: sticky; top: 14px; }
+  .discover-hero { background: radial-gradient(circle at top right, rgba(232,160,48,0.14), transparent 38%), linear-gradient(160deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 18px; padding: 26px; margin-bottom: 18px; overflow: hidden; }
+  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.7; max-width: 760px; }
+  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
+  .discover-kpi { background: rgba(0,0,0,0.14); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 16px 18px; backdrop-filter: blur(10px); }
   .discover-kpi .label { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
   .discover-kpi .value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; }
   .discover-kpi .sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
@@ -358,35 +370,76 @@
   .pill-btn { padding: 7px 11px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 11.5px; cursor: pointer; transition: all .14s; }
   .pill-btn:hover { color: var(--text); border-color: var(--amber); }
   .pill-btn.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
-  .discover-list { display: flex; flex-direction: column; gap: 12px; }
-  .news-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; transition: border-color .14s, transform .14s; }
-  .news-card:hover { border-color: var(--amber); transform: translateY(-1px); }
-  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+  .discover-feed-shell { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; overflow: hidden; }
+  .discover-feed-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 20px 16px; border-bottom: 1px solid var(--navy-border); flex-wrap: wrap; }
+  .discover-feed-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; }
+  .discover-feed-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .discover-list { display: flex; flex-direction: column; gap: 18px; padding: 20px; }
+  .news-card { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border: 1px solid var(--navy-border); border-radius: 18px; padding: 16px; transition: border-color .14s, transform .14s, box-shadow .14s; }
+  .news-card:hover { border-color: rgba(232,160,48,0.32); transform: translateY(-1px); box-shadow: 0 14px 28px rgba(0,0,0,0.14); }
+  .news-media { position: relative; min-height: 188px; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, rgba(74,158,218,0.16), rgba(232,160,48,0.12)); border: 1px solid rgba(255,255,255,0.04); }
+  .news-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .news-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.22) 100%); pointer-events: none; }
+  .news-media-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; }
+  .news-media-label { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; opacity: .76; margin-bottom: 6px; }
+  .news-media-title { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.1; max-width: 90%; }
+  .news-body { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .news-source { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
   .news-source.news { background: rgba(74,158,218,0.13); color: var(--blue); }
   .news-source.rates { background: rgba(61,186,126,0.13); color: var(--green); }
   .news-time { font-size: 11px; color: var(--text-dim); }
-  .news-title { font-size: 16px; font-weight: 600; line-height: 1.45; margin-bottom: 8px; }
+  .news-title { font-size: 20px; font-weight: 600; line-height: 1.35; margin-bottom: 10px; }
   .news-title a { color: var(--text); text-decoration: none; }
   .news-title a:hover { color: var(--amber); }
-  .news-summary { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
-  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .news-summary { font-size: 13px; color: var(--text-muted); line-height: 1.72; margin-bottom: 12px; }
+  .news-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; flex-wrap: wrap; }
+  .news-tagline { font-size: 11px; color: var(--text-dim); }
+  .news-link { display: inline-flex; align-items: center; gap: 7px; color: var(--amber); text-decoration: none; font-size: 12px; font-weight: 600; }
+  .news-link:hover { color: var(--amber-light); }
+  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
   .discover-side-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
   .brief-list { display: flex; flex-direction: column; gap: 10px; }
-  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 10px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
-  .mini-list { display: flex; flex-direction: column; gap: 9px; }
-  .mini-item { padding-bottom: 9px; border-bottom: 1px solid rgba(36,54,80,0.52); }
-  .mini-item:last-child { padding-bottom: 0; border-bottom: none; }
-  .mini-item a { color: var(--text); text-decoration: none; font-size: 12.5px; line-height: 1.45; }
-  .mini-item a:hover { color: var(--amber); }
-  .mini-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 4px; }
-  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; }
+  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 11px 13px; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .market-panel { background: #181716; color: #f2f1ef; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 18px; margin-bottom: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .market-panel-title { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+  .market-panel-sub { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 14px; line-height: 1.55; }
+  .market-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .market-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px 12px 10px; min-width: 0; }
+  .market-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+  .market-card-name { font-size: 14px; color: rgba(255,255,255,0.94); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .market-card-change { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .market-card-change.down { color: #ff6f8c; }
+  .market-card-change.up { color: #5fd470; }
+  .market-card-value { font-size: 24px; font-weight: 500; line-height: 1.1; margin-bottom: 2px; }
+  .market-card-dollar { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 10px; }
+  .market-chart { width: 100%; height: 46px; display: block; }
+  .market-chart path.line.down { stroke: #ff6f8c; }
+  .market-chart path.line.up { stroke: #5fd470; }
+  .market-chart path.fill.down { fill: rgba(255,111,140,0.14); }
+  .market-chart path.fill.up { fill: rgba(95,212,112,0.14); }
+  .market-footnote { margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; }
   .discover-empty .emoji { font-size: 30px; margin-bottom: 10px; }
+
+  @media (max-width: 1200px) {
+    .discover-shell { grid-template-columns: minmax(0, 1fr) minmax(280px, 330px); gap: 18px; }
+    .discover-feed-head { padding: 18px 18px 15px; }
+    .discover-list { padding: 18px; gap: 16px; }
+    .news-card { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); gap: 14px; padding: 14px; }
+    .news-title { font-size: 18px; }
+    .market-grid { grid-template-columns: 1fr; }
+  }
 
   @media (max-width: 980px) {
     .discover-shell { grid-template-columns: 1fr; gap: 14px; }
     .discover-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .discover-aside { position: static; }
     .discover-side-card { margin-bottom: 12px; }
+    .news-card { grid-template-columns: 1fr; }
+    .news-media { min-height: 220px; aspect-ratio: 16 / 10; }
+    .discover-feed-head { padding: 18px 18px 14px; }
+    .discover-list { padding: 16px; gap: 14px; }
   }
 
 </style>
@@ -395,7 +448,7 @@
 <div class="auth-shell" id="authShell">
   <div class="auth-card">
     <div class="auth-brand">
-      <div class="wordmark">Broker OS</div>
+      <div class="wordmark">Broker OS TEST 999</div>
       <div class="tagline">Deal Intelligence</div>
     </div>
     <div class="auth-title">Sign in to Broker OS</div>
@@ -424,7 +477,7 @@
 
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="wordmark">Broker OS</div>
+    <div class="wordmark">Broker OS TEST 999</div>
     <div class="tagline">Deal Intelligence</div>
   </div>
   <div class="sidebar-nav">
@@ -474,45 +527,46 @@
       <div class="discover-hero">
         <h2>Your real estate morning brief</h2>
         <p>Wake up, open Broker OS, and scan what actually changed. Discover is wired to your Mortgage News Daily RSS feed so you can check daily market movement, mortgage-rate coverage, and fresh housing headlines in one clean place.</p>
-      </div>
-      <div class="discover-kpis">
-        <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
-        <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
-        <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+        <div class="discover-kpis">
+          <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
+          <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
+          <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+        </div>
       </div>
       <div class="discover-shell">
-        <div>
-          <div class="table-card" style="margin-bottom:16px;">
-            <div class="table-header">
-              <div class="table-title">Market feed</div>
-              <div class="table-actions discover-filter-row">
+        <div class="discover-main">
+          <div class="discover-feed-shell">
+            <div class="discover-feed-head">
+              <div>
+                <div class="discover-feed-title">Latest market stories</div>
+                <div class="discover-feed-sub">Pictures and story details now stack cleanly one-by-one down the page.</div>
+              </div>
+              <div class="discover-filter-row">
                 <button class="pill-btn active" id="discoverFilter-all" onclick="setDiscoverFilter('all')">All</button>
                 <button class="pill-btn" id="discoverFilter-news" onclick="setDiscoverFilter('news')">Daily News</button>
                 <button class="pill-btn" id="discoverFilter-rates" onclick="setDiscoverFilter('rates')">Rates</button>
                 <button class="btn btn-secondary" onclick="refreshDiscoverFeed()">Refresh</button>
               </div>
             </div>
+            <div class="discover-list" id="discoverList"></div>
           </div>
-          <div class="discover-list" id="discoverList"></div>
           <div id="discoverEmpty" class="discover-empty" style="display:none;">
             <div class="emoji">📰</div>
             <h3 style="font-size:15px;color:var(--text-muted);margin-bottom:6px;">No Discover items yet</h3>
             <p style="font-size:12.5px;color:var(--text-dim);line-height:1.6;">Broker OS will try your live Mortgage News Daily feed directly here. If the feed is blocked by browser CORS, the next clean upgrade is a Supabase Edge Function cache into <strong style="color:var(--amber);">discover_items</strong>.</p>
           </div>
         </div>
-        <div>
+        <div class="discover-aside">
+          <div class="market-panel" id="marketRatesPanel"></div>
           <div class="discover-side-card">
             <div class="discover-side-title">This morning</div>
             <div class="brief-list" id="discoverBriefs"></div>
-          </div>
-          <div class="discover-side-card">
-            <div class="discover-side-title">Rate watch</div>
-            <div class="mini-list" id="discoverRatesMini"></div>
           </div>
           <div class="discover-side-card" style="margin-bottom:0;">
             <div class="discover-side-title">Sources</div>
             <div style="font-size:12px;color:var(--text-muted);line-height:1.7;">
               <div style="margin-bottom:7px;"><strong style="color:var(--text);">Mortgage News Daily</strong><br>Live custom RSS feed connected through your RSS.app link.</div>
+              <div style="margin-bottom:7px;"><strong style="color:var(--text);">Market Rates Placeholder</strong><br>Styled like your reference image now and ready to become live quotes later.</div>
               <div><strong style="color:var(--text);">Broker OS Discover</strong><br>Same app style, same flow, but now with a live market feed layered into your workspace.</div>
             </div>
           </div>
@@ -582,13 +636,7 @@
       <!-- PROXY + MLS -->
       <div class="settings-section">
         <div class="settings-section-title">🔗 PrimeMLS Connection</div>
-        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. You need two things: your proxy server URL (from Railway/Render — free) and your PrimeMLS credentials. See the steps below.</div>
-
-        <div class="hint-box">
-          <span class="step-badge">Step 1</span> <strong>Deploy the proxy</strong> — Upload the <code>broker-proxy</code> folder to GitHub, then connect it to Railway or Render (free). They give you a URL like <code>https://broker-proxy-xxx.up.railway.app</code><br><br>
-          <span class="step-badge">Step 2</span> <strong>Get MLS credentials</strong> — Log into PrimeMLS → Member Tools → IDX/API Access. If no API tab, call them at (603) 930-3220 and ask for RESO Web API credentials.<br><br>
-          <span class="step-badge">Step 3</span> <strong>Paste both below</strong> and hit Save & Test.
-        </div>
+        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. Enter your proxy server URL and PrimeMLS credentials below, then save and test the connection.</div>
 
         <div class="form-group">
           <div class="form-label">Your Proxy URL</div>
@@ -641,10 +689,10 @@
       <!-- APPEARANCE -->
       <div class="settings-section">
         <div class="settings-section-title">◐ Appearance</div>
-        <div class="settings-section-sub">Switch between the original dark look and a matching light theme. Your choice saves automatically on this device.</div>
+        <div class="settings-section-sub">White theme is the default look, and you can switch to dark anytime. Your choice saves automatically on this device.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
-          <button class="btn btn-secondary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-primary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-secondary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
         </div>
       </div>
 
@@ -731,7 +779,8 @@
 // ── STATE ──────────────────────────────────────────────────────
 let leads=[], listings=[], files=[], discoverItems=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
 let discoverFilter='all';
-let currentTheme='dark';
+let currentTheme='light';
+let onboardingDismissed=false;
 let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
 
 function hasRecognizedMLSConnection(){
@@ -757,7 +806,8 @@ function load() {
     if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
     activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
     newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
-    currentTheme = localStorage.getItem('bos_theme') || 'dark';
+    currentTheme = localStorage.getItem('bos_theme') || 'light';
+    onboardingDismissed = localStorage.getItem('bos_onboard_dismissed') === 'true';
     const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
     if(p.name) document.getElementById('p-name').value=p.name;
     if(p.brokerage) document.getElementById('p-brokerage').value=p.brokerage;
@@ -779,6 +829,7 @@ function persist() {
   localStorage.setItem('bos_log',JSON.stringify(activityLog.slice(-60)));
   localStorage.setItem('bos_nm',newMatchCount);
   localStorage.setItem('bos_theme',currentTheme);
+  localStorage.setItem('bos_onboard_dismissed', onboardingDismissed ? 'true' : 'false');
 }
 
 function applyTheme(theme){
@@ -823,7 +874,7 @@ function nav(name) {
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
-function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
+function renderAll(){buildOnboard();renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
 
 function renderStats(){
   document.getElementById('s-leads').textContent=leads.length;
@@ -889,6 +940,11 @@ function cleanSummary(text=''){
   return String(text || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 }
 
+function extractImageFromHtml(text=''){
+  const match = String(text || '').match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match ? safeHref(match[1]) : '';
+}
+
 function htmlEscape(str=''){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -910,11 +966,13 @@ function normalizeDiscoverType(item={}){
 
 function normalizeDiscoverItem(item={}){
   const type = normalizeDiscoverType(item);
+  const image = safeHref(item.image_url || item.image || item.thumbnail || extractImageFromHtml(item.summary || item.description || ''));
   return {
     source_name: item.source_name || DISCOVER_RSS_SOURCE_NAME,
     source_type: type,
     title: String(item.title || 'Untitled item').trim(),
     summary: cleanSummary(item.summary || item.description || ''),
+    image_url: image && image !== '#' ? image : '',
     link: safeHref(item.link || item.url || '#'),
     published_at: item.published_at || item.pubDate || item.isoDate || null,
     category: item.category || '',
@@ -937,12 +995,46 @@ function discoverDisplayItems(){
   return discoverItems.filter(item => (item.source_type || 'news') === discoverFilter);
 }
 
+function discoverFallbackVisual(item, type){
+  const label = type === 'rates' ? 'Rate Watch' : 'Daily Brief';
+  return `<div class="news-media-placeholder"><div class="news-media-label">${label}</div><div class="news-media-title">${htmlEscape((item.title || 'Market update').split(' ').slice(0,4).join(' '))}</div></div>`;
+}
+
+function marketPath(points, width, height){
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const range = Math.max(max - min, 1);
+  const step = width / Math.max(points.length - 1, 1);
+  return points.map((value, index) => {
+    const x = Number((index * step).toFixed(2));
+    const y = Number((height - ((value - min) / range) * height).toFixed(2));
+    return `${index === 0 ? 'M' : 'L'}${x} ${y}`;
+  }).join(' ');
+}
+
+function renderMarketRatesPanel(){
+  const panel = document.getElementById('marketRatesPanel');
+  if(!panel) return;
+
+  const cards = [
+    { name:'S&P Futures', value:'6,543.25', dollar:'-$97.50', change:'↘ 1.47%', trend:'down', points:[76,74,73,71,69,68,66,65,63,60,58,59,57,58,56] },
+    { name:'NASDAQ Fut.', value:'23,855.00', dollar:'-$512.75', change:'↘ 2.10%', trend:'down', points:[84,82,81,79,78,76,74,73,72,69,67,66,65,64,63] },
+    { name:'Bitcoin', value:'$68,966.25', dollar:'-$1,795.41', change:'↘ 2.54%', trend:'down', points:[88,86,85,84,82,80,79,77,75,73,71,70,68,67,66] },
+    { name:'VIX', value:'27.44', dollar:'+2.11', change:'↗ 8.33%', trend:'up', points:[22,23,22,24,25,26,27,27,29,30,31,33,32,33,34] }
+  ];
+
+  panel.innerHTML = `<div class="market-panel-title">Market Outlook</div><div class="market-panel-sub">Placeholder market rates on the right, ready to become live quotes later.</div><div class="market-grid">${cards.map(card => {
+    const path = marketPath(card.points, 132, 34);
+    const area = `${path} L 132 34 L 0 34 Z`;
+    return `<div class="market-card"><div class="market-card-head"><div class="market-card-name">${htmlEscape(card.name)}</div><div class="market-card-change ${card.trend}">${card.change}</div></div><div class="market-card-value">${htmlEscape(card.value)}</div><div class="market-card-dollar">${htmlEscape(card.dollar)}</div><svg class="market-chart" viewBox="0 0 132 34" preserveAspectRatio="none" aria-hidden="true"><path class="fill ${card.trend}" d="${area}"></path><path class="line ${card.trend}" d="${path}" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>`;
+  }).join('')}</div><div class="market-footnote">This panel is a styled placeholder for now. The live Discover news feed remains on the left.</div>`;
+}
+
 function renderDiscover(){
   const list=document.getElementById('discoverList');
   const empty=document.getElementById('discoverEmpty');
   const briefs=document.getElementById('discoverBriefs');
-  const ratesMini=document.getElementById('discoverRatesMini');
-  if(!list || !empty || !briefs || !ratesMini) return;
+  if(!list || !empty || !briefs) return;
 
   const items = discoverDisplayItems();
   const newsCount = discoverItems.filter(i => (i.source_type || 'news') === 'news').length;
@@ -957,6 +1049,7 @@ function renderDiscover(){
   if(newsEl) newsEl.textContent = newsCount;
   if(ratesEl) ratesEl.textContent = ratesCount;
   if(lastEl) lastEl.textContent = latestPublished ? relativeTime(latestPublished) : '—';
+  renderMarketRatesPanel();
 
   if(!items.length){
     list.innerHTML='';
@@ -969,15 +1062,14 @@ function renderDiscover(){
       const summary = htmlEscape(cleanSummary(item.summary).slice(0, 280) || 'No summary available yet.');
       const title = htmlEscape(item.title || 'Untitled item');
       const link = safeHref(item.link || '#');
-      return `<article class="news-card"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div></article>`;
+      const category = htmlEscape(item.category || (type === 'rates' ? 'Rates and yields' : 'Housing and brokerage'));
+      const media = item.image_url ? `<img src="${item.image_url}" alt="${title}" loading="lazy">` : discoverFallbackVisual(item, type);
+      return `<article class="news-card"><div class="news-media">${media}</div><div class="news-body"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div><div class="news-footer"><div class="news-tagline">${category}</div><a class="news-link" href="${link}" target="_blank" rel="noopener noreferrer">Open story <span aria-hidden="true">→</span></a></div></div></article>`;
     }).join('');
   }
 
   const latest = discoverItems.slice(0,3);
   briefs.innerHTML = latest.length ? latest.map((item, idx)=>`<div class="brief-item">${idx+1}. <strong style="color:var(--text);">${htmlEscape(item.title || 'Untitled item')}</strong><br>${htmlEscape(cleanSummary(item.summary).slice(0, 120) || 'Fresh market coverage is available in your feed.')}</div>`).join('') : '<div class="brief-item">Your daily brief will appear here once the live feed loads.</div>' ;
-
-  const rateItems = discoverItems.filter(i => (i.source_type || 'news') === 'rates').slice(0,4);
-  ratesMini.innerHTML = rateItems.length ? rateItems.map(item => `<div class="mini-item"><a href="${safeHref(item.link || '#')}" target="_blank" rel="noopener noreferrer">${htmlEscape(item.title || 'Untitled rate item')}</a><div class="mini-sub">${relativeTime(item.published_at)}</div></div>`).join('') : '<div class="mini-item"><div class="mini-sub">No rate-watch items yet.</div></div>' ;
 }
 
 function getCachedDiscoverItems(){
@@ -1014,10 +1106,14 @@ function parseFeedText(xmlText=''){
     };
     const linkNode = node.querySelector('link');
     const href = linkNode?.getAttribute?.('href');
+    const mediaNode = node.querySelector('media\\:content, media\\:thumbnail, enclosure[url], content[url]');
+    const mediaUrl = mediaNode?.getAttribute?.('url');
+    const descriptionHtml = getText('description','summary','content');
     return normalizeDiscoverItem({
       source_name: DISCOVER_RSS_SOURCE_NAME,
       title: getText('title'),
-      summary: getText('description','summary','content'),
+      summary: descriptionHtml,
+      image_url: mediaUrl || extractImageFromHtml(descriptionHtml),
       link: href || getText('link'),
       published_at: getText('pubDate','published','updated'),
       category: [...node.querySelectorAll('category')].map(el => el.textContent.trim()).filter(Boolean).join(', '),
@@ -1154,7 +1250,7 @@ async function saveMLS(){
     if(!r.ok||data.error) throw new Error(data.error||'Bad response');
 
     cfg={proxy,url,user,key,area,connected:true,lastSync:new Date().toLocaleString()};
-    persist();updateMLSBadge();
+    persist();buildOnboard();updateMLSBadge();
     res.style.background='rgba(61,186,126,0.08)';res.style.color='var(--green)';
     res.innerHTML=`✓ Connected to PrimeMLS! ${data.sample?'Sample listing: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync listings now →</strong>`;
     log('PrimeMLS connected successfully');
@@ -1427,8 +1523,15 @@ function togglePw(id){const el=document.getElementById(id);el.type=el.type==='pa
 // ── ONBOARDING ─────────────────────────────────────────────────
 function buildOnboard(){
   const b=document.getElementById('onboardBlock');
-  if(leads.length>0&&listings.length>0){b.innerHTML='';return;}
-  b.innerHTML=`<div class="onboarding-card"><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div class="onboarding-steps"><div class="onboarding-step"><div class="step-num">01</div><div class="step-title">Deploy Proxy + Connect MLS</div><div class="step-desc">Deploy the proxy server to Railway (free), then enter your PrimeMLS credentials in Settings.</div></div><div class="onboarding-step"><div class="step-num">02</div><div class="step-title">Import Leads</div><div class="step-desc">Pull from your phone contacts or upload a CSV of your existing client database.</div></div><div class="onboarding-step"><div class="step-num">03</div><div class="step-title">Run Matches</div><div class="step-desc">New listing hits MLS → Broker OS surfaces your best prospects automatically.</div></div></div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo();document.getElementById('onboardBlock').innerHTML=''">Try Demo First</button></div></div>`;
+  if(!b) return;
+  if(hasRecognizedMLSConnection() || onboardingDismissed || (leads.length>0&&listings.length>0)){b.innerHTML='';return;}
+  b.innerHTML=`<div class="onboarding-card"><button class="onboarding-close" type="button" aria-label="Close welcome panel" onclick="dismissOnboarding()">×</button><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo()">Try Demo First</button></div></div>`;
+}
+
+function dismissOnboarding(){
+  onboardingDismissed=true;
+  persist();
+  buildOnboard();
 }
 
 
