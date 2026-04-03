@@ -30,19 +30,8 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  html { -webkit-text-size-adjust: 100%; }
-  html { overflow: hidden; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--navy);
-    color: var(--text);
-    min-height: 100vh;
-    min-height: 100svh;
-    min-height: 100dvh;
-    display: flex;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
+  html { -webkit-text-size-adjust: 100%; overflow: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; overflow: hidden; overscroll-behavior: none; }
 
   .sidebar { width: 224px; min-width: 224px; background: var(--navy-mid); border-right: 1px solid var(--navy-border); display: flex; flex-direction: column; }
   .sidebar-logo { padding: 26px 22px 18px; border-bottom: 1px solid var(--navy-border); }
@@ -77,9 +66,7 @@
   .btn-green { background: rgba(61,186,126,0.14); color: var(--green); border: 1px solid rgba(61,186,126,0.25); } .btn-green:hover { background: rgba(61,186,126,0.24); }
   .btn-danger { background: rgba(224,92,92,0.1); color: var(--red); border: 1px solid rgba(224,92,92,0.2); } .btn-danger:hover { background: rgba(224,92,92,0.2); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-
   button, .btn, .nav-item, .contact-card, .mobile-menu-btn, .toggle { touch-action: manipulation; }
-
 
   .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 22px; }
   .stat-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
@@ -191,14 +178,11 @@
   .new-matches-banner { background: linear-gradient(135deg, rgba(61,186,126,0.1), rgba(61,186,126,0.04)); border: 1px solid rgba(61,186,126,0.25); border-radius: 9px; padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .15s; }
   .new-matches-banner:hover { border-color: var(--green); }
 
-  .onboarding-card { background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
+  .onboarding-card { position: relative; background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
   .onboarding-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
   .onboarding-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; max-width: 460px; margin-left: auto; margin-right: auto; }
-  .onboarding-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
-  .onboarding-step { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 9px; padding: 14px; text-align: left; }
-  .step-num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
-  .step-title { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
-  .step-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+  .onboarding-close { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 18px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .15s; }
+  .onboarding-close:hover { color: var(--text); border-color: var(--amber); }
 
   .toggle { width: 38px; height: 21px; border-radius: 11px; background: var(--navy-border); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
   .toggle.on { background: var(--green); }
@@ -209,148 +193,83 @@
   .mls-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(74,158,218,0.13); color: var(--blue); letter-spacing: .5px; }
   .match-listing-card { background: linear-gradient(135deg,var(--navy-light),rgba(232,160,48,0.04)); border: 1px solid rgba(232,160,48,0.22); border-radius: 10px; padding: 16px 18px; margin-bottom: 18px; }
 
+  .listing-results-shell { display: flex; flex-direction: column; gap: 16px; }
+  .listing-feed-shell { overflow: hidden; }
+  .listing-feed-header { align-items: flex-start; gap: 14px; }
+  .listing-feed-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+  .listing-toolbar { width: 100%; justify-content: flex-end; }
+  .listing-filter-bar { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+  .listing-filter-chip { padding: 7px 12px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all .14s; }
+  .listing-filter-chip:hover { color: var(--text); border-color: rgba(232,160,48,0.28); }
+  .listing-filter-chip.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
+  .listing-feed { display: flex; flex-direction: column; gap: 16px; padding: 18px; }
+  .listing-card { display: grid; grid-template-columns: 244px minmax(0, 1fr); align-items: start; gap: 14px; padding: 16px 18px; border-radius: 18px; border: 1px solid var(--navy-border); background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); cursor: pointer; transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease; }
+  .listing-card:hover { border-color: rgba(232,160,48,0.28); transform: translateY(-1px); box-shadow: 0 18px 32px rgba(0,0,0,0.10); }
+  .listing-card-media { position: relative; width: 100%; max-width: 244px; justify-self: start; min-height: 220px; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: linear-gradient(145deg, rgba(74,158,218,0.16), rgba(232,160,48,0.14) 56%, rgba(155,109,218,0.10)); border: 1px solid rgba(255,255,255,0.05); }
+  .listing-card-media img, .listing-detail-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .listing-card-media::after, .listing-detail-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.26) 100%); pointer-events: none; }
+  .listing-media-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; color: #fff; }
+  .listing-media-label { font-size: 10px; letter-spacing: 1.7px; text-transform: uppercase; opacity: .78; margin-bottom: 8px; }
+  .listing-media-title { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.06; max-width: 92%; }
+  .listing-media-meta { font-size: 11px; opacity: .8; margin-top: 8px; }
+  .listing-card-body { min-width: 0; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; }
+  .listing-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .listing-card-address { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.15; margin-bottom: 5px; }
+  .listing-card-location { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .listing-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
+  .listing-source-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); }
+  .listing-source-badge.mls { background: rgba(74,158,218,0.13); border-color: rgba(74,158,218,0.22); color: var(--blue); }
+  .listing-source-badge.manual { background: rgba(255,255,255,0.04); color: var(--text-muted); }
+  .listing-mls-ref { font-size: 11px; color: var(--text-dim); }
+  .listing-price-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-price { font-family: 'Playfair Display', serif; font-size: 32px; line-height: 1; color: var(--amber); }
+  .listing-status-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .55px; text-transform: uppercase; border: 1px solid transparent; }
+  .listing-status-badge.active { background: rgba(61,186,126,0.12); color: var(--green); border-color: rgba(61,186,126,0.22); }
+  .listing-status-badge.pending { background: rgba(232,160,48,0.12); color: var(--amber); border-color: rgba(232,160,48,0.22); }
+  .listing-status-badge.sold { background: rgba(255,255,255,0.04); color: var(--text-muted); border-color: rgba(255,255,255,0.06); }
+  .listing-status-badge .status-dot { width: 7px; height: 7px; margin-right: 0; box-shadow: none; }
+  .listing-facts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-fact { padding: 8px 10px; border-radius: 10px; background: var(--surface-0); border: 1px solid rgba(255,255,255,0.04); font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .listing-fact strong { color: var(--text); font-weight: 600; }
+  .listing-summary { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+  .listing-tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .listing-no-tags { font-size: 11.5px; color: var(--text-dim); }
+  .listing-card-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+  .listing-card-actions .btn { width: auto; min-width: 138px; }
+
+  .listing-detail-overlay { padding: 20px; }
+  .listing-detail-modal { width: min(980px, calc(100vw - 40px)); max-width: 980px; max-height: min(92vh, 960px); padding: 0; overflow: hidden; border-radius: 20px; }
+  .listing-detail-shell { display: grid; grid-template-columns: minmax(320px, .92fr) minmax(0, 1.08fr); min-height: 0; }
+  .listing-detail-hero { position: relative; min-height: 420px; background: linear-gradient(145deg, rgba(74,158,218,0.18), rgba(232,160,48,0.15) 56%, rgba(155,109,218,0.12)); border-right: 1px solid var(--navy-border); overflow: hidden; }
+  .listing-detail-body { padding: 24px 24px 22px; max-height: min(92vh, 960px); overflow-y: auto; }
+  .listing-detail-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .listing-detail-close { width: auto; padding-left: 14px; padding-right: 14px; white-space: nowrap; }
+  .listing-detail-kicker { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-detail-address { font-family: 'Playfair Display', serif; font-size: 30px; line-height: 1.12; margin-bottom: 10px; }
+  .listing-detail-price { font-family: 'Playfair Display', serif; font-size: 36px; line-height: 1; color: var(--amber); margin-bottom: 12px; }
+  .listing-detail-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .listing-detail-section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--navy-border); }
+  .listing-detail-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; }
+  .listing-detail-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .listing-detail-fact { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 12px; padding: 12px 13px; min-width: 0; }
+  .listing-detail-fact-label { font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .listing-detail-fact-value { font-size: 13px; color: var(--text); font-weight: 600; line-height: 1.45; margin-top: 4px; word-break: break-word; }
+  .listing-detail-note { font-size: 13px; color: var(--text-muted); line-height: 1.78; }
+  .listing-detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .listing-detail-actions .btn { width: auto; }
+
   .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy-light); border: 1px solid var(--navy-border); border-left: 3px solid var(--green); border-radius: 8px; padding: 11px 16px; font-size: 12.5px; z-index: 200; transform: translateX(130%); transition: transform .22s ease; max-width: 300px; }
   .toast.show { transform: translateX(0); }
   .toast.err { border-left-color: var(--red); }
 
-  @supports (height: 100dvh) {
-    body { min-height: 100dvh; }
-  }
-
-  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
-
-  /* Proxy URL hint box */
-  .hint-box { background: var(--glass-blue); border: 1px solid var(--glass-blue-border); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
-  .hint-box strong { color: var(--blue); }
-  .step-badge { display: inline-block; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
-
-
-  .mobile-menu-btn { display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--navy-border); background:var(--navy-light); color:var(--text); font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
-  .mobile-sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.58); z-index:40; opacity:0; pointer-events:none; transition:opacity .18s ease; }
-  .mobile-sidebar-overlay.open { opacity:1; pointer-events:auto; }
-
-  @media (max-width: 980px) {
-    body { overflow: hidden; min-height: 100svh; min-height: 100dvh; }
-    body.mobile-nav-open { overflow: hidden; }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 50;
-      transform: translateX(-100%);
-      transition: transform .22s ease;
-      box-shadow: var(--sidebar-shadow);
-    }
-    body.mobile-nav-open .sidebar { transform: translateX(0); }
-    .mobile-sidebar-overlay { display:block; }
-    body.mobile-nav-open .mobile-sidebar-overlay.open { display:block; }
-    .main { width:100%; min-width:0; height:100%; min-height:0; }
-    .mobile-menu-btn { display:inline-flex; }
-    .form-input, .form-select, .search-input, .match-select, .tag-text-input { font-size: 16px; }
-    .topbar { padding: max(env(safe-area-inset-top), 0px) 14px 0; height:auto; min-height:58px; }
-    .topbar-title { font-size: 16px; }
-    .topbar-sub { font-size: 11px; }
-    .content { padding: 14px 14px calc(14px + env(safe-area-inset-bottom) + 96px); }
-    .stats-row, .onboarding-steps, .form-row { grid-template-columns: 1fr 1fr; }
-    .match-hero, .new-matches-banner, .section-header, .auto-match-row { flex-wrap: wrap; }
-    .table-header { padding: 12px 14px; }
-    th, td { padding-left: 14px; padding-right: 14px; }
-    .table-card { overflow-x: auto; }
-    table { min-width: 760px; }
-    .contacts-grid, .match-results-grid, .files-grid { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
-    .modal { width: calc(100vw - 18px); padding: 18px; }
-    .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; }
-  }
-
-  @media (max-width: 640px) {
-    .content { padding: 12px 12px calc(12px + env(safe-area-inset-bottom) + 108px); }
-    .stats-row, .onboarding-steps, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
-    .table-actions { margin-left: 0; width: 100%; }
-    .table-actions > * { flex: 1 1 100%; }
-    .search-input { width: 100%; }
-    .btn { width: 100%; }
-    .match-hero { padding: 18px; gap: 14px; }
-    .match-hero-icon { width: 46px; height: 46px; font-size: 20px; }
-    .settings-section, .stat-card, .onboarding-card { padding: 16px; }
-    .onboarding-card h2 { font-size: 20px; }
-    .new-matches-banner { padding: 14px; }
-    .section-header { gap: 10px; }
-    .section-header .btn { width: auto; }
-    .modal-actions { flex-direction: column; }
-    .modal-actions .btn { width: 100%; }
-
-    .discover-hero { padding: 18px; margin-bottom: 14px; }
-    .discover-hero h2 { font-size: 20px; line-height: 1.2; }
-    .discover-hero p { font-size: 12.5px; line-height: 1.6; }
-    .discover-kpis { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
-    .discover-kpi { padding: 14px 16px; }
-    .discover-kpi .value { font-size: 22px; }
-    .discover-filter-row { width: 100%; gap: 8px; }
-    .discover-filter-row .pill-btn { flex: 1 1 calc(50% - 4px); text-align: center; }
-    .discover-filter-row .btn { width: 100%; }
-    .news-card { padding: 14px; }
-    .news-title { font-size: 15px; line-height: 1.4; }
-    .news-summary { font-size: 12px; line-height: 1.6; }
-    .discover-side-card { padding: 16px; }
-    .discover-side-title { font-size: 15px; }
-    .brief-item, .mini-item a { font-size: 11.5px; }
-  }
-
-
-
-  .auth-shell {
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background:
-      radial-gradient(circle at top left, var(--auth-glow), transparent 28%),
-      linear-gradient(135deg, var(--auth-bg-a), var(--auth-bg-b));
-  }
-  .auth-shell.hidden { display: none; }
-  .auth-card {
-    width: 100%;
-    max-width: 430px;
-    background: var(--navy-mid);
-    border: 1px solid var(--navy-border);
-    border-radius: 16px;
-    padding: 28px;
-    box-shadow: var(--shadow-strong);
-  }
-  .auth-brand { margin-bottom: 18px; }
-  .auth-brand .wordmark { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
-  .auth-brand .tagline { font-size: 10px; color: var(--amber); letter-spacing: 2.6px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
-  .auth-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 7px; }
-  .auth-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
-  .auth-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
-  .auth-note { margin-top: 14px; font-size: 11.5px; color: var(--text-dim); line-height: 1.55; text-align: center; }
-  .auth-status {
-    display: none;
-    margin-bottom: 14px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    line-height: 1.5;
-    border: 1px solid var(--navy-border);
-    background: rgba(255,255,255,0.03);
-    color: var(--text-muted);
-  }
-  .auth-status.show { display: block; }
-  .auth-status.success { border-color: rgba(61,186,126,0.25); background: rgba(61,186,126,0.08); color: var(--green); }
-  .auth-status.error { border-color: rgba(224,92,92,0.25); background: rgba(224,92,92,0.08); color: var(--red); }
-
-
-
-  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); gap: 18px; }
-  .discover-hero { background: linear-gradient(135deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
-  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 760px; }
-  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .discover-kpi { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
+  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, .8fr); gap: 22px; align-items: start; }
+  .discover-main { min-width: 0; }
+  .discover-aside { min-width: 0; position: sticky; top: 14px; }
+  .discover-hero { background: radial-gradient(circle at top right, rgba(232,160,48,0.14), transparent 38%), linear-gradient(160deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 18px; padding: 26px; margin-bottom: 18px; }
+  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.7; max-width: 760px; }
+  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
+  .discover-kpi { background: rgba(0,0,0,0.14); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 16px 18px; }
   .discover-kpi .label { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
   .discover-kpi .value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; }
   .discover-kpi .sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
@@ -358,40 +277,124 @@
   .pill-btn { padding: 7px 11px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 11.5px; cursor: pointer; transition: all .14s; }
   .pill-btn:hover { color: var(--text); border-color: var(--amber); }
   .pill-btn.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
-  .discover-list { display: flex; flex-direction: column; gap: 12px; }
-  .news-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; transition: border-color .14s, transform .14s; }
-  .news-card:hover { border-color: var(--amber); transform: translateY(-1px); }
-  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+  .discover-feed-shell { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; overflow: hidden; }
+  .discover-feed-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 20px 16px; border-bottom: 1px solid var(--navy-border); flex-wrap: wrap; }
+  .discover-feed-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; }
+  .discover-feed-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .discover-list { display: flex; flex-direction: column; gap: 18px; padding: 20px; }
+  .news-card { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border: 1px solid var(--navy-border); border-radius: 18px; padding: 16px; transition: border-color .14s, transform .14s, box-shadow .14s; }
+  .news-card:hover { border-color: rgba(232,160,48,0.32); transform: translateY(-1px); box-shadow: 0 14px 28px rgba(0,0,0,0.14); }
+  .news-media { position: relative; min-height: 188px; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, rgba(74,158,218,0.16), rgba(232,160,48,0.12)); border: 1px solid rgba(255,255,255,0.04); }
+  .news-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .news-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.22) 100%); pointer-events: none; }
+  .news-media-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; }
+  .news-media-label { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; opacity: .76; margin-bottom: 6px; }
+  .news-media-title { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.1; max-width: 90%; }
+  .news-body { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .news-source { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
   .news-source.news { background: rgba(74,158,218,0.13); color: var(--blue); }
   .news-source.rates { background: rgba(61,186,126,0.13); color: var(--green); }
   .news-time { font-size: 11px; color: var(--text-dim); }
-  .news-title { font-size: 16px; font-weight: 600; line-height: 1.45; margin-bottom: 8px; }
+  .news-title { font-size: 20px; font-weight: 600; line-height: 1.35; margin-bottom: 10px; }
   .news-title a { color: var(--text); text-decoration: none; }
   .news-title a:hover { color: var(--amber); }
-  .news-summary { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
-  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .news-summary { font-size: 13px; color: var(--text-muted); line-height: 1.72; margin-bottom: 12px; }
+  .news-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; flex-wrap: wrap; }
+  .news-tagline { font-size: 11px; color: var(--text-dim); }
+  .news-link { display: inline-flex; align-items: center; gap: 7px; color: var(--amber); text-decoration: none; font-size: 12px; font-weight: 600; }
+  .news-link:hover { color: var(--amber-light); }
+  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
   .discover-side-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
   .brief-list { display: flex; flex-direction: column; gap: 10px; }
-  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 10px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
-  .mini-list { display: flex; flex-direction: column; gap: 9px; }
-  .mini-item { padding-bottom: 9px; border-bottom: 1px solid rgba(36,54,80,0.52); }
-  .mini-item:last-child { padding-bottom: 0; border-bottom: none; }
-  .mini-item a { color: var(--text); text-decoration: none; font-size: 12.5px; line-height: 1.45; }
-  .mini-item a:hover { color: var(--amber); }
-  .mini-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 4px; }
-  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; }
-  .discover-empty .emoji { font-size: 30px; margin-bottom: 10px; }
+  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 11px 13px; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .market-panel { background: #181716; color: #f2f1ef; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 18px; margin-bottom: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .market-panel-title { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+  .market-panel-sub { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 14px; line-height: 1.55; }
+  .market-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .market-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px 12px 10px; min-width: 0; }
+  .market-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+  .market-card-name { font-size: 14px; color: rgba(255,255,255,0.94); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .market-card-change { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .market-card-change.down { color: #ff6f8c; }
+  .market-card-change.up { color: #5fd470; }
+  .market-card-value { font-size: 24px; font-weight: 500; line-height: 1.1; margin-bottom: 2px; }
+  .market-card-dollar { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 10px; }
+  .market-chart { width: 100%; height: 46px; display: block; }
+  .market-chart path.line.down { stroke: #ff6f8c; }
+  .market-chart path.line.up { stroke: #5fd470; }
+  .market-chart path.fill.down { fill: rgba(255,111,140,0.14); }
+  .market-chart path.fill.up { fill: rgba(95,212,112,0.14); }
+  .market-footnote { margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+
+  .auth-shell { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at top left, var(--auth-glow), transparent 28%), linear-gradient(135deg, var(--auth-bg-a), var(--auth-bg-b)); }
+  .auth-shell.hidden { display: none; }
+  .auth-card { width: 100%; max-width: 430px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-strong); }
+  .auth-brand { margin-bottom: 18px; }
+  .auth-brand .wordmark { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .auth-brand .tagline { font-size: 10px; color: var(--amber); letter-spacing: 2.6px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
+  .auth-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; margin-bottom: 7px; }
+  .auth-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+  .auth-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .auth-note { margin-top: 14px; font-size: 11.5px; color: var(--text-dim); line-height: 1.55; text-align: center; }
+  .auth-status { display: none; margin-bottom: 14px; padding: 10px 12px; border-radius: 8px; font-size: 12px; line-height: 1.5; border: 1px solid var(--navy-border); background: rgba(255,255,255,0.03); color: var(--text-muted); }
+  .auth-status.show { display: block; }
+  .auth-status.success { border-color: rgba(61,186,126,0.25); background: rgba(61,186,126,0.08); color: var(--green); }
+  .auth-status.error { border-color: rgba(224,92,92,0.25); background: rgba(224,92,92,0.08); color: var(--red); }
+
+  .hint-box { background: var(--glass-blue); border: 1px solid var(--glass-blue-border); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+  .hint-box strong { color: var(--blue); }
+
+  .mobile-menu-btn { display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--navy-border); background:var(--navy-light); color:var(--text); font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
+  .mobile-sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.58); z-index:40; opacity:0; pointer-events:none; transition:opacity .18s ease; }
+  .mobile-sidebar-overlay.open { opacity:1; pointer-events:auto; }
+
+  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
 
   @media (max-width: 980px) {
-    .discover-shell { grid-template-columns: 1fr; gap: 14px; }
+    body { overflow: hidden; min-height: 100svh; min-height: 100dvh; }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; transform: translateX(-100%); transition: transform .22s ease; box-shadow: var(--sidebar-shadow); }
+    body.mobile-nav-open .sidebar { transform: translateX(0); }
+    .mobile-sidebar-overlay { display:block; }
+    .main { width:100%; min-width:0; height:100%; min-height:0; }
+    .mobile-menu-btn { display:inline-flex; }
+    .form-input, .form-select, .search-input, .match-select { font-size: 16px; }
+    .topbar { padding: max(env(safe-area-inset-top), 0px) 14px 0; height:auto; min-height:58px; }
+    .content { padding: 14px 14px calc(14px + env(safe-area-inset-bottom) + 96px); }
+    .stats-row, .form-row { grid-template-columns: 1fr 1fr; }
+    .table-card { overflow-x: auto; }
+    table { min-width: 760px; }
+    .contacts-grid, .match-results-grid, .files-grid { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
+    .modal { width: calc(100vw - 18px); padding: 18px; }
+    .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+    .listing-card { grid-template-columns: 1fr; }
+    .listing-detail-shell { grid-template-columns: 1fr; }
+    .listing-detail-hero { min-height: 260px; border-right: none; border-bottom: 1px solid var(--navy-border); }
+    .listing-detail-body { max-height: none; }
+    .discover-shell { grid-template-columns: 1fr; }
     .discover-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .discover-side-card { margin-bottom: 12px; }
+    .discover-aside { position: static; }
+    .news-card { grid-template-columns: 1fr; }
+    .news-media { min-height: 220px; aspect-ratio: 16 / 10; }
   }
-
+  @media (max-width: 640px) {
+    .content { padding: 12px 12px calc(12px + env(safe-area-inset-bottom) + 108px); }
+    .stats-row, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
+    .table-actions { margin-left: 0; width: 100%; }
+    .search-input { width: 100%; }
+    .btn { width: 100%; }
+    .modal-actions { flex-direction: column; }
+    .modal-actions .btn { width: 100%; }
+    .listing-filter-chip { flex: 1 1 calc(50% - 4px); text-align: center; }
+    .listing-detail-facts { grid-template-columns: 1fr; }
+    .listing-detail-actions .btn, .listing-detail-close { width: 100%; }
+    .market-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
+
+<!-- AUTH -->
 <div class="auth-shell" id="authShell">
   <div class="auth-card">
     <div class="auth-brand">
@@ -399,7 +402,7 @@
       <div class="tagline">Deal Intelligence</div>
     </div>
     <div class="auth-title">Sign in to Broker OS</div>
-    <div class="auth-sub">Secure your workspace with email and password access. Once your auth logic is wired in, this screen can gate the full app before data loads.</div>
+    <div class="auth-sub">Your leads, listings, and matches — secured per account.</div>
     <div class="auth-status" id="authStatus"></div>
     <div class="form-group">
       <div class="form-label">Email</div>
@@ -416,7 +419,7 @@
       <button class="btn btn-secondary" type="button" id="authSignupBtn">Create Account</button>
       <button class="btn btn-primary" type="button" id="authSigninBtn">Sign In</button>
     </div>
-    <div class="auth-note">Replace the Supabase placeholders with your real project URL and anon key. Then connect these buttons to your signup and sign-in JS.</div>
+    <div class="auth-note">All data saves per-account to Supabase. Each broker sees only their own leads and listings.</div>
   </div>
 </div>
 
@@ -439,7 +442,7 @@
     <div class="nav-item" onclick="nav('files')" id="nav-files"><span class="icon">▤</span> Documents <span class="nav-badge" id="badge-files">0</span></div>
     <div class="nav-item" onclick="nav('settings')" id="nav-settings"><span class="icon">⚙</span> Settings</div>
     <div class="mls-status disconnected" id="mlsBadge">
-      <span class="mls-dot off" id="mlsDot"></span><span id="mlsTxt" style="color:var(--red);">MLS Not Live Yet</span>
+      <span class="mls-dot off" id="mlsDot"></span><span id="mlsTxt" style="color:var(--red);">MLS Not Connected</span>
     </div>
   </div>
 </div>
@@ -457,7 +460,7 @@
       <div id="onboardBlock"></div>
       <div id="matchBanner" style="display:none;" class="new-matches-banner" onclick="nav('match')">
         <div><div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--green);" id="matchBannerCount">0</div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);font-weight:700;">New Matches</div></div>
-        <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">New listing matches ready</div><div style="font-size:12px;color:var(--text-muted);">AI found leads that fit newly synced listings. Click to review.</div></div>
+        <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">New listing matches ready</div><div style="font-size:12px;color:var(--text-muted);">AI found leads that fit newly synced listings.</div></div>
         <div style="font-size:18px;color:var(--green);">→</div>
       </div>
       <div class="stats-row">
@@ -466,54 +469,54 @@
         <div class="stat-card"><div class="stat-label">Hot Leads</div><div class="stat-value green" id="s-hot">0</div></div>
         <div class="stat-card"><div class="stat-label">MLS Synced</div><div class="stat-value" id="s-synced">—</div></div>
       </div>
-      <div class="table-card"><div class="table-header"><div class="table-title">Recent Activity</div></div><div id="activityEl" style="padding:18px 20px;font-size:13px;color:var(--text-muted);">Connect MLS and add leads to get started.</div></div>
+      <div class="table-card"><div class="table-header"><div class="table-title">Recent Activity</div></div><div id="activityEl" style="padding:18px 20px;font-size:13px;color:var(--text-muted);">Sign in and add data to get started.</div></div>
     </div>
 
     <!-- DISCOVER -->
     <div class="view" id="view-discover">
       <div class="discover-hero">
         <h2>Your real estate morning brief</h2>
-        <p>Wake up, open Broker OS, and scan what actually changed. Discover is wired to your Mortgage News Daily RSS feed so you can check daily market movement, mortgage-rate coverage, and fresh housing headlines in one clean place.</p>
-      </div>
-      <div class="discover-kpis">
-        <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
-        <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
-        <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+        <p>Live Mortgage News Daily feed — daily market movement, mortgage-rate coverage, and fresh housing headlines.</p>
+        <div class="discover-kpis">
+          <div class="discover-kpi"><div class="label">Articles</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest in feed</div></div>
+          <div class="discover-kpi"><div class="label">News</div><div class="value" id="discoverNewsCount">0</div><div class="sub">Market & housing</div></div>
+          <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage coverage</div></div>
+        </div>
       </div>
       <div class="discover-shell">
-        <div>
-          <div class="table-card" style="margin-bottom:16px;">
-            <div class="table-header">
-              <div class="table-title">Market feed</div>
-              <div class="table-actions discover-filter-row">
+        <div class="discover-main">
+          <div class="discover-feed-shell">
+            <div class="discover-feed-head">
+              <div>
+                <div class="discover-feed-title">Latest market stories</div>
+                <div class="discover-feed-sub">Live from your RSS feed.</div>
+              </div>
+              <div class="discover-filter-row">
                 <button class="pill-btn active" id="discoverFilter-all" onclick="setDiscoverFilter('all')">All</button>
                 <button class="pill-btn" id="discoverFilter-news" onclick="setDiscoverFilter('news')">Daily News</button>
                 <button class="pill-btn" id="discoverFilter-rates" onclick="setDiscoverFilter('rates')">Rates</button>
                 <button class="btn btn-secondary" onclick="refreshDiscoverFeed()">Refresh</button>
               </div>
             </div>
+            <div class="discover-list" id="discoverList"></div>
           </div>
-          <div class="discover-list" id="discoverList"></div>
-          <div id="discoverEmpty" class="discover-empty" style="display:none;">
+          <div id="discoverEmpty" class="empty-state" style="display:none;padding:40px 20px;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:18px;margin-top:16px;">
             <div class="emoji">📰</div>
-            <h3 style="font-size:15px;color:var(--text-muted);margin-bottom:6px;">No Discover items yet</h3>
-            <p style="font-size:12.5px;color:var(--text-dim);line-height:1.6;">Broker OS will try your live Mortgage News Daily feed directly here. If the feed is blocked by browser CORS, the next clean upgrade is a Supabase Edge Function cache into <strong style="color:var(--amber);">discover_items</strong>.</p>
+            <h3>No Discover items yet</h3>
+            <p>Live RSS will load automatically. If blocked by CORS, cache items via a Supabase Edge Function into <strong style="color:var(--amber);">discover_items</strong>.</p>
           </div>
         </div>
-        <div>
+        <div class="discover-aside">
+          <div class="market-panel" id="marketRatesPanel"></div>
           <div class="discover-side-card">
             <div class="discover-side-title">This morning</div>
             <div class="brief-list" id="discoverBriefs"></div>
           </div>
-          <div class="discover-side-card">
-            <div class="discover-side-title">Rate watch</div>
-            <div class="mini-list" id="discoverRatesMini"></div>
-          </div>
           <div class="discover-side-card" style="margin-bottom:0;">
             <div class="discover-side-title">Sources</div>
             <div style="font-size:12px;color:var(--text-muted);line-height:1.7;">
-              <div style="margin-bottom:7px;"><strong style="color:var(--text);">Mortgage News Daily</strong><br>Live custom RSS feed connected through your RSS.app link.</div>
-              <div><strong style="color:var(--text);">Broker OS Discover</strong><br>Same app style, same flow, but now with a live market feed layered into your workspace.</div>
+              <div style="margin-bottom:7px;"><strong style="color:var(--text);">Mortgage News Daily</strong><br>Live RSS feed via rss.app.</div>
+              <div><strong style="color:var(--text);">Supabase Cache</strong><br>Items optionally cached in discover_items for offline/fast load.</div>
             </div>
           </div>
         </div>
@@ -540,24 +543,37 @@
     <!-- LISTINGS -->
     <div class="view" id="view-listings">
       <div id="listingsBanner"></div>
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">All Listings</div>
-          <div class="table-actions">
-            <input class="search-input" type="text" placeholder="Search…" id="listingSearch" oninput="renderListings()">
-            <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
-            <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
-            <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
+      <div class="listing-results-shell">
+        <div class="table-card listing-feed-shell">
+          <div class="table-header listing-feed-header">
+            <div>
+              <div class="table-title">All Listings</div>
+              <div class="listing-feed-sub" id="listingResultMeta">0 results.</div>
+            </div>
+            <div class="table-actions listing-toolbar">
+              <input class="search-input" type="text" placeholder="Search address, tag, MLS ID…" id="listingSearch" oninput="renderListings()">
+              <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
+              <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
+              <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
+            </div>
+            <div class="listing-filter-bar" id="listingFilters">
+              <button class="listing-filter-chip active" type="button" id="listingFilter-all" onclick="setListingFilter('all')">All</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-active" onclick="setListingFilter('active')">Active</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-pending" onclick="setListingFilter('pending')">Pending</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-sold" onclick="setListingFilter('sold')">Sold</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-mls" onclick="setListingFilter('mls')">MLS</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-manual" onclick="setListingFilter('manual')">Manual</button>
+            </div>
           </div>
+          <div class="listing-feed" id="listingsFeed"></div>
+          <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
         </div>
-        <table><thead><tr><th>Address</th><th>Price</th><th>Status</th><th>Beds/Baths</th><th>Source</th><th>Tags</th><th></th></tr></thead><tbody id="listingsTable"></tbody></table>
-        <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
       </div>
     </div>
 
     <!-- MATCH -->
     <div class="view" id="view-match">
-      <div class="match-hero"><div class="match-hero-icon">✦</div><div><h2>AI Match Engine</h2><p>Pick a listing — AI scores every lead in your database and explains why each one fits or doesn't.</p></div></div>
+      <div class="match-hero"><div class="match-hero-icon">✦</div><div><h2>AI Match Engine</h2><p>Pick a listing — AI scores every lead and explains why each one fits.</p></div></div>
       <div class="table-card" style="padding:22px;">
         <div class="form-group"><div class="form-label">Select Listing</div><select class="match-select" id="matchSel"><option value="">— Choose a listing —</option></select></div>
         <button class="btn btn-primary" onclick="runMatch()" style="width:100%;padding:11px;font-size:14px;">✦ &nbsp;Run AI Match</button>
@@ -578,22 +594,13 @@
 
     <!-- SETTINGS -->
     <div class="view" id="view-settings">
-
-      <!-- PROXY + MLS -->
       <div class="settings-section">
         <div class="settings-section-title">🔗 PrimeMLS Connection</div>
-        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. You need two things: your proxy server URL (from Railway/Render — free) and your PrimeMLS credentials. See the steps below.</div>
-
-        <div class="hint-box">
-          <span class="step-badge">Step 1</span> <strong>Deploy the proxy</strong> — Upload the <code>broker-proxy</code> folder to GitHub, then connect it to Railway or Render (free). They give you a URL like <code>https://broker-proxy-xxx.up.railway.app</code><br><br>
-          <span class="step-badge">Step 2</span> <strong>Get MLS credentials</strong> — Log into PrimeMLS → Member Tools → IDX/API Access. If no API tab, call them at (603) 930-3220 and ask for RESO Web API credentials.<br><br>
-          <span class="step-badge">Step 3</span> <strong>Paste both below</strong> and hit Save & Test.
-        </div>
-
+        <div class="settings-section-sub">Connect your proxy server and PrimeMLS credentials. Saved per-account to Supabase.</div>
         <div class="form-group">
           <div class="form-label">Your Proxy URL</div>
           <input class="form-input" id="cfg-proxy" placeholder="https://your-proxy.up.railway.app">
-          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">The URL Railway or Render gives you after deploying the proxy server.</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">The Railway/Render URL from your deployed broker-proxy.</div>
         </div>
         <div class="form-group">
           <div class="form-label">PrimeMLS API Base URL</div>
@@ -608,29 +615,26 @@
         <div class="form-group">
           <div class="form-label">Area Filter (optional)</div>
           <input class="form-input" id="cfg-area" placeholder="Northeast Kingdom, Caledonia County, VT">
-          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Only pull listings from this area. Leave blank for all your listings.</div>
         </div>
         <div style="display:flex;gap:9px;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="saveMLS()">Save & Test Connection</button>
-          <button class="btn btn-secondary" onclick="loadDemo()">Load Demo Data Instead</button>
+          <button class="btn btn-secondary" onclick="loadDemo()">Load Demo Data</button>
         </div>
         <div id="mlsResult" style="display:none;margin-top:12px;font-size:12.5px;padding:10px 14px;border-radius:7px;"></div>
       </div>
 
-      <!-- AUTO MATCH -->
       <div class="settings-section">
         <div class="settings-section-title">✦ Auto-Match</div>
-        <div class="settings-section-sub">When new listings sync from MLS, automatically score them against all leads and show a banner on your dashboard.</div>
+        <div class="settings-section-sub">Auto-score leads against new MLS listings on sync.</div>
         <div class="auto-match-row">
-          <div class="toggle on" id="tog-automatch"></div>
-          <div><div style="font-size:13px;font-weight:500;">Auto-match on MLS sync</div><div style="font-size:11.5px;color:var(--text-muted);">Runs silently every time listings update</div></div>
+          <div class="toggle on" id="tog-automatch" onclick="toggleAutoMatch()"></div>
+          <div><div style="font-size:13px;font-weight:500;">Auto-match on MLS sync</div><div style="font-size:11.5px;color:var(--text-muted);">Runs silently every sync</div></div>
         </div>
       </div>
 
-      <!-- PROFILE -->
       <div class="settings-section">
         <div class="settings-section-title">👤 Broker Profile</div>
-        <div class="settings-section-sub">Your name appears in match reports.</div>
+        <div class="settings-section-sub">Saved to your account in Supabase.</div>
         <div class="form-row">
           <div class="form-group"><div class="form-label">Name</div><input class="form-input" id="p-name" placeholder="Tom Whitfield"></div>
           <div class="form-group"><div class="form-label">Brokerage</div><input class="form-input" id="p-brokerage" placeholder="Northeast Kingdom Realty"></div>
@@ -638,20 +642,18 @@
         <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
       </div>
 
-      <!-- APPEARANCE -->
       <div class="settings-section">
         <div class="settings-section-title">◐ Appearance</div>
-        <div class="settings-section-sub">Switch between the original dark look and a matching light theme. Your choice saves automatically on this device.</div>
+        <div class="settings-section-sub">Theme preference saves to your account.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
-          <button class="btn btn-secondary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-primary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-secondary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
         </div>
       </div>
 
-      <!-- DANGER -->
       <div class="settings-section">
         <div class="settings-section-title" style="color:var(--red);">⚠ Clear Data</div>
-        <div class="settings-section-sub">Permanently delete data. Cannot be undone.</div>
+        <div class="settings-section-sub">Permanently deletes from Supabase. Cannot be undone.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-danger" onclick="clearData('leads')">Clear Leads</button>
           <button class="btn btn-danger" onclick="clearData('listings')">Clear Listings</button>
@@ -707,7 +709,7 @@
 </div>
 
 <div class="modal-overlay" id="modal-contacts">
-  <div class="modal wide"><div class="modal-title">📱 Import from Contacts</div><div class="modal-sub" id="contactSub">Select contacts from your phone to add as leads. You can fill in budget, notes, and preferences later.</div>
+  <div class="modal wide"><div class="modal-title">📱 Import from Contacts</div><div class="modal-sub" id="contactSub">Select contacts to add as leads.</div>
     <input class="search-input" style="width:100%;margin-bottom:12px;" type="text" placeholder="Search contacts…" id="contactSearch" oninput="filterContacts()">
     <div class="contacts-grid" id="contactsGrid"></div>
     <div id="contactsEmpty" style="display:none;text-align:center;padding:28px;font-size:13px;color:var(--text-dim);"></div>
@@ -718,803 +720,95 @@
   </div>
 </div>
 
+<div class="modal-overlay listing-detail-overlay" id="listingDetailOverlay" aria-hidden="true">
+  <div class="modal listing-detail-modal" role="dialog" aria-modal="true" aria-labelledby="listingDetailTitle">
+    <div class="listing-detail-shell" id="listingDetailContent"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-  const SUPABASE_URL = "https://bodxyrrvfwzgnbiqkvtb.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_c88I_bgPQe5tNHkwbIsxPA_AOvxUq82";
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
+// ── SUPABASE ───────────────────────────────────────────────────
+const SUPABASE_URL = "https://bodxyrrvfwzgnbiqkvtb.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_c88I_bgPQe5tNHkwbIsxPA_AOvxUq82";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script>
 // ── STATE ──────────────────────────────────────────────────────
-let leads=[], listings=[], files=[], discoverItems=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
-let discoverFilter='all';
-let currentTheme='dark';
-let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
+let leads = [], listings = [], files = [], discoverItems = [];
+let leadTags = [], listingTags = [], pendingContacts = [], selectedContacts = new Set();
+let activityLog = [], newMatchCount = 0;
+let discoverFilter = 'all', currentTheme = 'light', currentListingFilter = 'all';
+let onboardingDismissed = false, autoMatchEnabled = true;
+let activeListingId = null, lastListingFocusEl = null;
+let currentUser = null;
 
-function hasRecognizedMLSConnection(){
-  return !!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key);
-}
+// cfg: MLS connection — loaded from Supabase user_settings + local for password (never sent to DB)
+let cfg = { proxy:'', url:'https://api.primemls.com/reso/odata', user:'', key:'', area:'', connected:false, lastSync:'' };
 
 // ── BOOT ───────────────────────────────────────────────────────
 function init() {
-  load();
+  loadLocal(); // theme, activity log, newMatchCount, onboard flag
   applyTheme(currentTheme);
-  populateSettingsFields();
   renderAll();
   buildOnboard();
-  loadDiscoverFromAccount().catch(err=>console.warn('Discover load failed.', err));
 }
 
-function load() {
+function loadLocal() {
   try {
-    leads = JSON.parse(localStorage.getItem('bos_leads')||'[]');
-    listings = JSON.parse(localStorage.getItem('bos_listings')||'[]');
-    files = JSON.parse(localStorage.getItem('bos_files')||'[]');
-    cfg = JSON.parse(localStorage.getItem('bos_cfg')||'{"proxy":"","url":"","user":"","key":"","area":"","connected":false,"lastSync":""}');
-    if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
-    activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
-    newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
-    currentTheme = localStorage.getItem('bos_theme') || 'dark';
-    const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
-    if(p.name) document.getElementById('p-name').value=p.name;
-    if(p.brokerage) document.getElementById('p-brokerage').value=p.brokerage;
-  } catch(e){}
+    activityLog = JSON.parse(localStorage.getItem('bos_log') || '[]');
+    newMatchCount = parseInt(localStorage.getItem('bos_nm') || '0');
+    currentTheme = localStorage.getItem('bos_theme') || 'light';
+    onboardingDismissed = localStorage.getItem('bos_onboard_dismissed') === 'true';
+    // MLS key stays local only (sensitive)
+    cfg.key = localStorage.getItem('bos_mls_key') || '';
+  } catch(e) {}
 }
 
-function populateSettingsFields() {
-  if(cfg.proxy) document.getElementById('cfg-proxy').value=cfg.proxy;
-  if(cfg.url) document.getElementById('cfg-url').value=cfg.url;
-  if(cfg.user) document.getElementById('cfg-user').value=cfg.user;
-  if(cfg.area) document.getElementById('cfg-area').value=cfg.area;
+function persistLocal() {
+  localStorage.setItem('bos_log', JSON.stringify(activityLog.slice(-60)));
+  localStorage.setItem('bos_nm', newMatchCount);
+  localStorage.setItem('bos_theme', currentTheme);
+  localStorage.setItem('bos_onboard_dismissed', onboardingDismissed ? 'true' : 'false');
+  if (cfg.key) localStorage.setItem('bos_mls_key', cfg.key);
 }
 
-function persist() {
-  localStorage.setItem('bos_leads',JSON.stringify(leads));
-  localStorage.setItem('bos_listings',JSON.stringify(listings));
-  localStorage.setItem('bos_files',JSON.stringify(files));
-  localStorage.setItem('bos_cfg',JSON.stringify(cfg));
-  localStorage.setItem('bos_log',JSON.stringify(activityLog.slice(-60)));
-  localStorage.setItem('bos_nm',newMatchCount);
-  localStorage.setItem('bos_theme',currentTheme);
+// ── SUPABASE DATA LAYER ────────────────────────────────────────
+
+// LEADS
+async function loadLeads() {
+  if (!currentUser) return;
+  const { data, error } = await sb.from('leads').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: true });
+  if (error) { console.error('load leads:', error); return; }
+  leads = (data || []).map(mapDbLead);
+  renderAll();
 }
 
-function applyTheme(theme){
-  currentTheme = theme === 'light' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  const darkBtn = document.getElementById('theme-dark-btn');
-  const lightBtn = document.getElementById('theme-light-btn');
-  if(darkBtn){
-    darkBtn.className = `btn ${currentTheme==='dark' ? 'btn-primary' : 'btn-secondary'}`;
-    darkBtn.setAttribute('aria-pressed', currentTheme==='dark' ? 'true' : 'false');
+async function insertLead(lead) {
+  if (!currentUser) return null;
+  const row = leadToRow(lead);
+  const { data, error } = await sb.from('leads').insert([row]).select().single();
+  if (error) throw error;
+  return mapDbLead(data);
+}
+
+async function deleteLead(id) {
+  // id here is the local JS id which mirrors the DB uuid
+  const lead = leads.find(l => l.id === id);
+  if (!lead) return;
+  leads = leads.filter(l => l.id !== id);
+  renderAll();
+  if (currentUser && lead.dbId) {
+    const { error } = await sb.from('leads').delete().eq('id', lead.dbId).eq('user_id', currentUser.id);
+    if (error) console.error('delete lead:', error);
   }
-  if(lightBtn){
-    lightBtn.className = `btn ${currentTheme==='light' ? 'btn-primary' : 'btn-secondary'}`;
-    lightBtn.setAttribute('aria-pressed', currentTheme==='light' ? 'true' : 'false');
-  }
 }
 
-function setTheme(theme){
-  applyTheme(theme);
-  persist();
-  toast(`${currentTheme==='light' ? 'White' : 'Dark'} theme active ✓`);
-}
-
-
-// ── NAV ────────────────────────────────────────────────────────
-const titles = {dashboard:'Dashboard',discover:'Discover',leads:'Leads',listings:'Listings',match:'Match Engine',files:'Documents',settings:'Settings'};
-const subs = {dashboard:'Overview',discover:'Real estate news and market pulse',leads:'All contacts',listings:'All properties',match:'AI-powered lead matching',files:'Contracts & documents',settings:'Configuration'};
-
-function nav(name) {
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('view-'+name).classList.add('active');
-  const ni = document.getElementById('nav-'+name);
-  if(ni) ni.classList.add('active');
-  document.getElementById('tbTitle').textContent=titles[name]||name;
-  document.getElementById('tbSub').textContent=subs[name]||'';
-  if(name==='match'){populateMatchSel();newMatchCount=0;document.getElementById('badge-matches').style.display='none';document.getElementById('matchBanner').style.display='none';persist();}
-  if(name==='listings') renderListingsBanner();
-  const contentEl = document.querySelector('.content');
-  if(contentEl) contentEl.scrollTop = 0;
-  if (window.innerWidth <= 980) closeMobileNav();
-}
-
-// ── RENDER ─────────────────────────────────────────────────────
-function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
-
-function renderStats(){
-  document.getElementById('s-leads').textContent=leads.length;
-  document.getElementById('s-listings').textContent=listings.filter(l=>l.status==='active').length;
-  document.getElementById('s-hot').textContent=leads.filter(l=>l.status==='hot').length;
-  const n=listings.filter(l=>l.source==='mls').length;
-  document.getElementById('s-synced').textContent=n||'—';
-}
-
-function renderBadges(){
-  document.getElementById('badge-leads').textContent=leads.length;
-  document.getElementById('badge-listings').textContent=listings.length;
-  document.getElementById('badge-files').textContent=files.length;
-  if(newMatchCount>0){const b=document.getElementById('badge-matches');b.style.display='inline-block';b.textContent=newMatchCount;}
-}
-
-function renderActivity(){
-  const el=document.getElementById('activityEl');
-  if(!activityLog.length){el.innerHTML='<span style="color:var(--text-muted);">Connect MLS and add leads to get started.</span>';return;}
-  el.innerHTML='<div>'+activityLog.slice(-8).reverse().map(a=>`<div style="padding:9px 0;border-bottom:1px solid var(--navy-border);font-size:12.5px;"><span style="color:var(--text-dim);font-size:11px;margin-right:8px;">${a.t}</span>${a.m}</div>`).join('')+'</div>';
-}
-
-function log(m){activityLog.push({m,t:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});renderActivity();}
-
-function updateMLSBadge(){
-  const badge=document.getElementById('mlsBadge'),dot=document.getElementById('mlsDot'),txt=document.getElementById('mlsTxt');
-  const live = hasRecognizedMLSConnection();
-  if(live){badge.className='mls-status connected';dot.className='mls-dot on';txt.style.color='var(--green)';txt.textContent='MLS Live';}
-  else{badge.className='mls-status disconnected';dot.className='mls-dot off';txt.style.color='var(--red)';txt.textContent='MLS Not Live Yet';}
-}
-
-// ── DISCOVER ───────────────────────────────────────────────────
-const DISCOVER_RSS_URL = 'https://rss.app/feeds/GZmHICn6jx0eX9ZS.xml';
-const DISCOVER_RSS_SOURCE_NAME = 'Mortgage News Daily';
-const DISCOVER_CACHE_KEY = 'bos_discover_rss_cache_v1';
-const DISCOVER_CACHE_TIME_KEY = 'bos_discover_rss_cache_time_v1';
-const DISCOVER_CACHE_TTL_MS = 15 * 60 * 1000;
-
-function setDiscoverFilter(type){
-  discoverFilter = type;
-  ['all','news','rates'].forEach(k=>{
-    const el=document.getElementById('discoverFilter-'+k);
-    if(el) el.classList.toggle('active', k===type);
-  });
-  renderDiscover();
-}
-
-function relativeTime(dateStr){
-  if(!dateStr) return 'No timestamp';
-  const d = new Date(dateStr);
-  if(Number.isNaN(d.getTime())) return 'No timestamp';
-  const diff = Date.now() - d.getTime();
-  const mins = Math.round(diff / 60000);
-  if(mins < 60) return `${Math.max(mins,1)}m ago`;
-  const hrs = Math.round(mins / 60);
-  if(hrs < 24) return `${hrs}h ago`;
-  const days = Math.round(hrs / 24);
-  if(days < 7) return `${days}d ago`;
-  return d.toLocaleDateString();
-}
-
-function cleanSummary(text=''){
-  return String(text || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
-}
-
-function htmlEscape(str=''){
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-
-function safeHref(url=''){
-  const value = String(url || '').trim();
-  if(!value) return '#';
-  try {
-    const parsed = new URL(value);
-    if(parsed.protocol === 'http:' || parsed.protocol === 'https:') return parsed.href;
-  } catch(_) {}
-  return '#';
-}
-
-function normalizeDiscoverType(item={}){
-  const haystack = [item.source_type, item.source_name, item.title, item.summary, item.category].map(v => String(v || '').toLowerCase()).join(' ');
-  return /rate|mortgage|mbs|yield|refi|refinanc/.test(haystack) ? 'rates' : 'news';
-}
-
-function normalizeDiscoverItem(item={}){
-  const type = normalizeDiscoverType(item);
+function mapDbLead(row) {
   return {
-    source_name: item.source_name || DISCOVER_RSS_SOURCE_NAME,
-    source_type: type,
-    title: String(item.title || 'Untitled item').trim(),
-    summary: cleanSummary(item.summary || item.description || ''),
-    link: safeHref(item.link || item.url || '#'),
-    published_at: item.published_at || item.pubDate || item.isoDate || null,
-    category: item.category || '',
-    raw_guid: item.raw_guid || item.guid || item.link || item.title || Math.random().toString(36).slice(2)
-  };
-}
-
-function dedupeDiscoverItems(items=[]){
-  const seen = new Set();
-  return items.map(normalizeDiscoverItem).filter(item => {
-    const key = `${item.raw_guid}::${item.link}`;
-    if(seen.has(key)) return false;
-    seen.add(key);
-    return !!item.title;
-  }).sort((a,b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
-}
-
-function discoverDisplayItems(){
-  if(discoverFilter==='all') return discoverItems;
-  return discoverItems.filter(item => (item.source_type || 'news') === discoverFilter);
-}
-
-function renderDiscover(){
-  const list=document.getElementById('discoverList');
-  const empty=document.getElementById('discoverEmpty');
-  const briefs=document.getElementById('discoverBriefs');
-  const ratesMini=document.getElementById('discoverRatesMini');
-  if(!list || !empty || !briefs || !ratesMini) return;
-
-  const items = discoverDisplayItems();
-  const newsCount = discoverItems.filter(i => (i.source_type || 'news') === 'news').length;
-  const ratesCount = discoverItems.filter(i => (i.source_type || 'news') === 'rates').length;
-  const latestPublished = discoverItems[0]?.published_at || null;
-
-  const totalEl=document.getElementById('discoverTotal');
-  const newsEl=document.getElementById('discoverNewsCount');
-  const ratesEl=document.getElementById('discoverRatesCount');
-  const lastEl=document.getElementById('discoverLastUpdated');
-  if(totalEl) totalEl.textContent = discoverItems.length;
-  if(newsEl) newsEl.textContent = newsCount;
-  if(ratesEl) ratesEl.textContent = ratesCount;
-  if(lastEl) lastEl.textContent = latestPublished ? relativeTime(latestPublished) : '—';
-
-  if(!items.length){
-    list.innerHTML='';
-    empty.style.display='block';
-  } else {
-    empty.style.display='none';
-    list.innerHTML = items.map(item => {
-      const type = item.source_type || 'news';
-      const source = htmlEscape(item.source_name || (type === 'rates' ? 'Rate Watch' : 'News'));
-      const summary = htmlEscape(cleanSummary(item.summary).slice(0, 280) || 'No summary available yet.');
-      const title = htmlEscape(item.title || 'Untitled item');
-      const link = safeHref(item.link || '#');
-      return `<article class="news-card"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div></article>`;
-    }).join('');
-  }
-
-  const latest = discoverItems.slice(0,3);
-  briefs.innerHTML = latest.length ? latest.map((item, idx)=>`<div class="brief-item">${idx+1}. <strong style="color:var(--text);">${htmlEscape(item.title || 'Untitled item')}</strong><br>${htmlEscape(cleanSummary(item.summary).slice(0, 120) || 'Fresh market coverage is available in your feed.')}</div>`).join('') : '<div class="brief-item">Your daily brief will appear here once the live feed loads.</div>' ;
-
-  const rateItems = discoverItems.filter(i => (i.source_type || 'news') === 'rates').slice(0,4);
-  ratesMini.innerHTML = rateItems.length ? rateItems.map(item => `<div class="mini-item"><a href="${safeHref(item.link || '#')}" target="_blank" rel="noopener noreferrer">${htmlEscape(item.title || 'Untitled rate item')}</a><div class="mini-sub">${relativeTime(item.published_at)}</div></div>`).join('') : '<div class="mini-item"><div class="mini-sub">No rate-watch items yet.</div></div>' ;
-}
-
-function getCachedDiscoverItems(){
-  try {
-    const raw = localStorage.getItem(DISCOVER_CACHE_KEY);
-    const cachedAt = Number(localStorage.getItem(DISCOVER_CACHE_TIME_KEY) || '0');
-    if(!raw || !cachedAt || (Date.now() - cachedAt > DISCOVER_CACHE_TTL_MS)) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? dedupeDiscoverItems(parsed) : [];
-  } catch(_) {
-    return [];
-  }
-}
-
-function cacheDiscoverItems(items=[]){
-  try {
-    localStorage.setItem(DISCOVER_CACHE_KEY, JSON.stringify(items));
-    localStorage.setItem(DISCOVER_CACHE_TIME_KEY, String(Date.now()));
-  } catch(_) {}
-}
-
-function parseFeedText(xmlText=''){
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(xmlText, 'application/xml');
-  if(xml.querySelector('parsererror')) throw new Error('Could not parse feed XML.');
-  const nodes = [...xml.querySelectorAll('item, entry')];
-  return nodes.map(node => {
-    const getText = (...selectors) => {
-      for(const sel of selectors){
-        const el = node.querySelector(sel);
-        if(el && el.textContent && el.textContent.trim()) return el.textContent.trim();
-      }
-      return '';
-    };
-    const linkNode = node.querySelector('link');
-    const href = linkNode?.getAttribute?.('href');
-    return normalizeDiscoverItem({
-      source_name: DISCOVER_RSS_SOURCE_NAME,
-      title: getText('title'),
-      summary: getText('description','summary','content'),
-      link: href || getText('link'),
-      published_at: getText('pubDate','published','updated'),
-      category: [...node.querySelectorAll('category')].map(el => el.textContent.trim()).filter(Boolean).join(', '),
-      raw_guid: getText('guid','id') || href || getText('link') || getText('title')
-    });
-  }).filter(item => item.title && item.link);
-}
-
-async function loadDiscoverFromRSS(force=false){
-  const cached = !force ? getCachedDiscoverItems() : [];
-  if(cached.length) return cached;
-  const response = await fetch(DISCOVER_RSS_URL, { cache: 'no-store' });
-  if(!response.ok) throw new Error(`RSS request failed (${response.status})`);
-  const xmlText = await response.text();
-  const items = dedupeDiscoverItems(parseFeedText(xmlText));
-  cacheDiscoverItems(items);
-  return items;
-}
-
-async function loadDiscoverFromAccount(){
-  let dbItems = [];
-  try {
-    const { data, error } = await sb.from('discover_items').select('*').order('published_at', { ascending: false }).limit(60);
-    if(error) throw error;
-    dbItems = Array.isArray(data) ? dedupeDiscoverItems(data) : [];
-  } catch(e) {
-    console.warn('Supabase discover read failed, falling back to RSS feed.', e);
-  }
-
-  if(dbItems.length){
-    discoverItems = dbItems;
-    renderDiscover();
-    return discoverItems;
-  }
-
-  const rssItems = await loadDiscoverFromRSS();
-  discoverItems = rssItems;
-  renderDiscover();
-  return discoverItems;
-}
-
-async function refreshDiscoverFeed(){
-  try {
-    const rssItems = await loadDiscoverFromRSS(true);
-    discoverItems = rssItems.length ? rssItems : discoverItems;
-    renderDiscover();
-    toast('Discover refreshed ✓');
-  } catch (rssErr) {
-    try {
-      await loadDiscoverFromAccount();
-      toast('Discover refreshed ✓');
-    } catch (e) {
-      console.error(e);
-      toast('Could not refresh Discover feed.', true);
-    }
-  }
-}
-
-// ── LEADS RENDER ───────────────────────────────────────────────
-function renderLeads(){
-  const q=(document.getElementById('leadSearch')?.value||'').toLowerCase();
-  const tb=document.getElementById('leadsTable'),emp=document.getElementById('leadsEmpty');
-  const f=leads.filter(l=>!q||l.name.toLowerCase().includes(q)||(l.email||'').toLowerCase().includes(q)||l.preferences.join(' ').toLowerCase().includes(q));
-  if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
-  emp.style.display='none';
-  tb.innerHTML=f.map(l=>`<tr>
-    <td><strong>${l.name}</strong>${l.fromContacts?' <span style="font-size:10px;color:var(--text-dim);">📱</span>':''}</td>
-    <td style="color:var(--text-muted);font-size:11.5px;">${l.email||'—'}<br>${l.phone||'—'}</td>
-    <td>${dot(l.status,'lead')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
-    <td style="font-size:12px;color:var(--text-muted);">$${fmt(l.budgetMin)}–$${fmt(l.budgetMax)}</td>
-    <td>${l.preferences.map(tagHtml).join('')}</td>
-    <td style="font-size:11.5px;color:var(--text-muted);max-width:130px;">${l.notes||'—'}</td>
-    <td><button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteLead(${l.id})">✕</button></td>
-  </tr>`).join('');
-}
-
-function deleteLead(id){leads=leads.filter(l=>l.id!==id);persist();renderAll();}
-
-// ── LISTINGS RENDER ────────────────────────────────────────────
-function renderListings(){
-  const q=(document.getElementById('listingSearch')?.value||'').toLowerCase();
-  const tb=document.getElementById('listingsTable'),emp=document.getElementById('listingsEmpty');
-  const f=listings.filter(l=>!q||l.address.toLowerCase().includes(q)||l.tags.join(' ').toLowerCase().includes(q));
-  if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
-  emp.style.display='none';
-  tb.innerHTML=f.map(l=>`<tr>
-    <td><strong style="font-size:12.5px;">${l.address}</strong></td>
-    <td style="color:var(--amber);font-weight:600;">$${fmt(l.price)}</td>
-    <td>${dot(l.status,'listing')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
-    <td style="font-size:12px;color:var(--text-muted);">${l.beds}bd/${l.baths}ba</td>
-    <td>${l.source==='mls'?'<span class="mls-badge">MLS</span>':'<span style="font-size:11px;color:var(--text-dim);">Manual</span>'}</td>
-    <td>${l.tags.slice(0,4).map(tagHtml).join('')}</td>
-    <td><button class="btn btn-secondary" style="font-size:11px;padding:4px 9px;white-space:nowrap;" onclick="matchFrom(${l.id})">Match ✦</button></td>
-  </tr>`).join('');
-}
-
-function renderListingsBanner(){
-  const el=document.getElementById('listingsBanner');
-  if(!hasRecognizedMLSConnection()){el.innerHTML=`<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings</strong> to auto-sync live listings.</div></div>`;}
-  else{el.innerHTML=`<div class="sync-banner success"><span class="mls-dot on"></span>PrimeMLS connected${cfg.area?' · '+cfg.area:''}. Last sync: ${cfg.lastSync||'Never'} &nbsp;<button class="btn btn-green" style="font-size:11px;padding:4px 10px;" onclick="syncMLS()">Sync Now</button></div>`;}
-}
-
-// ── FILES ──────────────────────────────────────────────────────
-function renderFiles(){
-  const g=document.getElementById('filesGrid'),e=document.getElementById('filesEmpty');
-  if(!files.length){g.innerHTML='';e.style.display='block';return;}
-  e.style.display='none';
-  g.innerHTML=files.map(f=>`<div class="file-card"><div style="font-size:28px;margin-bottom:9px;">${fileIcon(f.name)}</div><div style="font-size:12.5px;font-weight:500;margin-bottom:3px;word-break:break-word;">${f.name}</div><div style="font-size:10.5px;color:var(--text-dim);">${f.size} · ${f.date}</div></div>`).join('');
-}
-
-function uploadFiles(e){Array.from(e.target.files).forEach(f=>{files.push({name:f.name,size:fmtBytes(f.size),date:new Date().toLocaleDateString()});});persist();renderAll();toast(`${e.target.files.length} file(s) uploaded ✓`);}
-
-// ── MLS CONNECTION ─────────────────────────────────────────────
-async function saveMLS(){
-  const proxy=document.getElementById('cfg-proxy').value.trim();
-  const url=document.getElementById('cfg-url').value.trim();
-  const user=document.getElementById('cfg-user').value.trim();
-  const key=document.getElementById('cfg-key').value.trim();
-  const area=document.getElementById('cfg-area').value.trim();
-  const res=document.getElementById('mlsResult');
-
-  if(!proxy){res.style.display='block';res.style.background='rgba(224,92,92,0.1)';res.style.color='var(--red)';res.textContent='⚠ Enter your proxy URL first. Deploy the broker-proxy server to Railway/Render to get this URL.';return;}
-  if(!url||!user||!key){toast('Fill in all MLS fields.',true);return;}
-
-  res.style.display='block';res.style.background='var(--amber-dim)';res.style.color='var(--amber)';res.textContent='⏳ Testing connection via proxy…';
-
-  try {
-    const r=await fetch(proxy.replace(/\/$/,'')+'/mls-test',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({url,user,key})
-    });
-    const data=await r.json();
-    if(!r.ok||data.error) throw new Error(data.error||'Bad response');
-
-    cfg={proxy,url,user,key,area,connected:true,lastSync:new Date().toLocaleString()};
-    persist();updateMLSBadge();
-    res.style.background='rgba(61,186,126,0.08)';res.style.color='var(--green)';
-    res.innerHTML=`✓ Connected to PrimeMLS! ${data.sample?'Sample listing: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync listings now →</strong>`;
-    log('PrimeMLS connected successfully');
-  } catch(e) {
-    res.style.background='rgba(224,92,92,0.08)';res.style.color='var(--red)';
-    res.textContent='✗ Connection failed: '+e.message+'. Check proxy URL and MLS credentials.';
-    cfg={...cfg,proxy,url,user,key,area,connected:false};persist();
-  }
-}
-
-async function syncMLS(){
-  if(!cfg.connected){toast('Connect MLS in Settings first.',true);nav('settings');return;}
-  toast('Syncing listings from PrimeMLS…');
-  try {
-    const r=await fetch(cfg.proxy.replace(/\/$/,'')+'/mls-sync',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({url:cfg.url,user:cfg.user,key:cfg.key,area:cfg.area,top:100})
-    });
-    if(!r.ok) throw new Error('Proxy returned '+r.status);
-    const data=await r.json();
-    const props=data.value||[];
-    const existing=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
-    let added=0;
-    props.forEach(p=>{
-      if(existing.has(p.ListingId)) return;
-      listings.push({id:Date.now()+Math.random(),mlsId:p.ListingId,address:p.UnparsedAddress||'Unknown',price:p.ListPrice||0,status:(p.StandardStatus||'Active').toLowerCase(),beds:p.BedroomsTotal||0,baths:p.BathroomsFullCount||0,tags:mlsTags(p),source:'mls'});
-      added++;
-    });
-    cfg.lastSync=new Date().toLocaleString();
-    persist();renderAll();populateMatchSel();
-    log(`MLS sync: ${added} new listing${added!==1?'s':''} added`);
-    toast(`Synced — ${added} new listing${added!==1?'s':''} added ✓`);
-    if(document.getElementById('tog-automatch').classList.contains('on')&&added>0&&leads.length>0) await autoMatch(added);
-  } catch(e){toast('Sync failed: '+e.message,true);}
-}
-
-function mlsTags(p){
-  const t=[];
-  if(p.WaterfrontYN||p.WaterBodyName) t.push('lakefront','waterfront');
-  if(p.ViewYN) t.push('mountain view');
-  if(p.BedroomsTotal) t.push(p.BedroomsTotal+'BR');
-  if(p.ListPrice>600000) t.push('luxury');
-  if(Array.isArray(p.ListingFeatures)) p.ListingFeatures.forEach(f=>{if(f)t.push(f.toLowerCase());});
-  return [...new Set(t)];
-}
-
-async function autoMatch(newCount){
-  const recent=listings.filter(l=>l.source==='mls').slice(-newCount);
-  let found=0;
-  recent.forEach(l=>{found+=fallbackScore(l).filter(r=>r.score>=50).length;});
-  if(found>0){newMatchCount+=found;persist();renderBadges();document.getElementById('matchBannerCount').textContent=newMatchCount;document.getElementById('matchBanner').style.display='flex';log(`Auto-match: ${found} strong match${found!==1?'es':''} found`);}
-}
-
-// DEMO DATA
-function loadDemo(){
-  const demo=[
-    {id:Date.now()+1,mlsId:'ML001',address:'14 Willoughby Lake Rd, Westmore, VT',price:489000,status:'active',beds:3,baths:2,tags:['lakefront','dock','mountain view','3BR','garage'],source:'mls'},
-    {id:Date.now()+2,mlsId:'ML002',address:'88 Mountain View Dr, Burke, VT',price:275000,status:'active',beds:4,baths:2,tags:['mountain view','rural','4BR','land'],source:'mls'},
-    {id:Date.now()+3,mlsId:'ML003',address:'5 Maple St #2B, St. Johnsbury, VT',price:189000,status:'active',beds:2,baths:1,tags:['condo','in-town','walkable'],source:'mls'},
-    {id:Date.now()+4,mlsId:'ML004',address:'220 Echo Lake Rd, Charleston, VT',price:625000,status:'active',beds:5,baths:3,tags:['lakefront','dock','luxury','5BR','garage','waterfront'],source:'mls'},
-    {id:Date.now()+5,mlsId:'ML005',address:'37 Kingdom Farm Rd, Craftsbury, VT',price:340000,status:'active',beds:3,baths:2,tags:['rural','barn','land','mountain view','3BR'],source:'mls'},
-  ];
-  const ex=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
-  listings.push(...demo.filter(d=>!ex.has(d.mlsId)));
-  if(!leads.length) leads=[
-    {id:1,name:'Michael Torres',email:'mtorres@email.com',phone:'(802) 555-0141',budgetMin:300000,budgetMax:550000,status:'hot',preferences:['lakefront','dock','3BR','mountain view'],notes:'Vacation property'},
-    {id:2,name:'Sarah & Jim Okafor',email:'sokafor@gmail.com',phone:'(802) 555-0188',budgetMin:400000,budgetMax:700000,status:'hot',preferences:['lakefront','waterfront','luxury','4BR'],notes:'Moving from Boston'},
-    {id:3,name:'Dana Whitfield',email:'dwhitfield@email.com',phone:'(802) 555-0122',budgetMin:150000,budgetMax:280000,status:'warm',preferences:['mountain view','rural','land'],notes:'Pre-approved 275k'},
-    {id:4,name:'Craig Hensley',email:'chensley@email.com',phone:'(802) 555-0165',budgetMin:500000,budgetMax:900000,status:'warm',preferences:['lakefront','luxury','dock','5BR'],notes:'Cash buyer'},
-    {id:5,name:'Priya Nair',email:'pnair@email.com',phone:'(802) 555-0109',budgetMin:200000,budgetMax:350000,status:'cold',preferences:['condo','in-town','walkable'],notes:'Paused til fall'},
-  ];
-  cfg.connected=true;cfg.lastSync=new Date().toLocaleString();
-  persist();renderAll();populateMatchSel();
-  document.getElementById('onboardBlock').innerHTML='';
-  document.getElementById('mlsResult').style.display='block';document.getElementById('mlsResult').style.background='rgba(61,186,126,0.08)';document.getElementById('mlsResult').style.color='var(--green)';document.getElementById('mlsResult').textContent='✓ Demo data loaded. Go to Match Engine to try it.';
-  log('Demo data loaded');toast('Demo ready — try the Match Engine ✓');
-}
-
-// ── CONTACT PICKER ─────────────────────────────────────────────
-async function openContactPicker(){
-  selectedContacts=new Set();
-
-  const supported = !!(window.isSecureContext && 'contacts' in navigator && 'ContactsManager' in window && navigator.contacts && typeof navigator.contacts.select === 'function');
-  if(!supported){
-    toast('Real phone contact import is not supported in this browser/web-app. It works on some Android browsers, but not iPhone Safari web apps.', true);
-    return;
-  }
-
-  try{
-    let props = ['name','tel','email'];
-    if(typeof navigator.contacts.getProperties === 'function'){
-      const available = await navigator.contacts.getProperties();
-      props = props.filter(p => available.includes(p));
-    }
-    const c = await navigator.contacts.select(props, { multiple:true });
-    if(c && c.length){
-      await importDirect(c);
-      return;
-    }
-    toast('No contacts selected.', true);
-  }catch(e){
-    if(e && (e.name === 'AbortError' || e.name === 'NotAllowedError')){
-      toast('Contact import was cancelled.', true);
-      return;
-    }
-    console.error(e);
-    toast('Contact import failed on this device/browser.', true);
-  }
-}
-
-async function importDirect(contacts){
-  let added=0;
-  const importedLeads=[];
-  contacts.forEach(c=>{
-    const name=(c.name&&c.name[0])||'Unknown',phone=(c.tel&&c.tel[0])||'',email=(c.email&&c.email[0])||'';
-    if(!leads.find(l=>l.phone===phone||(email&&l.email===email))){
-      const lead={id:Date.now()+Math.random(),name,email,phone,budgetMin:0,budgetMax:999999,status:'warm',preferences:[],notes:'',fromContacts:true};
-      leads.push(lead);importedLeads.push(lead);added++;
-    }
-  });
-  persist();renderAll();
-  try { await saveImportedLeadsToAccount(importedLeads); } catch (e) { console.error(e); toast('Contacts imported, but account save failed.', true); }
-  log(`Imported ${added} contacts as leads`);toast(`${added} contact${added!==1?'s':''} added ✓`);
-}
-
-function showContactModal(){
-  pendingContacts=[];
-  selectedContacts = new Set();
-  document.getElementById('contactSearch').value = '';
-  document.getElementById('selCount').textContent = '0';
-  document.getElementById('importCBtn').disabled = true;
-  document.getElementById('contactSub').textContent='Real phone contact import is only available in supported mobile browsers. On unsupported browsers, use Add or CSV import instead.';
-  renderContactGrid(pendingContacts);
-  const empty=document.getElementById('contactsEmpty');
-  empty.style.display='block';
-  empty.innerHTML='Native phone contact access is not available in this browser/web-app.<br><br>Use <strong style="color:var(--amber);">+ Add</strong> or <strong style="color:var(--amber);">CSV</strong> instead.';
-  openModal('contacts');
-}
-
-function renderContactGrid(contacts){
-  const g=document.getElementById('contactsGrid'),e=document.getElementById('contactsEmpty');
-  if(!contacts.length){g.innerHTML='';e.style.display='block';e.textContent='No contacts found.';return;}
-  e.style.display='none';
-  g.innerHTML=contacts.map(c=>`<div class="contact-card ${selectedContacts.has(c.id)?'selected':''}" onclick="toggleContact(${c.id})" id="cc-${c.id}"><div class="contact-avatar">${c.name.charAt(0).toUpperCase()}</div><div style="flex:1;min-width:0;"><div class="contact-name">${c.name}</div><div class="contact-phone">${c.phone||c.email||''}</div></div><div class="contact-check">✓</div></div>`).join('');
-}
-
-function filterContacts(){const q=document.getElementById('contactSearch').value.toLowerCase();renderContactGrid(pendingContacts.filter(c=>c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)));}
-function toggleContact(id){selectedContacts.has(id)?selectedContacts.delete(id):selectedContacts.add(id);const c=document.getElementById('cc-'+id);if(c)c.classList.toggle('selected',selectedContacts.has(id));document.getElementById('selCount').textContent=selectedContacts.size;document.getElementById('importCBtn').disabled=selectedContacts.size===0;}
-async function importSelected(){
-  let added=0;
-  const importedLeads=[];
-  pendingContacts.filter(c=>selectedContacts.has(c.id)).forEach(c=>{
-    if(!leads.find(l=>l.phone===c.phone||(c.email&&l.email===c.email))){
-      const lead={id:Date.now()+Math.random(),name:c.name,email:c.email||'',phone:c.phone||'',budgetMin:0,budgetMax:999999,status:'warm',preferences:[],notes:'',fromContacts:true};
-      leads.push(lead);importedLeads.push(lead);added++;
-    }
-  });
-  closeModal('contacts');persist();renderAll();
-  try { await saveImportedLeadsToAccount(importedLeads); } catch (e) { console.error(e); toast('Contacts imported, but account save failed.', true); }
-  log(`Imported ${added} contacts as leads`);toast(`${added} contact${added!==1?'s':''} added ✓`);
-}
-
-// ── ADD LEAD / LISTING ─────────────────────────────────────────
-function saveLead(){
-  const name=(document.getElementById('l-fn').value+' '+document.getElementById('l-ln').value).trim();
-  if(!name){toast('Name required.',true);return;}
-  leads.push({id:Date.now(),name,email:document.getElementById('l-em').value.trim(),phone:document.getElementById('l-ph').value.trim(),budgetMin:parseInt(document.getElementById('l-bmin').value)||0,budgetMax:parseInt(document.getElementById('l-bmax').value)||999999,status:document.getElementById('l-st').value,preferences:[...leadTags],notes:document.getElementById('l-no').value.trim()});
-  leadTags=[];document.getElementById('lTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
-  ['l-fn','l-ln','l-em','l-ph','l-bmin','l-bmax','l-no'].forEach(id=>document.getElementById(id).value='');
-  closeModal('addLead');persist();renderAll();log('Lead added: '+name);toast(name+' added ✓');
-}
-
-function saveListing(){
-  const addr=document.getElementById('p-ad').value.trim();if(!addr){toast('Address required.',true);return;}
-  listings.push({id:Date.now(),address:addr,price:parseInt(document.getElementById('p-pr').value)||0,status:document.getElementById('p-st').value,beds:parseInt(document.getElementById('p-bd').value)||0,baths:parseInt(document.getElementById('p-ba').value)||0,tags:[...listingTags],source:'manual'});
-  listingTags=[];document.getElementById('pTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
-  ['p-ad','p-pr','p-bd','p-ba'].forEach(id=>document.getElementById(id).value='');
-  closeModal('addListing');persist();renderAll();populateMatchSel();log('Listing added: '+addr);toast('Listing added ✓');
-}
-
-// ── TAGS ───────────────────────────────────────────────────────
-function addTag(e,type){
-  if(e.key!=='Enter'&&e.key!==',') return;e.preventDefault();
-  const val=e.target.value.trim().replace(/,/g,'');if(!val) return;
-  const arr=type==='lead'?leadTags:listingTags,aId=type==='lead'?'lTagArea':'pTagArea',iId=type==='lead'?'lTagIn':'pTagIn';
-  if(arr.includes(val)) return;arr.push(val);
-  const pill=document.createElement('span');pill.className='tag-pill';pill.innerHTML=`${val}<span class="remove" onclick="rmTag('${val}','${type}',this)">×</span>`;
-  document.getElementById(iId).before(pill);e.target.value='';
-}
-function rmTag(tag,type,el){if(type==='lead')leadTags=leadTags.filter(t=>t!==tag);else listingTags=listingTags.filter(t=>t!==tag);el.parentElement.remove();}
-
-// ── CSV ────────────────────────────────────────────────────────
-function dropCsv(e,type){e.preventDefault();e.currentTarget.classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)parseCsv(f,type);}
-function readCsv(e,type){const f=e.target.files[0];if(f)parseCsv(f,type);}
-function parseCsv(file,type){
-  const r=new FileReader();
-  r.onload=e=>{
-    const lines=e.target.result.split('\n').filter(l=>l.trim());
-    const hdrs=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
-    let count=0;
-    for(let i=1;i<lines.length;i++){
-      const vals=csvSplit(lines[i]),row={};
-      hdrs.forEach((h,idx)=>row[h]=(vals[idx]||'').replace(/"/g,'').trim());
-      if(type==='leads'){const prefs=(row.preferences||row.tags||'').split(';').map(p=>p.trim()).filter(Boolean);leads.push({id:Date.now()+i,name:row.name||'Unknown',email:row.email||'',phone:row.phone||'',budgetMin:parseInt(row.budget_min||0),budgetMax:parseInt(row.budget_max||999999),status:row.status||'warm',preferences:prefs,notes:row.notes||''});}
-      else{const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);listings.push({id:Date.now()+i,address:row.address||'Unknown',price:parseInt(row.price||0),status:row.status||'active',beds:parseInt(row.beds||0),baths:parseInt(row.baths||0),tags,source:'manual'});}
-      count++;
-    }
-    const sel=type==='leads'?'lcsvStatus':'pcsvStatus';document.getElementById(sel).style.display='block';document.getElementById(sel).textContent=`✓ Imported ${count} ${type}`;
-    persist();renderAll();populateMatchSel();log(`CSV: ${count} ${type} imported`);toast(`${count} ${type} imported ✓`);
-  };r.readAsText(file);
-}
-function csvSplit(line){const r=[];let cur='',q=false;for(const c of line){if(c==='"'){q=!q;continue;}if(c===','&&!q){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r;}
-
-// ── MATCH ENGINE ───────────────────────────────────────────────
-function populateMatchSel(){
-  const s=document.getElementById('matchSel');if(!s) return;
-  s.innerHTML='<option value="">— Choose a listing —</option>';
-  listings.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=`${l.address} — $${fmt(l.price)}`;s.appendChild(o);});
-}
-
-function matchFrom(id){nav('match');setTimeout(()=>{document.getElementById('matchSel').value=id;runMatch();},120);}
-
-async function runMatch(){
-  const id=parseFloat(document.getElementById('matchSel').value);
-  if(!id){toast('Select a listing first.',true);return;}
-  const listing=listings.find(l=>l.id==id);
-  if(!listing||!leads.length){toast('Need at least one lead.',true);return;}
-  const out=document.getElementById('matchOutput');
-  out.innerHTML=`<div class="sync-banner info"><div class="spinner"></div>AI analyzing ${leads.length} leads against: ${listing.tags.join(', ')}…</div>`;
-  const prompt=`You are a real estate CRM assistant. Score each lead's fit for this listing.
-LISTING: ${listing.address} | $${listing.price} | ${listing.beds}bd/${listing.baths}ba | Tags: ${listing.tags.join(', ')}
-LEADS:
-${leads.map(l=>`ID:${l.id} | ${l.name} | Budget:$${l.budgetMin}-$${l.budgetMax} | Prefs:${l.preferences.join(',')} | Status:${l.status} | Notes:${l.notes}`).join('\n')}
-Return ONLY a JSON array. Each object: {id,score(0-100),reason(1-2 sentences specific to tag/budget match)}. Order by score desc. No markdown.`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const raw=data.content.map(b=>b.text||'').join('');
-    renderMatchResults(listing,JSON.parse(raw.replace(/```json|```/g,'').trim()));
-  }catch(e){renderMatchResults(listing,fallbackScore(listing));}
-}
-
-function fallbackScore(listing){
-  return leads.map(lead=>{
-    const lt=listing.tags.map(t=>t.toLowerCase()),lp=lead.preferences.map(p=>p.toLowerCase());
-    const matched=lp.filter(p=>lt.some(t=>t.includes(p)||p.includes(t)));
-    let score=Math.round((matched.length/Math.max(lp.length,1))*60);
-    if(listing.price>=lead.budgetMin&&listing.price<=lead.budgetMax)score+=30;else if(listing.price<=lead.budgetMax*1.1)score+=10;
-    if(lead.status==='hot')score+=10;else if(lead.status==='warm')score+=5;
-    score=Math.min(100,score);
-    const reason=matched.length>0?`Matches on: ${matched.join(', ')}. Price $${fmt(listing.price)} ${listing.price<=lead.budgetMax?'is within budget':'is slightly above budget'}.`:`No direct preference overlap. Budget ${listing.price<=lead.budgetMax?'fits':'may be high'} at $${fmt(listing.price)}.`;
-    return{id:lead.id,score,reason};
-  }).sort((a,b)=>b.score-a.score);
-}
-
-function renderMatchResults(listing,results){
-  const out=document.getElementById('matchOutput');
-  const strong=results.filter(r=>r.score>=50).length;
-  out.innerHTML=`<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${listing.address}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${listing.source==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${listing.tags.map(tagHtml).join('')}</div></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;">${strong} strong match${strong!==1?'es':''} of ${leads.length} leads</div><div style="font-size:11.5px;color:var(--text-muted);">Sorted by fit score</div></div>
-  <div class="match-results-grid">${results.map((r,i)=>{const lead=leads.find(l=>l.id==r.id);if(!lead)return'';return`<div class="match-card" style="animation-delay:${i*.05}s;opacity:${r.score<15?.4:1}"><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">${lead.name}</div><div style="font-size:11.5px;color:var(--text-muted);">${lead.email||lead.phone||''} · ${dot(lead.status,'lead')}${lead.status}</div></div><div style="text-align:right;flex-shrink:0;"><div class="match-score">${r.score}</div><div class="match-score-label">Match %</div></div></div><div class="match-reason">${r.reason}</div><div style="font-size:11px;color:var(--text-dim);margin-bottom:9px;">Budget: $${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div><div style="margin-bottom:11px;">${lead.preferences.map(tagHtml).join('')}</div><div style="display:flex;gap:7px;"><button style="flex:1;padding:7px;background:var(--amber);color:var(--navy);border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;" onclick="copyText('${lead.email||lead.phone}')">📋 Copy Contact</button><button style="flex:1;padding:7px;background:var(--navy-light);color:var(--text-muted);border:1px solid var(--navy-border);border-radius:6px;font-size:11.5px;cursor:pointer;">Notes</button></div></div>`;}).join('')}</div>`;
-}
-
-// ── SETTINGS ───────────────────────────────────────────────────
-function saveProfile(){const n=document.getElementById('p-name').value.trim(),b=document.getElementById('p-brokerage').value.trim();localStorage.setItem('bos_profile',JSON.stringify({name:n,brokerage:b}));toast('Profile saved ✓');}
-function clearData(type){if(!confirm(`Clear all ${type}? Cannot be undone.`))return;if(type==='leads'||type==='all')leads=[];if(type==='listings'||type==='all')listings=[];if(type==='all'){files=[];activityLog=[];}persist();renderAll();toast(type==='all'?'All data cleared.':type+' cleared.');}
-function togglePw(id){const el=document.getElementById(id);el.type=el.type==='password'?'text':'password';}
-
-// ── ONBOARDING ─────────────────────────────────────────────────
-function buildOnboard(){
-  const b=document.getElementById('onboardBlock');
-  if(leads.length>0&&listings.length>0){b.innerHTML='';return;}
-  b.innerHTML=`<div class="onboarding-card"><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div class="onboarding-steps"><div class="onboarding-step"><div class="step-num">01</div><div class="step-title">Deploy Proxy + Connect MLS</div><div class="step-desc">Deploy the proxy server to Railway (free), then enter your PrimeMLS credentials in Settings.</div></div><div class="onboarding-step"><div class="step-num">02</div><div class="step-title">Import Leads</div><div class="step-desc">Pull from your phone contacts or upload a CSV of your existing client database.</div></div><div class="onboarding-step"><div class="step-num">03</div><div class="step-title">Run Matches</div><div class="step-desc">New listing hits MLS → Broker OS surfaces your best prospects automatically.</div></div></div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo();document.getElementById('onboardBlock').innerHTML=''">Try Demo First</button></div></div>`;
-}
-
-
-function toggleMobileNav(){
-  document.body.classList.toggle('mobile-nav-open');
-  const overlay = document.getElementById('mobileSidebarOverlay');
-  if(overlay) overlay.classList.toggle('open', document.body.classList.contains('mobile-nav-open'));
-}
-function closeMobileNav(){
-  document.body.classList.remove('mobile-nav-open');
-  const overlay = document.getElementById('mobileSidebarOverlay');
-  if(overlay) overlay.classList.remove('open');
-}
-window.addEventListener('resize',()=>{ if(window.innerWidth>980) closeMobileNav(); });
-
-// ── HELPERS ────────────────────────────────────────────────────
-function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
-function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
-
-function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'')+' show';setTimeout(()=>t.classList.remove('show'),2800);}
-function copyText(v){navigator.clipboard.writeText(v).then(()=>toast('Copied: '+v));}
-function dot(s,type){if(type==='lead'){const c=s==='hot'?'dot-hot':s==='warm'?'dot-warm':'dot-cold';return`<span class="status-dot ${c}"></span>`;}const c=s==='active'?'dot-active':s==='pending'?'dot-pending':'dot-sold';return`<span class="status-dot ${c}"></span>`;}
-function tagHtml(tag){const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${tag}</span>`;}
-function fmt(n){return Number(n||0).toLocaleString();}
-function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
-function fileIcon(n){const e=(n.split('.').pop()||'').toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',csv:'📋'}[e]||'📁';}
-
-
-function showAuth(message='',type=''){
-  const shell=document.getElementById('authShell');
-  if(shell) shell.classList.remove('hidden');
-  setAuthStatus(message,type);
-}
-function hideAuth(){
-  const shell=document.getElementById('authShell');
-  if(shell) shell.classList.add('hidden');
-  setAuthStatus('','');
-}
-function setAuthStatus(message='',type=''){
-  const box=document.getElementById('authStatus');
-  if(!box) return;
-  box.className='auth-status'+(message?' show':'')+(type?' '+type:'');
-  box.textContent=message||'';
-}
-
-async function signUp(email, password) {
-  const { data, error } = await sb.auth.signUp({ email, password });
-  if (error) throw error;
-  return data;
-}
-
-async function signIn(email, password) {
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  return data;
-}
-
-async function signOutUser() {
-  const { error } = await sb.auth.signOut();
-  if (error) throw error;
-}
-
-async function getCurrentUser() {
-  const { data, error } = await sb.auth.getUser();
-  if (error) throw error;
-  return data.user;
-}
-
-async function ensureProfile() {
-  const { data: userData, error: userError } = await sb.auth.getUser();
-  if (userError) throw userError;
-  const user = userData.user;
-  if (!user) return;
-
-  const { error } = await sb
-    .from('profiles')
-    .upsert([{ id: user.id, email: user.email || '' }]);
-
-  if (error) throw error;
-}
-
-
-function mapSupabaseLead(row){
-  return {
-    id: typeof row.id === 'number' ? row.id : (row.id || (Date.now() + Math.random())),
+    id: row.id, // uuid string used as identifier
+    dbId: row.id,
     name: row.name || '',
     email: row.email || '',
     phone: row.phone || '',
@@ -1523,31 +817,14 @@ function mapSupabaseLead(row){
     status: row.status || 'warm',
     preferences: Array.isArray(row.tags) ? row.tags : [],
     notes: row.notes || '',
-    fromContacts: true
+    source: row.source || '',
+    fromContacts: row.source === 'contacts'
   };
 }
 
-async function loadLeadsFromAccount() {
-  const user = await getCurrentUser();
-  if (!user) return;
-  const { data, error } = await sb
-    .from('leads')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: true });
-  if (error) throw error;
-  if (Array.isArray(data) && data.length) {
-    leads = data.map(mapSupabaseLead);
-    persist();
-    renderAll();
-  }
-}
-
-async function saveImportedLeadsToAccount(importedLeads) {
-  const user = await getCurrentUser();
-  if (!user || !importedLeads.length) return;
-  const rows = importedLeads.map(lead => ({
-    user_id: user.id,
+function leadToRow(lead) {
+  return {
+    user_id: currentUser.id,
     name: lead.name || '',
     email: lead.email || '',
     phone: lead.phone || '',
@@ -1555,93 +832,996 @@ async function saveImportedLeadsToAccount(importedLeads) {
     budget_max: Number(lead.budgetMax || 999999),
     status: lead.status || 'warm',
     tags: Array.isArray(lead.preferences) ? lead.preferences : [],
-    notes: lead.notes || ''
-  }));
-  const { error } = await sb.from('leads').insert(rows);
+    notes: lead.notes || '',
+    source: lead.fromContacts ? 'contacts' : (lead.source || 'manual')
+  };
+}
+
+// LISTINGS
+async function loadListings() {
+  if (!currentUser) return;
+  const { data, error } = await sb.from('listings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+  if (error) { console.error('load listings:', error); return; }
+  listings = (data || []).map(mapDbListing);
+  renderAll();
+  populateMatchSel();
+}
+
+async function insertListing(listing) {
+  if (!currentUser) return null;
+  const row = listingToRow(listing);
+  const { data, error } = await sb.from('listings').insert([row]).select().single();
+  if (error) throw error;
+  return mapDbListing(data);
+}
+
+async function upsertMLSListings(mlsListings) {
+  if (!currentUser || !mlsListings.length) return 0;
+  const rows = mlsListings.map(l => ({ ...listingToRow(l), mls_id: l.mlsId || null }));
+  // upsert on mls_id+user_id to avoid duplicates
+  const { data, error } = await sb.from('listings').upsert(rows, { onConflict: 'user_id,mls_id', ignoreDuplicates: false }).select();
+  if (error) throw error;
+  return (data || []).length;
+}
+
+async function deleteListing(id) {
+  const listing = listings.find(l => l.id === id);
+  if (!listing) return;
+  listings = listings.filter(l => l.id !== id);
+  renderAll();
+  populateMatchSel();
+  if (currentUser && listing.dbId) {
+    const { error } = await sb.from('listings').delete().eq('id', listing.dbId).eq('user_id', currentUser.id);
+    if (error) console.error('delete listing:', error);
+  }
+}
+
+function mapDbListing(row) {
+  return {
+    id: row.id,
+    dbId: row.id,
+    mlsId: row.mls_id || '',
+    address: row.address || '',
+    price: Number(row.price || 0),
+    status: normalizeListingStatus(row.status || 'active'),
+    beds: Number(row.beds || 0),
+    baths: Number(row.baths || 0),
+    tags: Array.isArray(row.tags) ? row.tags : [],
+    source: row.source || 'manual',
+    city: row.city || '',
+    state: row.state || '',
+    zip: row.zip || '',
+    sqft: Number(row.sqft || 0),
+    lotSize: row.lot_size || '',
+    yearBuilt: row.year_built || '',
+    description: row.description || '',
+    propertyType: row.property_type || '',
+    image_url: row.image_url || '',
+    photos: Array.isArray(row.photos) ? row.photos : [],
+    notes: row.notes || ''
+  };
+}
+
+function listingToRow(listing) {
+  return {
+    user_id: currentUser.id,
+    address: listing.address || '',
+    price: Number(listing.price || 0),
+    status: normalizeListingStatus(listing.status || 'active'),
+    beds: Number(listing.beds || 0),
+    baths: Number(listing.baths || 0),
+    tags: Array.isArray(listing.tags) ? listing.tags : [],
+    source: normalizeListingSource(listing.source || 'manual'),
+    city: listing.city || '',
+    state: listing.state || '',
+    zip: listing.zip || listing.postalCode || '',
+    sqft: Number(listing.sqft || 0),
+    lot_size: listing.lotSize || '',
+    year_built: listing.yearBuilt || '',
+    description: listing.description || '',
+    property_type: listing.propertyType || '',
+    image_url: listing.image_url || '',
+    photos: Array.isArray(listing.photos) ? listing.photos : [],
+    notes: listing.notes || '',
+    mls_id: listing.mlsId || null
+  };
+}
+
+// USER SETTINGS + PROFILE
+async function loadUserSettings() {
+  if (!currentUser) return;
+  const { data, error } = await sb.from('user_settings').select('*').eq('user_id', currentUser.id).maybeSingle();
+  if (error) { console.error('load settings:', error); return; }
+  if (!data) return;
+
+  cfg.proxy = data.mls_proxy_url || '';
+  cfg.url = data.mls_url || 'https://api.primemls.com/reso/odata';
+  cfg.user = data.mls_username || '';
+  cfg.area = data.mls_area || '';
+  cfg.lastSync = data.mls_last_sync || '';
+  cfg.connected = !!(cfg.proxy && cfg.url && cfg.user);
+  currentTheme = data.theme || 'light';
+  autoMatchEnabled = data.auto_match !== false;
+
+  // Profile fields
+  const pName = data.broker_name || '';
+  const pBrokerage = data.brokerage || '';
+  if (pName) document.getElementById('p-name').value = pName;
+  if (pBrokerage) document.getElementById('p-brokerage').value = pBrokerage;
+
+  populateSettingsFields();
+  applyTheme(currentTheme);
+  updateAutoMatchToggle();
+  updateMLSBadge();
+}
+
+async function saveUserSettings(patch = {}) {
+  if (!currentUser) return;
+  const row = {
+    user_id: currentUser.id,
+    mls_proxy_url: cfg.proxy || '',
+    mls_url: cfg.url || '',
+    mls_username: cfg.user || '',
+    mls_area: cfg.area || '',
+    mls_last_sync: cfg.lastSync || '',
+    theme: currentTheme,
+    auto_match: autoMatchEnabled,
+    broker_name: document.getElementById('p-name')?.value?.trim() || '',
+    brokerage: document.getElementById('p-brokerage')?.value?.trim() || '',
+    ...patch
+  };
+  const { error } = await sb.from('user_settings').upsert([row], { onConflict: 'user_id' });
   if (error) throw error;
 }
 
-async function handleSignUp() {
-  const emailEl = document.getElementById('authEmail');
-  const passEl = document.getElementById('authPassword');
-  const email = (emailEl?.value || '').trim();
-  const password = passEl?.value || '';
+// DOCUMENTS (metadata only — no binary storage here)
+async function loadDocuments() {
+  if (!currentUser) return;
+  const { data, error } = await sb.from('documents').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+  if (error) { console.error('load docs:', error); return; }
+  files = (data || []).map(row => ({
+    id: row.id,
+    name: row.file_name || row.title || 'Document',
+    size: row.file_size ? fmtBytes(row.file_size) : '—',
+    date: row.uploaded_at ? new Date(row.uploaded_at).toLocaleDateString() : '—',
+    type: row.file_type || ''
+  }));
+  renderFiles();
+  renderBadges();
+}
 
-  if (!email || !password) {
-    setAuthStatus('Enter email and password.', 'error');
-    return;
-  }
+async function insertDocument(file) {
+  if (!currentUser) return;
+  const row = {
+    user_id: currentUser.id,
+    file_name: file.name,
+    file_size: file.rawSize || 0,
+    file_type: file.name.split('.').pop().toLowerCase(),
+    title: file.name
+  };
+  const { error } = await sb.from('documents').insert([row]);
+  if (error) console.error('insert doc:', error);
+}
 
+// DISCOVER — cache to DB
+async function cacheDiscoverItemsToDB(items) {
+  if (!currentUser || !items.length) return;
+  const rows = items.map(item => ({
+    source_name: item.source_name || 'Mortgage News Daily',
+    source_type: item.source_type || 'news',
+    title: item.title || '',
+    summary: item.summary || '',
+    link: item.link || '',
+    image_url: item.image_url || '',
+    published_at: item.published_at || null,
+    category: item.category || '',
+    raw_guid: item.raw_guid || item.link || item.title || String(Math.random())
+  }));
+  // upsert on raw_guid (unique index we created)
+  const { error } = await sb.from('discover_items').upsert(rows, { onConflict: 'raw_guid', ignoreDuplicates: true });
+  if (error) console.error('cache discover:', error);
+}
+
+// ── AUTH ───────────────────────────────────────────────────────
+function showAuth(message = '', type = '') {
+  document.getElementById('authShell').classList.remove('hidden');
+  setAuthStatus(message, type);
+}
+function hideAuth() {
+  document.getElementById('authShell').classList.add('hidden');
+  setAuthStatus('', '');
+}
+function setAuthStatus(message = '', type = '') {
+  const box = document.getElementById('authStatus');
+  if (!box) return;
+  box.className = 'auth-status' + (message ? ' show' : '') + (type ? ' ' + type : '');
+  box.textContent = message || '';
+}
+
+async function handleSignIn() {
+  const email = (document.getElementById('authEmail')?.value || '').trim();
+  const password = document.getElementById('authPassword')?.value || '';
+  if (!email || !password) { setAuthStatus('Enter email and password.', 'error'); return; }
   try {
-    setAuthStatus('Creating account...', '');
-    const result = await signUp(email, password);
-    if (result?.user) {
-      try { await ensureProfile(); } catch (_) {}
-    }
-    if (result?.session?.user) {
+    setAuthStatus('Signing in…', '');
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    currentUser = data.user;
+    await afterSignIn();
+    hideAuth();
+  } catch (err) {
+    setAuthStatus(err.message || 'Sign in failed.', 'error');
+  }
+}
+
+async function handleSignUp() {
+  const email = (document.getElementById('authEmail')?.value || '').trim();
+  const password = document.getElementById('authPassword')?.value || '';
+  if (!email || !password) { setAuthStatus('Enter email and password.', 'error'); return; }
+  try {
+    setAuthStatus('Creating account…', '');
+    const { data, error } = await sb.auth.signUp({ email, password });
+    if (error) throw error;
+    if (data?.session?.user) {
+      currentUser = data.session.user;
+      await afterSignIn();
       hideAuth();
-      setAuthStatus('', '');
     } else {
-      setAuthStatus('Account created. Check email if confirmation is enabled, then sign in.', 'success');
+      setAuthStatus('Account created! Check your email to confirm, then sign in.', 'success');
     }
   } catch (err) {
     setAuthStatus(err.message || 'Sign up failed.', 'error');
   }
 }
 
-async function handleSignIn() {
-  const emailEl = document.getElementById('authEmail');
-  const passEl = document.getElementById('authPassword');
-  const email = (emailEl?.value || '').trim();
-  const password = passEl?.value || '';
+async function afterSignIn() {
+  await ensureProfile();
+  await Promise.all([loadUserSettings(), loadLeads(), loadListings(), loadDocuments()]);
+  loadDiscoverFromAccount().catch(console.warn);
+  renderAll();
+  buildOnboard();
+}
 
-  if (!email || !password) {
-    setAuthStatus('Enter email and password.', 'error');
-    return;
-  }
-
-  try {
-    setAuthStatus('Signing in...', '');
-    await signIn(email, password);
-    try { await ensureProfile(); await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
-    hideAuth();
-    setAuthStatus('', '');
-  } catch (err) {
-    setAuthStatus(err.message || 'Sign in failed.', 'error');
-  }
+async function ensureProfile() {
+  if (!currentUser) return;
+  await sb.from('profiles').upsert([{ id: currentUser.id, email: currentUser.email || '' }]);
 }
 
 async function bootAuth() {
   try {
-    const user = await getCurrentUser();
-    if (user) {
+    const { data } = await sb.auth.getUser();
+    if (data?.user) {
+      currentUser = data.user;
       hideAuth();
-      try { await ensureProfile(); await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
+      await afterSignIn();
     } else {
       showAuth();
     }
-  } catch (err) {
+  } catch (e) {
     showAuth('Could not verify session.', 'error');
   }
 }
 
-function handleAuthEnter(e) {
-  if (e.key === 'Enter') handleSignIn();
-}
-
-document.getElementById('authEmail')?.addEventListener('keydown', handleAuthEnter);
-document.getElementById('authPassword')?.addEventListener('keydown', handleAuthEnter);
-document.getElementById('authSigninBtn')?.addEventListener('click', handleSignIn);
-document.getElementById('authSignupBtn')?.addEventListener('click', handleSignUp);
-
-sb.auth.onAuthStateChange(async (_event, session) => {
-  if (session?.user) {
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session?.user && !currentUser) {
+    currentUser = session.user;
     hideAuth();
-    try { await loadLeadsFromAccount(); await loadDiscoverFromAccount(); } catch (_) {}
-  } else {
+    await afterSignIn();
+  } else if (!session) {
+    currentUser = null;
+    leads = []; listings = []; files = [];
+    renderAll();
     showAuth();
   }
 });
+
+// ── NAV ────────────────────────────────────────────────────────
+const titles = { dashboard:'Dashboard', discover:'Discover', leads:'Leads', listings:'Listings', match:'Match Engine', files:'Documents', settings:'Settings' };
+const subs = { dashboard:'Overview', discover:'Real estate news and market pulse', leads:'All contacts', listings:'All properties', match:'AI-powered lead matching', files:'Contracts & documents', settings:'Configuration' };
+
+function nav(name) {
+  if (name !== 'listings' && document.getElementById('listingDetailOverlay')?.classList.contains('open')) closeListingDetail(true);
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  const ni = document.getElementById('nav-' + name);
+  if (ni) ni.classList.add('active');
+  document.getElementById('tbTitle').textContent = titles[name] || name;
+  document.getElementById('tbSub').textContent = subs[name] || '';
+  if (name === 'match') { populateMatchSel(); newMatchCount = 0; document.getElementById('badge-matches').style.display = 'none'; document.getElementById('matchBanner').style.display = 'none'; persistLocal(); }
+  if (name === 'listings') renderListingsBanner();
+  document.querySelector('.content')?.scrollTo(0, 0);
+  if (window.innerWidth <= 980) closeMobileNav();
+}
+
+// ── RENDER ALL ─────────────────────────────────────────────────
+function renderAll() { buildOnboard(); renderLeads(); renderListings(); renderFiles(); renderStats(); renderBadges(); renderActivity(); updateMLSBadge(); renderDiscover(); }
+
+function renderStats() {
+  document.getElementById('s-leads').textContent = leads.length;
+  document.getElementById('s-listings').textContent = listings.filter(l => normalizeListingStatus(l.status) === 'active').length;
+  document.getElementById('s-hot').textContent = leads.filter(l => l.status === 'hot').length;
+  const n = listings.filter(l => normalizeListingSource(l.source) === 'mls').length;
+  document.getElementById('s-synced').textContent = n || '—';
+}
+
+function renderBadges() {
+  document.getElementById('badge-leads').textContent = leads.length;
+  document.getElementById('badge-listings').textContent = listings.length;
+  document.getElementById('badge-files').textContent = files.length;
+  if (newMatchCount > 0) { const b = document.getElementById('badge-matches'); b.style.display = 'inline-block'; b.textContent = newMatchCount; }
+}
+
+function renderActivity() {
+  const el = document.getElementById('activityEl');
+  if (!activityLog.length) { el.innerHTML = '<span style="color:var(--text-muted);">Sign in and add data to get started.</span>'; return; }
+  el.innerHTML = '<div>' + activityLog.slice(-8).reverse().map(a => `<div style="padding:9px 0;border-bottom:1px solid var(--navy-border);font-size:12.5px;"><span style="color:var(--text-dim);font-size:11px;margin-right:8px;">${a.t}</span>${a.m}</div>`).join('') + '</div>';
+}
+
+function log(m) { activityLog.push({ m, t: new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) }); persistLocal(); renderActivity(); }
+
+function updateMLSBadge() {
+  const badge = document.getElementById('mlsBadge'), dot = document.getElementById('mlsDot'), txt = document.getElementById('mlsTxt');
+  const live = !!(cfg.connected && cfg.proxy && cfg.url && cfg.user);
+  if (live) { badge.className = 'mls-status connected'; dot.className = 'mls-dot on'; txt.style.color = 'var(--green)'; txt.textContent = 'MLS Live'; }
+  else { badge.className = 'mls-status disconnected'; dot.className = 'mls-dot off'; txt.style.color = 'var(--red)'; txt.textContent = 'MLS Not Connected'; }
+}
+
+function applyTheme(theme) {
+  currentTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const dk = document.getElementById('theme-dark-btn'), lt = document.getElementById('theme-light-btn');
+  if (dk) dk.className = `btn ${currentTheme === 'dark' ? 'btn-primary' : 'btn-secondary'}`;
+  if (lt) lt.className = `btn ${currentTheme === 'light' ? 'btn-primary' : 'btn-secondary'}`;
+}
+
+function setTheme(theme) {
+  applyTheme(theme);
+  persistLocal();
+  saveUserSettings().catch(console.error);
+  toast(`${currentTheme === 'light' ? 'White' : 'Dark'} theme active ✓`);
+}
+
+function updateAutoMatchToggle() {
+  const tog = document.getElementById('tog-automatch');
+  if (tog) tog.classList.toggle('on', autoMatchEnabled);
+}
+
+function toggleAutoMatch() {
+  autoMatchEnabled = !autoMatchEnabled;
+  updateAutoMatchToggle();
+  saveUserSettings().catch(console.error);
+}
+
+function populateSettingsFields() {
+  if (cfg.proxy) document.getElementById('cfg-proxy').value = cfg.proxy;
+  if (cfg.url) document.getElementById('cfg-url').value = cfg.url;
+  if (cfg.user) document.getElementById('cfg-user').value = cfg.user;
+  if (cfg.key) document.getElementById('cfg-key').value = cfg.key;
+  if (cfg.area) document.getElementById('cfg-area').value = cfg.area;
+}
+
+// ── DISCOVER ───────────────────────────────────────────────────
+const DISCOVER_RSS_URL = 'https://rss.app/feeds/GZmHICn6jx0eX9ZS.xml';
+const DISCOVER_RSS_SOURCE_NAME = 'Mortgage News Daily';
+
+function setDiscoverFilter(type) {
+  discoverFilter = type;
+  ['all','news','rates'].forEach(k => { const el = document.getElementById('discoverFilter-' + k); if (el) el.classList.toggle('active', k === type); });
+  renderDiscover();
+}
+
+function relativeTime(dateStr) {
+  if (!dateStr) return 'No timestamp';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return 'No timestamp';
+  const diff = Date.now() - d.getTime();
+  const mins = Math.round(diff / 60000);
+  if (mins < 60) return `${Math.max(mins, 1)}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+function cleanSummary(text = '') { return String(text || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+function extractImageFromHtml(text = '') { const m = String(text || '').match(/<img[^>]+src=["']([^"']+)["']/i); return m ? safeHref(m[1]) : ''; }
+function htmlEscape(str = '') { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function safeHref(url = '') { const v = String(url || '').trim(); if (!v) return '#'; try { const p = new URL(v); if (p.protocol === 'http:' || p.protocol === 'https:') return p.href; } catch(_){} return '#'; }
+
+function normalizeDiscoverType(item = {}) {
+  const h = [item.source_type, item.source_name, item.title, item.summary, item.category].map(v => String(v || '').toLowerCase()).join(' ');
+  return /rate|mortgage|mbs|yield|refi|refinanc/.test(h) ? 'rates' : 'news';
+}
+
+function normalizeDiscoverItem(item = {}) {
+  const type = normalizeDiscoverType(item);
+  const image = safeHref(item.image_url || item.image || item.thumbnail || extractImageFromHtml(item.summary || item.description || ''));
+  return {
+    source_name: item.source_name || DISCOVER_RSS_SOURCE_NAME,
+    source_type: type,
+    title: String(item.title || 'Untitled').trim(),
+    summary: cleanSummary(item.summary || item.description || ''),
+    image_url: image && image !== '#' ? image : '',
+    link: safeHref(item.link || item.url || '#'),
+    published_at: item.published_at || item.pubDate || item.isoDate || null,
+    category: item.category || '',
+    raw_guid: item.raw_guid || item.guid || item.link || item.title || Math.random().toString(36).slice(2)
+  };
+}
+
+function dedupeDiscoverItems(items = []) {
+  const seen = new Set();
+  return items.map(normalizeDiscoverItem).filter(item => {
+    const key = `${item.raw_guid}::${item.link}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return !!item.title;
+  }).sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0));
+}
+
+function parseFeedText(xmlText = '') {
+  const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
+  if (xml.querySelector('parsererror')) throw new Error('Could not parse RSS XML');
+  return [...xml.querySelectorAll('item, entry')].map(node => {
+    const getText = (...sels) => { for (const s of sels) { const el = node.querySelector(s); if (el?.textContent?.trim()) return el.textContent.trim(); } return ''; };
+    const linkNode = node.querySelector('link');
+    const href = linkNode?.getAttribute?.('href');
+    const mediaNode = node.querySelector('media\\:content, media\\:thumbnail, enclosure[url]');
+    const mediaUrl = mediaNode?.getAttribute?.('url');
+    const desc = getText('description','summary','content');
+    return normalizeDiscoverItem({
+      source_name: DISCOVER_RSS_SOURCE_NAME,
+      title: getText('title'),
+      summary: desc,
+      image_url: mediaUrl || extractImageFromHtml(desc),
+      link: href || getText('link'),
+      published_at: getText('pubDate','published','updated'),
+      category: [...node.querySelectorAll('category')].map(el => el.textContent.trim()).filter(Boolean).join(', '),
+      raw_guid: getText('guid','id') || href || getText('link') || getText('title')
+    });
+  }).filter(item => item.title && item.link);
+}
+
+async function loadDiscoverFromAccount() {
+  // Try Supabase cache first
+  try {
+    const { data, error } = await sb.from('discover_items').select('*').order('published_at', { ascending: false }).limit(60);
+    if (!error && Array.isArray(data) && data.length) {
+      discoverItems = dedupeDiscoverItems(data);
+      renderDiscover();
+      return;
+    }
+  } catch(e) { console.warn('Supabase discover fallback to RSS'); }
+  // Fall back to RSS
+  try {
+    const r = await fetch(DISCOVER_RSS_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`RSS ${r.status}`);
+    const items = dedupeDiscoverItems(parseFeedText(await r.text()));
+    discoverItems = items;
+    renderDiscover();
+    cacheDiscoverItemsToDB(items).catch(console.warn);
+  } catch(e) { console.warn('Discover RSS failed:', e); }
+}
+
+async function refreshDiscoverFeed() {
+  try {
+    const r = await fetch(DISCOVER_RSS_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`RSS ${r.status}`);
+    const items = dedupeDiscoverItems(parseFeedText(await r.text()));
+    if (items.length) { discoverItems = items; cacheDiscoverItemsToDB(items).catch(console.warn); }
+    renderDiscover();
+    toast('Discover refreshed ✓');
+  } catch(e) { toast('Could not refresh feed.', true); }
+}
+
+function discoverDisplayItems() {
+  return discoverFilter === 'all' ? discoverItems : discoverItems.filter(i => (i.source_type || 'news') === discoverFilter);
+}
+
+function renderDiscover() {
+  const list = document.getElementById('discoverList'), empty = document.getElementById('discoverEmpty'), briefs = document.getElementById('discoverBriefs');
+  if (!list || !empty || !briefs) return;
+  const items = discoverDisplayItems();
+  const newsCount = discoverItems.filter(i => (i.source_type || 'news') === 'news').length;
+  const ratesCount = discoverItems.filter(i => i.source_type === 'rates').length;
+  const totalEl = document.getElementById('discoverTotal'), newsEl = document.getElementById('discoverNewsCount'), ratesEl = document.getElementById('discoverRatesCount');
+  if (totalEl) totalEl.textContent = discoverItems.length;
+  if (newsEl) newsEl.textContent = newsCount;
+  if (ratesEl) ratesEl.textContent = ratesCount;
+  renderMarketRatesPanel();
+  if (!items.length) { list.innerHTML = ''; empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    list.innerHTML = items.map(item => {
+      const type = item.source_type || 'news';
+      const source = htmlEscape(item.source_name || 'News');
+      const summary = htmlEscape(cleanSummary(item.summary).slice(0, 280) || 'No summary available.');
+      const title = htmlEscape(item.title || 'Untitled');
+      const link = safeHref(item.link || '#');
+      const category = htmlEscape(item.category || (type === 'rates' ? 'Rates & yields' : 'Housing & brokerage'));
+      const media = item.image_url ? `<img src="${item.image_url}" alt="${title}" loading="lazy">` : `<div class="news-media-placeholder"><div class="news-media-label">${type === 'rates' ? 'Rate Watch' : 'Daily Brief'}</div><div class="news-media-title">${htmlEscape((item.title||'Market update').split(' ').slice(0,4).join(' '))}</div></div>`;
+      return `<article class="news-card"><div class="news-media">${media}</div><div class="news-body"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div><div class="news-footer"><div class="news-tagline">${category}</div><a class="news-link" href="${link}" target="_blank" rel="noopener noreferrer">Open story →</a></div></div></article>`;
+    }).join('');
+  }
+  briefs.innerHTML = discoverItems.slice(0,3).map((item, i) => `<div class="brief-item">${i+1}. <strong style="color:var(--text);">${htmlEscape(item.title || 'Untitled')}</strong><br>${htmlEscape(cleanSummary(item.summary).slice(0, 120) || 'Fresh coverage in your feed.')}</div>`).join('') || '<div class="brief-item">Your brief will appear once the feed loads.</div>';
+}
+
+function marketPath(pts, w, h) {
+  const max = Math.max(...pts), min = Math.min(...pts), range = Math.max(max - min, 1), step = w / Math.max(pts.length - 1, 1);
+  return pts.map((v, i) => `${i === 0 ? 'M' : 'L'}${(i * step).toFixed(2)} ${(h - ((v - min) / range) * h).toFixed(2)}`).join(' ');
+}
+
+function renderMarketRatesPanel() {
+  const panel = document.getElementById('marketRatesPanel');
+  if (!panel) return;
+  const cards = [
+    { name:'S&P Futures', value:'6,543.25', dollar:'-$97.50', change:'↘ 1.47%', trend:'down', points:[76,74,73,71,69,68,66,65,63,60,58,59,57,58,56] },
+    { name:'NASDAQ Fut.', value:'23,855.00', dollar:'-$512.75', change:'↘ 2.10%', trend:'down', points:[84,82,81,79,78,76,74,73,72,69,67,66,65,64,63] },
+    { name:'Bitcoin', value:'$68,966.25', dollar:'-$1,795.41', change:'↘ 2.54%', trend:'down', points:[88,86,85,84,82,80,79,77,75,73,71,70,68,67,66] },
+    { name:'VIX', value:'27.44', dollar:'+2.11', change:'↗ 8.33%', trend:'up', points:[22,23,22,24,25,26,27,27,29,30,31,33,32,33,34] }
+  ];
+  panel.innerHTML = `<div class="market-panel-title">Market Outlook</div><div class="market-panel-sub">Placeholder rates — ready to wire live quotes later.</div><div class="market-grid">${cards.map(card => {
+    const path = marketPath(card.points, 132, 34);
+    return `<div class="market-card"><div class="market-card-head"><div class="market-card-name">${card.name}</div><div class="market-card-change ${card.trend}">${card.change}</div></div><div class="market-card-value">${card.value}</div><div class="market-card-dollar">${card.dollar}</div><svg class="market-chart" viewBox="0 0 132 34" preserveAspectRatio="none"><path class="fill ${card.trend}" d="${path} L 132 34 L 0 34 Z"></path><path class="line ${card.trend}" d="${path}" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>`;
+  }).join('')}</div><div class="market-footnote">Styled placeholder. Wire live data when ready.</div>`;
+}
+
+// ── LEADS RENDER ───────────────────────────────────────────────
+function renderLeads() {
+  const q = (document.getElementById('leadSearch')?.value || '').toLowerCase();
+  const tb = document.getElementById('leadsTable'), emp = document.getElementById('leadsEmpty');
+  const f = leads.filter(l => !q || l.name.toLowerCase().includes(q) || (l.email||'').toLowerCase().includes(q) || l.preferences.join(' ').toLowerCase().includes(q));
+  if (!f.length) { tb.innerHTML = ''; emp.style.display = 'block'; return; }
+  emp.style.display = 'none';
+  tb.innerHTML = f.map(l => `<tr>
+    <td><strong>${l.name}</strong>${l.fromContacts ? ' <span style="font-size:10px;color:var(--text-dim);">📱</span>' : ''}</td>
+    <td style="color:var(--text-muted);font-size:11.5px;">${l.email||'—'}<br>${l.phone||'—'}</td>
+    <td>${dot(l.status,'lead')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
+    <td style="font-size:12px;color:var(--text-muted);">$${fmt(l.budgetMin)}–$${fmt(l.budgetMax)}</td>
+    <td>${l.preferences.map(tagHtml).join('')}</td>
+    <td style="font-size:11.5px;color:var(--text-muted);max-width:130px;">${l.notes||'—'}</td>
+    <td><button class="btn btn-danger" style="font-size:11px;padding:4px 8px;" onclick="deleteLeadById('${l.id}')">✕</button></td>
+  </tr>`).join('');
+}
+
+function deleteLeadById(id) { deleteLead(id).catch(e => { leads = leads.filter(l => l.id !== id); renderAll(); }); }
+
+// ── LISTINGS RENDER ────────────────────────────────────────────
+function firstPresent(...vals) { for (const v of vals) { if (v === undefined || v === null) continue; if (typeof v === 'string' && !v.trim()) continue; return v; } return ''; }
+function truncateText(text = '', max = 180) { const c = String(text||'').trim(); return c.length <= max ? c : c.slice(0, max-1).trimEnd() + '…'; }
+function normalizeListingStatus(status = '') { const s = String(status||'').toLowerCase(); if (/pend|under contract|conting/.test(s)) return 'pending'; if (/sold|close/.test(s)) return 'sold'; return 'active'; }
+function normalizeListingSource(source = '') { return String(source||'').toLowerCase() === 'mls' ? 'mls' : 'manual'; }
+function formatListingStatus(status = '') { const v = normalizeListingStatus(status); return v.charAt(0).toUpperCase() + v.slice(1); }
+function getListingAddress(l = {}) { const composed = [l.street, l.city, l.state].filter(Boolean).join(', '); return String(firstPresent(l.address, l.UnparsedAddress, composed, 'Address unavailable')).trim(); }
+function getListingTags(l = {}) { if (Array.isArray(l.tags)) return l.tags.filter(Boolean); if (typeof l.tags === 'string') return l.tags.split(/[;,]/).map(t=>t.trim()).filter(Boolean); return []; }
+function formatListingPrice(l = {}) { const p = Number(l.price||0); return p > 0 ? `$${fmt(p)}` : 'Price on request'; }
+function formatCountValue(v) { const n = Number(v); if (!Number.isFinite(n) || n <= 0) return '—'; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/,''); }
+function formatSquareFeet(v) { const n = Number(v); return Number.isFinite(n) && n > 0 ? `${fmt(n)} sq ft` : ''; }
+function getListingLocationLine(l = {}) { const city = String(firstPresent(l.city,'')).trim(), state = String(firstPresent(l.state,'')).trim(), zip = String(firstPresent(l.zip,l.postalCode,'')).trim(), cs = [city,state].filter(Boolean).join(', '); if (cs && zip) return `${cs} ${zip}`; if (cs) return cs; if (zip) return zip; if (l.mlsId) return `MLS #${l.mlsId}`; return normalizeListingSource(l.source) === 'mls' ? 'PrimeMLS listing' : 'Manual listing'; }
+function getListingPhoto(l = {}) { const cands = []; if (Array.isArray(l.photos)) l.photos.forEach(p => { if (typeof p === 'string') cands.push(p); else if (p) cands.push(p.url, p.href, p.Uri, p.MediaURL); }); cands.push(l.image_url, l.imageUrl, l.image, l.photo); for (const c of cands) { const s = safeHref(c||''); if (s && s !== '#') return s; } return ''; }
+function getListingSummary(l = {}) { const existing = cleanSummary(firstPresent(l.description, l.publicRemarks, l.notes, '')); if (existing) return truncateText(existing, 210); const type = String(firstPresent(l.propertyType,l.property_type,'residence')).toLowerCase(); const beds = Number(l.beds||0) > 0 ? `${formatCountValue(l.beds)} bed${Number(l.beds)===1?'':'s'}` : ''; const baths = Number(l.baths||0) > 0 ? `${formatCountValue(l.baths)} bath${Number(l.baths)===1?'':'s'}` : ''; const sqft = formatSquareFeet(firstPresent(l.sqft, l.squareFeet, l.livingArea)); const facts = [beds, baths, sqft].filter(Boolean).join(', '); const tags = getListingTags(l).slice(0,3); let s = `${formatListingStatus(l.status)} ${type}`; if (facts) s += ` with ${facts}`; s += '.'; if (tags.length) s += ` Highlights: ${tags.join(', ')}.`; return truncateText(s, 210); }
+function getListingCardFacts(l = {}) { const f = [{label:'Beds',value:formatCountValue(l.beds)},{label:'Baths',value:formatCountValue(l.baths)}]; const type = String(firstPresent(l.propertyType,l.property_type,'')).trim(); const sqft = formatSquareFeet(firstPresent(l.sqft,l.squareFeet,l.livingArea)); if (type) f.push({label:'Type',value:type}); if (sqft) f.push({label:'Interior',value:sqft}); return f.filter(x=>x.value&&x.value!=='—').slice(0,4); }
+function getListingFacts(l = {}) { const f = [{label:'Status',value:formatListingStatus(l.status)},{label:'Source',value:normalizeListingSource(l.source)==='mls'?'MLS Sync':'Manual Entry'},{label:'Beds',value:formatCountValue(l.beds)},{label:'Baths',value:formatCountValue(l.baths)}]; const type = String(firstPresent(l.propertyType,l.property_type,'')).trim(); const sqft = formatSquareFeet(firstPresent(l.sqft,l.squareFeet,l.livingArea)); const lot = l.lotSize||l.lot_size||''; const year = String(firstPresent(l.yearBuilt,l.year_built,'')).trim(); const loc = getListingLocationLine(l); if (type) f.push({label:'Property Type',value:type}); if (sqft) f.push({label:'Interior',value:sqft}); if (lot) f.push({label:'Lot',value:lot}); if (year) f.push({label:'Year Built',value:year}); if (loc) f.push({label:'Location',value:loc}); if (l.mlsId) f.push({label:'MLS ID',value:String(l.mlsId)}); return f.filter(x=>x.value&&x.value!=='—'); }
+function renderListingStatusBadge(status='') { const n = normalizeListingStatus(status); return `<span class="listing-status-badge ${n}">${dot(n,'listing')}<span>${htmlEscape(formatListingStatus(n))}</span></span>`; }
+function renderListingMedia(l={}, mode='card') { const photo = getListingPhoto(l); if (photo) return `<img src="${photo}" alt="${htmlEscape(getListingAddress(l))}" ${mode==='card'?'loading="lazy"':''}>`;  const title = htmlEscape(getListingAddress(l).split(',')[0]||'Property'); const label = normalizeListingSource(l.source)==='mls'?'PrimeMLS Sync':'Manual Listing'; const meta = l.mlsId?`MLS #${htmlEscape(String(l.mlsId))}`:htmlEscape(formatListingStatus(l.status)); return `<div class="listing-media-placeholder"><div class="listing-media-label">${htmlEscape(label)}</div><div class="listing-media-title">${title}</div><div class="listing-media-meta">${meta}</div></div>`; }
+
+function getFilteredListings() {
+  const q = (document.getElementById('listingSearch')?.value||'').toLowerCase().trim();
+  return listings.filter(l => {
+    const hay = [getListingAddress(l), getListingLocationLine(l), l.mlsId, l.description, l.notes, l.propertyType, normalizeListingSource(l.source), normalizeListingStatus(l.status), getListingTags(l).join(' ')].map(v=>String(v||'').toLowerCase()).join(' ');
+    const matchesQ = !q || hay.includes(q);
+    const status = normalizeListingStatus(l.status), source = normalizeListingSource(l.source);
+    const matchesF = currentListingFilter==='all' || currentListingFilter===status || currentListingFilter===source;
+    return matchesQ && matchesF;
+  });
+}
+
+function renderListingCard(listing) {
+  const source = normalizeListingSource(listing.source), tags = getListingTags(listing), facts = getListingCardFacts(listing), id = JSON.stringify(listing.id);
+  return `<article class="listing-card" tabindex="0" role="button" onclick='openListingDetail(${id})' onkeydown='handleListingCardKey(event, ${id})'>
+    <div class="listing-card-media">${renderListingMedia(listing,'card')}</div>
+    <div class="listing-card-body">
+      <div class="listing-card-top">
+        <div style="min-width:0;"><div class="listing-card-address">${htmlEscape(getListingAddress(listing))}</div><div class="listing-card-location">${htmlEscape(getListingLocationLine(listing))}</div></div>
+        <div class="listing-card-meta"><span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>${listing.mlsId?`<span class="listing-mls-ref">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
+      </div>
+      <div class="listing-price-row"><div class="listing-price">${htmlEscape(formatListingPrice(listing))}</div>${renderListingStatusBadge(listing.status)}</div>
+      <div class="listing-facts">${facts.map(f=>`<div class="listing-fact"><strong>${htmlEscape(f.label)}:</strong> ${htmlEscape(f.value)}</div>`).join('')}</div>
+      <div class="listing-summary">${htmlEscape(getListingSummary(listing))}</div>
+      <div class="listing-tag-row">${tags.length?tags.slice(0,6).map(tagHtml).join(''):'<span class="listing-no-tags">No tags.</span>'}</div>
+      <div class="listing-card-actions">
+        <button class="btn btn-secondary" type="button" onclick='event.stopPropagation();openListingDetail(${id})'>View Details</button>
+        <button class="btn btn-primary" type="button" onclick='event.stopPropagation();matchFrom(${id})'>Match ✦</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderListingDetailContent(listing) {
+  const content = document.getElementById('listingDetailContent');
+  if (!content || !listing) return;
+  const source = normalizeListingSource(listing.source), tags = getListingTags(listing), facts = getListingFacts(listing), id = JSON.stringify(listing.id);
+  const meta = [formatCountValue(listing.beds)!=='—'?`${formatCountValue(listing.beds)} bd`:'', formatCountValue(listing.baths)!=='—'?`${formatCountValue(listing.baths)} ba`:'', String(firstPresent(listing.propertyType,listing.property_type,'')).trim()].filter(v=>v&&v!=='—');
+  content.innerHTML = `<div class="listing-detail-hero">${renderListingMedia(listing,'detail')}</div>
+    <div class="listing-detail-body">
+      <div class="listing-detail-top">
+        <div style="min-width:0;">
+          <div class="listing-detail-kicker">${renderListingStatusBadge(listing.status)}<span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>${listing.mlsId?`<span class="mls-badge">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
+          <h2 class="listing-detail-address" id="listingDetailTitle">${htmlEscape(getListingAddress(listing))}</h2>
+          <div class="listing-detail-price">${htmlEscape(formatListingPrice(listing))}</div>
+          <div class="listing-detail-meta"><span>${htmlEscape(getListingLocationLine(listing))}</span>${meta.map(m=>`<span>${htmlEscape(m)}</span>`).join('')}</div>
+        </div>
+        <button class="btn btn-secondary listing-detail-close" type="button" id="listingDetailCloseBtn" onclick="closeListingDetail()">Back</button>
+      </div>
+      <div class="listing-tag-row">${tags.length?tags.map(tagHtml).join(''):'<span class="listing-no-tags">No tags.</span>'}</div>
+      <div class="listing-detail-section"><div class="listing-detail-label">Property Facts</div><div class="listing-detail-facts">${facts.map(f=>`<div class="listing-detail-fact"><div class="listing-detail-fact-label">${htmlEscape(f.label)}</div><div class="listing-detail-fact-value">${htmlEscape(f.value)}</div></div>`).join('')}</div></div>
+      <div class="listing-detail-section"><div class="listing-detail-label">Notes & Summary</div><div class="listing-detail-note">${htmlEscape(getListingSummary(listing))}</div></div>
+      <div class="listing-detail-actions"><button class="btn btn-primary" type="button" onclick='closeListingDetail(true);matchFrom(${id})'>Match ✦</button><button class="btn btn-secondary" type="button" onclick="closeListingDetail()">Close</button></div>
+    </div>`;
+}
+
+function setListingFilter(type) { currentListingFilter = type; ['all','active','pending','sold','mls','manual'].forEach(k => { const el = document.getElementById('listingFilter-'+k); if(el) el.classList.toggle('active', k===type); }); renderListings(); }
+
+function openListingDetail(id) {
+  const listing = listings.find(l => l.id == id), overlay = document.getElementById('listingDetailOverlay');
+  if (!listing || !overlay) return;
+  activeListingId = listing.id; lastListingFocusEl = document.activeElement;
+  renderListingDetailContent(listing);
+  overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false');
+  setTimeout(() => document.getElementById('listingDetailCloseBtn')?.focus(), 20);
+}
+
+function closeListingDetail(skipFocus = false) {
+  const overlay = document.getElementById('listingDetailOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+  activeListingId = null;
+  if (!skipFocus && lastListingFocusEl) try { lastListingFocusEl.focus(); } catch(_){}
+  lastListingFocusEl = null;
+}
+
+function handleListingCardKey(e, id) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openListingDetail(id); } }
+
+function renderListings() {
+  const feed = document.getElementById('listingsFeed'), emp = document.getElementById('listingsEmpty'), meta = document.getElementById('listingResultMeta');
+  if (!feed || !emp) return;
+  const filtered = getFilteredListings();
+  if (meta) meta.textContent = `${filtered.length} result${filtered.length===1?'':'s'}.`;
+  if (activeListingId !== null) { const a = listings.find(l => l.id == activeListingId); if (a) renderListingDetailContent(a); else closeListingDetail(true); }
+  if (!filtered.length) { feed.innerHTML = ''; emp.style.display = 'block'; emp.innerHTML = listings.length ? '<div class="emoji">🔎</div><h3>No listings match</h3><p>Try different filters.</p>' : '<div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p>'; return; }
+  emp.style.display = 'none';
+  feed.innerHTML = filtered.map(renderListingCard).join('');
+}
+
+function renderListingsBanner() {
+  const el = document.getElementById('listingsBanner');
+  if (!el) return;
+  const live = !!(cfg.connected && cfg.proxy && cfg.url && cfg.user);
+  if (!live) el.innerHTML = `<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings →</strong></div></div>`;
+  else el.innerHTML = `<div class="sync-banner success"><span class="mls-dot on"></span>PrimeMLS connected${cfg.area?' · '+cfg.area:''}. Last sync: ${cfg.lastSync||'Never'} &nbsp;<button class="btn btn-green" style="font-size:11px;padding:4px 10px;" onclick="syncMLS()">Sync Now</button></div>`;
+}
+
+// ── FILES ──────────────────────────────────────────────────────
+function renderFiles() {
+  const g = document.getElementById('filesGrid'), e = document.getElementById('filesEmpty');
+  if (!files.length) { g.innerHTML = ''; e.style.display = 'block'; return; }
+  e.style.display = 'none';
+  g.innerHTML = files.map(f => `<div class="file-card"><div style="font-size:28px;margin-bottom:9px;">${fileIcon(f.name)}</div><div style="font-size:12.5px;font-weight:500;margin-bottom:3px;word-break:break-word;">${f.name}</div><div style="font-size:10.5px;color:var(--text-dim);">${f.size} · ${f.date}</div></div>`).join('');
+}
+
+async function uploadFiles(e) {
+  const fileArr = Array.from(e.target.files);
+  for (const f of fileArr) {
+    const item = { name: f.name, size: fmtBytes(f.size), rawSize: f.size, date: new Date().toLocaleDateString() };
+    files.push(item);
+    await insertDocument(item).catch(console.error);
+  }
+  renderFiles(); renderBadges();
+  toast(`${fileArr.length} file(s) uploaded ✓`);
+}
+
+// ── MLS ────────────────────────────────────────────────────────
+async function saveMLS() {
+  const proxy = document.getElementById('cfg-proxy').value.trim();
+  const url = document.getElementById('cfg-url').value.trim();
+  const user = document.getElementById('cfg-user').value.trim();
+  const key = document.getElementById('cfg-key').value.trim();
+  const area = document.getElementById('cfg-area').value.trim();
+  const res = document.getElementById('mlsResult');
+  if (!proxy) { res.style.display='block'; res.style.background='rgba(224,92,92,0.1)'; res.style.color='var(--red)'; res.textContent='⚠ Enter your proxy URL first.'; return; }
+  if (!url || !user || !key) { toast('Fill in all MLS fields.', true); return; }
+  res.style.display='block'; res.style.background='var(--amber-dim)'; res.style.color='var(--amber)'; res.textContent='⏳ Testing connection…';
+  try {
+    const r = await fetch(proxy.replace(/\/$/, '') + '/mls-test', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url, user, key }) });
+    const data = await r.json();
+    if (!r.ok || data.error) throw new Error(data.error || 'Bad response');
+    cfg = { proxy, url, user, key, area, connected: true, lastSync: new Date().toLocaleString() };
+    localStorage.setItem('bos_mls_key', key); // store key locally only
+    await saveUserSettings();
+    updateMLSBadge(); buildOnboard();
+    res.style.background='rgba(61,186,126,0.08)'; res.style.color='var(--green)';
+    res.innerHTML=`✓ Connected! ${data.sample?'Sample: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync now →</strong>`;
+    log('PrimeMLS connected');
+  } catch(e) {
+    res.style.background='rgba(224,92,92,0.08)'; res.style.color='var(--red)'; res.textContent='✗ Failed: ' + e.message;
+    cfg = { ...cfg, proxy, url, user, key, area, connected: false };
+  }
+}
+
+async function syncMLS() {
+  if (!cfg.connected) { toast('Connect MLS in Settings first.', true); nav('settings'); return; }
+  toast('Syncing listings from PrimeMLS…');
+  try {
+    const r = await fetch(cfg.proxy.replace(/\/$/, '') + '/mls-sync', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url:cfg.url, user:cfg.user, key:cfg.key, area:cfg.area, top:100 }) });
+    if (!r.ok) throw new Error('Proxy returned ' + r.status);
+    const data = await r.json();
+    const props = data.value || [];
+    const mlsMapped = props.map(p => mapMLSListing(p));
+    const added = await upsertMLSListings(mlsMapped);
+    cfg.lastSync = new Date().toLocaleString();
+    await saveUserSettings();
+    await loadListings(); // refresh from DB
+    log(`MLS sync: ${added} listing${added!==1?'s':''} synced`);
+    toast(`Synced — ${added} listing${added!==1?'s':''} ✓`);
+    if (autoMatchEnabled && added > 0 && leads.length > 0) autoMatch(added);
+  } catch(e) { toast('Sync failed: ' + e.message, true); }
+}
+
+function mlsTags(p) { const t = []; if (p.WaterfrontYN||p.WaterBodyName) t.push('lakefront','waterfront'); if (p.ViewYN) t.push('mountain view'); if (p.BedroomsTotal) t.push(p.BedroomsTotal+'BR'); if (p.ListPrice>600000) t.push('luxury'); if (Array.isArray(p.ListingFeatures)) p.ListingFeatures.forEach(f => { if(f) t.push(f.toLowerCase()); }); return [...new Set(t)]; }
+function extractMLSPhotos(p={}) { const photos=[]; if(Array.isArray(p.Media)) p.Media.forEach(m=>photos.push(m?.MediaURL,m?.Uri,m?.url)); if(Array.isArray(p.Photos)) p.Photos.forEach(m=>{if(typeof m==='string')photos.push(m);else photos.push(m?.url,m?.href,m?.Uri);}); if(p.MediaURL) photos.push(p.MediaURL); return photos.filter(Boolean); }
+
+function mapMLSListing(p={}) {
+  const address = firstPresent(p.UnparsedAddress, [p.StreetNumberNumeric, p.StreetName, p.StreetSuffix, p.UnitNumber].filter(Boolean).join(' '), 'Unknown');
+  return {
+    mlsId: firstPresent(p.ListingId, p.ListingKey, ''),
+    address, price: Number(p.ListPrice||0), status: normalizeListingStatus(p.StandardStatus||p.MlsStatus||'active'),
+    beds: Number(p.BedroomsTotal||p.Bedrooms||0), baths: Number(p.BathroomsFullCount||p.BathroomsTotalInteger||p.BathroomsTotalDecimal||0),
+    tags: mlsTags(p), source: 'mls',
+    city: firstPresent(p.City,p.CityName,''), state: firstPresent(p.StateOrProvince,p.State,''), zip: firstPresent(p.PostalCode,''),
+    sqft: Number(firstPresent(p.LivingArea,p.AboveGradeFinishedArea,p.BuildingAreaTotal,0))||0,
+    lotSize: p.LotSizeArea ? `${p.LotSizeArea} ${p.LotSizeUnits||''}`.trim() : firstPresent(p.LotSizeAcres,p.LotSizeSquareFeet,''),
+    yearBuilt: firstPresent(p.YearBuilt,''), description: firstPresent(p.PublicRemarks,p.PrivateRemarks,''),
+    propertyType: firstPresent(p.PropertyType,p.PropertySubType,''),
+    image_url: firstPresent(p.MediaURL,''), photos: extractMLSPhotos(p)
+  };
+}
+
+function autoMatch(newCount) {
+  const recent = listings.filter(l => normalizeListingSource(l.source) === 'mls').slice(-newCount);
+  let found = 0;
+  recent.forEach(l => { found += fallbackScore(l).filter(r => r.score >= 50).length; });
+  if (found > 0) { newMatchCount += found; persistLocal(); renderBadges(); document.getElementById('matchBannerCount').textContent = newMatchCount; document.getElementById('matchBanner').style.display = 'flex'; log(`Auto-match: ${found} strong match${found!==1?'es':''} found`); }
+}
+
+// DEMO DATA
+async function loadDemo() {
+  const demo = [
+    { mlsId:'ML001', address:'14 Willoughby Lake Rd, Westmore, VT', price:489000, status:'active', beds:3, baths:2, tags:['lakefront','dock','mountain view','3BR','garage'], source:'mls', city:'Westmore', state:'VT', zip:'05860', sqft:2140, lotSize:'0.68 acres', yearBuilt:'1998', propertyType:'Single Family', description:'Refined lakefront home with private dock and direct water access.' },
+    { mlsId:'ML002', address:'88 Mountain View Dr, Burke, VT', price:275000, status:'active', beds:4, baths:2, tags:['mountain view','rural','4BR','land'], source:'mls', city:'Burke', state:'VT', zip:'05832', sqft:1860, lotSize:'2.4 acres', yearBuilt:'1987', propertyType:'Single Family', description:'Burke property with broad mountain views and generous yard space.' },
+    { mlsId:'ML003', address:'5 Maple St #2B, St. Johnsbury, VT', price:189000, status:'pending', beds:2, baths:1, tags:['condo','in-town','walkable'], source:'mls', city:'St. Johnsbury', state:'VT', zip:'05819', sqft:980, yearBuilt:'2005', propertyType:'Condo', description:'Bright in-town condo, low-maintenance ownership for first-time buyers.' },
+    { mlsId:'ML004', address:'220 Echo Lake Rd, Charleston, VT', price:625000, status:'active', beds:5, baths:3, tags:['lakefront','dock','luxury','5BR','waterfront'], source:'mls', city:'Charleston', state:'VT', zip:'05872', sqft:3220, lotSize:'1.1 acres', yearBuilt:'2008', propertyType:'Lakefront Estate', description:'Large waterfront retreat with dock and premium second-home appeal.' },
+    { mlsId:'ML005', address:'37 Kingdom Farm Rd, Craftsbury, VT', price:340000, status:'sold', beds:3, baths:2, tags:['rural','barn','land','mountain view','3BR'], source:'mls', city:'Craftsbury', state:'VT', zip:'05826', sqft:1740, lotSize:'5.2 acres', yearBuilt:'1979', propertyType:'Farmhouse', description:'Classic NEK farmhouse with barn and open land.' }
+  ];
+  const demoLeads = [
+    { name:'Michael Torres', email:'mtorres@email.com', phone:'(802) 555-0141', budgetMin:300000, budgetMax:550000, status:'hot', preferences:['lakefront','dock','3BR','mountain view'], notes:'Vacation property', fromContacts:false },
+    { name:'Sarah & Jim Okafor', email:'sokafor@gmail.com', phone:'(802) 555-0188', budgetMin:400000, budgetMax:700000, status:'hot', preferences:['lakefront','waterfront','luxury','4BR'], notes:'Moving from Boston', fromContacts:false },
+    { name:'Dana Whitfield', email:'dwhitfield@email.com', phone:'(802) 555-0122', budgetMin:150000, budgetMax:280000, status:'warm', preferences:['mountain view','rural','land'], notes:'Pre-approved 275k', fromContacts:false },
+    { name:'Craig Hensley', email:'chensley@email.com', phone:'(802) 555-0165', budgetMin:500000, budgetMax:900000, status:'warm', preferences:['lakefront','luxury','dock','5BR'], notes:'Cash buyer', fromContacts:false },
+    { name:'Priya Nair', email:'pnair@email.com', phone:'(802) 555-0109', budgetMin:200000, budgetMax:350000, status:'cold', preferences:['condo','in-town','walkable'], notes:'Paused til fall', fromContacts:false }
+  ];
+  toast('Loading demo data…');
+  try {
+    // Insert demo listings via upsert
+    await upsertMLSListings(demo);
+    // Insert demo leads
+    for (const l of demoLeads) { await insertLead(l).catch(()=>{}); }
+    await Promise.all([loadLeads(), loadListings()]);
+    cfg.connected = true; cfg.lastSync = new Date().toLocaleString();
+    await saveUserSettings();
+    updateMLSBadge(); buildOnboard(); populateMatchSel();
+    document.getElementById('mlsResult').style.display='block';
+    document.getElementById('mlsResult').style.background='rgba(61,186,126,0.08)';
+    document.getElementById('mlsResult').style.color='var(--green)';
+    document.getElementById('mlsResult').textContent='✓ Demo data loaded. Try the Match Engine.';
+    log('Demo data loaded');
+    toast('Demo ready — try the Match Engine ✓');
+  } catch(e) { toast('Demo load failed: ' + e.message, true); }
+}
+
+// ── CONTACTS ───────────────────────────────────────────────────
+let pendingContactsList = [];
+
+async function openContactPicker() {
+  const supported = !!(window.isSecureContext && 'contacts' in navigator && typeof navigator.contacts?.select === 'function');
+  if (!supported) { toast('Real phone contact import is not supported in this browser.', true); return; }
+  try {
+    const c = await navigator.contacts.select(['name','tel','email'], { multiple: true });
+    if (c?.length) { await importContactsDirect(c); return; }
+    toast('No contacts selected.', true);
+  } catch(e) {
+    if (e?.name === 'AbortError' || e?.name === 'NotAllowedError') { toast('Contact import cancelled.', true); return; }
+    toast('Contact import failed.', true);
+  }
+}
+
+async function importContactsDirect(contacts) {
+  let added = 0;
+  for (const c of contacts) {
+    const name = (c.name&&c.name[0])||'Unknown', phone = (c.tel&&c.tel[0])||'', email = (c.email&&c.email[0])||'';
+    if (leads.find(l => (phone && l.phone === phone) || (email && l.email === email))) continue;
+    const lead = { name, email, phone, budgetMin:0, budgetMax:999999, status:'warm', preferences:[], notes:'', fromContacts:true };
+    try { const saved = await insertLead(lead); if (saved) leads.push(saved); added++; } catch(e) { console.error(e); }
+  }
+  renderAll(); log(`Imported ${added} contacts as leads`); toast(`${added} contact${added!==1?'s':''} added ✓`);
+}
+
+// ── ADD LEAD / LISTING ─────────────────────────────────────────
+async function saveLead() {
+  const name = (document.getElementById('l-fn').value + ' ' + document.getElementById('l-ln').value).trim();
+  if (!name) { toast('Name required.', true); return; }
+  const lead = { name, email:document.getElementById('l-em').value.trim(), phone:document.getElementById('l-ph').value.trim(), budgetMin:parseInt(document.getElementById('l-bmin').value)||0, budgetMax:parseInt(document.getElementById('l-bmax').value)||999999, status:document.getElementById('l-st').value, preferences:[...leadTags], notes:document.getElementById('l-no').value.trim() };
+  try {
+    const saved = await insertLead(lead);
+    if (saved) leads.push(saved);
+    leadTags = []; document.getElementById('lTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
+    ['l-fn','l-ln','l-em','l-ph','l-bmin','l-bmax','l-no'].forEach(id => document.getElementById(id).value='');
+    closeModal('addLead'); renderAll(); log('Lead added: '+name); toast(name+' added ✓');
+  } catch(e) { toast('Save failed: ' + e.message, true); }
+}
+
+async function saveListing() {
+  const addr = document.getElementById('p-ad').value.trim();
+  if (!addr) { toast('Address required.', true); return; }
+  const listing = { address:addr, price:parseInt(document.getElementById('p-pr').value)||0, status:normalizeListingStatus(document.getElementById('p-st').value), beds:parseFloat(document.getElementById('p-bd').value)||0, baths:parseFloat(document.getElementById('p-ba').value)||0, tags:[...listingTags], source:'manual' };
+  try {
+    const saved = await insertListing(listing);
+    if (saved) listings.push(saved);
+    listingTags = []; document.getElementById('pTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
+    ['p-ad','p-pr','p-bd','p-ba'].forEach(id => document.getElementById(id).value='');
+    closeModal('addListing'); renderAll(); populateMatchSel(); log('Listing added: '+addr); toast('Listing added ✓');
+  } catch(e) { toast('Save failed: ' + e.message, true); }
+}
+
+// ── TAGS ───────────────────────────────────────────────────────
+function addTag(e, type) { if (e.key!=='Enter'&&e.key!==',') return; e.preventDefault(); const val=e.target.value.trim().replace(/,/g,''); if(!val) return; const arr=type==='lead'?leadTags:listingTags, aId=type==='lead'?'lTagArea':'pTagArea', iId=type==='lead'?'lTagIn':'pTagIn'; if(arr.includes(val)) return; arr.push(val); const pill=document.createElement('span'); pill.className='tag-pill'; pill.innerHTML=`${val}<span class="remove" onclick="rmTag('${val}','${type}',this)">×</span>`; document.getElementById(iId).before(pill); e.target.value=''; }
+function rmTag(tag, type, el) { if(type==='lead') leadTags=leadTags.filter(t=>t!==tag); else listingTags=listingTags.filter(t=>t!==tag); el.parentElement.remove(); }
+
+// ── CSV ────────────────────────────────────────────────────────
+function dropCsv(e, type) { e.preventDefault(); e.currentTarget.classList.remove('dragover'); const f=e.dataTransfer.files[0]; if(f) parseCsv(f,type); }
+function readCsv(e, type) { const f=e.target.files[0]; if(f) parseCsv(f,type); }
+
+async function parseCsv(file, type) {
+  const r = new FileReader();
+  r.onload = async e => {
+    const lines=e.target.result.split('\n').filter(l=>l.trim()), hdrs=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
+    let count = 0;
+    for (let i=1; i<lines.length; i++) {
+      const vals=csvSplit(lines[i]), row={};
+      hdrs.forEach((h,idx) => row[h]=(vals[idx]||'').replace(/"/g,'').trim());
+      if (type === 'leads') {
+        const prefs=(row.preferences||row.tags||'').split(';').map(p=>p.trim()).filter(Boolean);
+        const lead={name:row.name||'Unknown',email:row.email||'',phone:row.phone||'',budgetMin:parseInt(row.budget_min||0),budgetMax:parseInt(row.budget_max||999999),status:row.status||'warm',preferences:prefs,notes:row.notes||''};
+        try { const saved = await insertLead(lead); if(saved) leads.push(saved); count++; } catch(e){}
+      } else {
+        const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);
+        const listing={address:row.address||'Unknown',price:parseInt(row.price||0),status:normalizeListingStatus(row.status||'active'),beds:parseFloat(row.beds||0)||0,baths:parseFloat(row.baths||0)||0,tags,source:normalizeListingSource(row.source||'manual'),city:row.city||'',state:row.state||'',zip:row.zip||'',sqft:parseInt(row.sqft||row.square_feet||0)||0,lotSize:row.lot_size||'',yearBuilt:row.year_built||'',description:row.description||row.notes||'',propertyType:row.property_type||'',image_url:row.image_url||''};
+        try { const saved = await insertListing(listing); if(saved) listings.push(saved); populateMatchSel(); count++; } catch(e){}
+      }
+    }
+    const sel=type==='leads'?'lcsvStatus':'pcsvStatus'; document.getElementById(sel).style.display='block'; document.getElementById(sel).textContent=`✓ Imported ${count} ${type}`;
+    renderAll(); log(`CSV: ${count} ${type} imported`); toast(`${count} ${type} imported ✓`);
+  };
+  r.readAsText(file);
+}
+
+function csvSplit(line) { const r=[]; let cur='',q=false; for(const c of line){if(c==='"'){q=!q;continue;}if(c===','&&!q){r.push(cur);cur='';continue;}cur+=c;}r.push(cur);return r; }
+
+// ── MATCH ENGINE ───────────────────────────────────────────────
+function populateMatchSel() {
+  const s = document.getElementById('matchSel'); if(!s) return;
+  s.innerHTML = '<option value="">— Choose a listing —</option>';
+  listings.forEach(l => { const o=document.createElement('option'); o.value=l.id; o.textContent=`${getListingAddress(l)} — ${formatListingPrice(l)}`; s.appendChild(o); });
+}
+
+function matchFrom(id) { nav('match'); setTimeout(() => { document.getElementById('matchSel').value = id; runMatch(); }, 120); }
+
+async function runMatch() {
+  const id = document.getElementById('matchSel').value;
+  if (!id) { toast('Select a listing first.', true); return; }
+  const listing = listings.find(l => l.id == id);
+  if (!listing || !leads.length) { toast('Need at least one lead.', true); return; }
+  const out = document.getElementById('matchOutput');
+  const listingTagsText = getListingTags(listing).join(', ') || 'listing details';
+  out.innerHTML = `<div class="sync-banner info"><div class="spinner"></div>AI analyzing ${leads.length} leads…</div>`;
+  const prompt = `You are a real estate CRM assistant. Score each lead's fit for this listing.
+LISTING: ${getListingAddress(listing)} | $${listing.price} | ${listing.beds}bd/${listing.baths}ba | Tags: ${listingTagsText}
+LEADS:
+${leads.map(l=>`ID:${l.id} | ${l.name} | Budget:$${l.budgetMin}-$${l.budgetMax} | Prefs:${l.preferences.join(',')} | Status:${l.status} | Notes:${l.notes}`).join('\n')}
+Return ONLY a JSON array. Each object: {id,score(0-100),reason(1-2 sentences)}. Order by score desc. No markdown.`;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] }) });
+    const data = await res.json();
+    const raw = data.content.map(b=>b.text||'').join('');
+    renderMatchResults(listing, JSON.parse(raw.replace(/```json|```/g,'').trim()));
+  } catch(e) { renderMatchResults(listing, fallbackScore(listing)); }
+}
+
+function fallbackScore(listing) {
+  return leads.map(lead => {
+    const lt=getListingTags(listing).map(t=>t.toLowerCase()), lp=lead.preferences.map(p=>p.toLowerCase());
+    const matched=lp.filter(p=>lt.some(t=>t.includes(p)||p.includes(t)));
+    let score=Math.round((matched.length/Math.max(lp.length,1))*60);
+    if(listing.price>=lead.budgetMin&&listing.price<=lead.budgetMax) score+=30; else if(listing.price<=lead.budgetMax*1.1) score+=10;
+    if(lead.status==='hot') score+=10; else if(lead.status==='warm') score+=5;
+    score=Math.min(100,score);
+    const reason=matched.length>0?`Matches on: ${matched.join(', ')}. Price $${fmt(listing.price)} ${listing.price<=lead.budgetMax?'is within budget':'is slightly above budget'}.`:`No direct preference overlap. Budget ${listing.price<=lead.budgetMax?'fits':'may be high'}.`;
+    return {id:lead.id,score,reason};
+  }).sort((a,b)=>b.score-a.score);
+}
+
+function renderMatchResults(listing, results) {
+  const out = document.getElementById('matchOutput');
+  const strong = results.filter(r=>r.score>=50).length;
+  out.innerHTML = `<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${htmlEscape(getListingAddress(listing))}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${normalizeListingSource(listing.source)==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${getListingTags(listing).map(tagHtml).join('')}</div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;">${strong} strong match${strong!==1?'es':''} of ${leads.length} leads</div><div style="font-size:11.5px;color:var(--text-muted);">Sorted by fit score</div></div>
+  <div class="match-results-grid">${results.map((r,i)=>{const lead=leads.find(l=>l.id==r.id);if(!lead)return'';return`<div class="match-card" style="animation-delay:${i*.05}s;opacity:${r.score<15?.4:1}"><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">${lead.name}</div><div style="font-size:11.5px;color:var(--text-muted);">${lead.email||lead.phone||''} · ${dot(lead.status,'lead')}${lead.status}</div></div><div style="text-align:right;flex-shrink:0;"><div class="match-score">${r.score}</div><div class="match-score-label">Match %</div></div></div><div class="match-reason">${r.reason}</div><div style="font-size:11px;color:var(--text-dim);margin-bottom:9px;">Budget: $${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div><div style="margin-bottom:11px;">${lead.preferences.map(tagHtml).join('')}</div><div style="display:flex;gap:7px;"><button style="flex:1;padding:7px;background:var(--amber);color:var(--navy);border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;" onclick="copyText('${lead.email||lead.phone}')">📋 Copy Contact</button></div></div>`;}).join('')}</div>`;
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────
+async function saveProfile() {
+  const n = document.getElementById('p-name').value.trim(), b = document.getElementById('p-brokerage').value.trim();
+  try {
+    await saveUserSettings({ broker_name: n, brokerage: b });
+    // Also update profiles table
+    if (currentUser) await sb.from('profiles').upsert([{ id:currentUser.id, email:currentUser.email||'', full_name:n, broker_name:n, brokerage:b }]);
+    toast('Profile saved ✓');
+  } catch(e) { toast('Save failed: ' + e.message, true); }
+}
+
+async function clearData(type) {
+  if (!confirm(`Clear all ${type}? Cannot be undone.`)) return;
+  if (!currentUser) return;
+  if (type === 'leads' || type === 'all') { await sb.from('leads').delete().eq('user_id', currentUser.id); leads = []; }
+  if (type === 'listings' || type === 'all') { await sb.from('listings').delete().eq('user_id', currentUser.id); listings = []; }
+  if (type === 'all') { files = []; activityLog = []; await sb.from('documents').delete().eq('user_id', currentUser.id); }
+  persistLocal(); renderAll(); toast(type === 'all' ? 'All data cleared.' : type + ' cleared.');
+}
+
+function togglePw(id) { const el=document.getElementById(id); el.type=el.type==='password'?'text':'password'; }
+
+// ── ONBOARDING ─────────────────────────────────────────────────
+function buildOnboard() {
+  const b = document.getElementById('onboardBlock'); if(!b) return;
+  if (cfg.connected || onboardingDismissed || (leads.length>0&&listings.length>0)) { b.innerHTML=''; return; }
+  b.innerHTML=`<div class="onboarding-card"><button class="onboarding-close" type="button" onclick="dismissOnboarding()">×</button><h2>Welcome to Broker OS</h2><p>Connect PrimeMLS to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo()">Try Demo First</button></div></div>`;
+}
+
+function dismissOnboarding() { onboardingDismissed=true; persistLocal(); buildOnboard(); }
+
+// ── MOBILE NAV ─────────────────────────────────────────────────
+function toggleMobileNav() { document.body.classList.toggle('mobile-nav-open'); const o=document.getElementById('mobileSidebarOverlay'); if(o) o.classList.toggle('open',document.body.classList.contains('mobile-nav-open')); }
+function closeMobileNav() { document.body.classList.remove('mobile-nav-open'); const o=document.getElementById('mobileSidebarOverlay'); if(o) o.classList.remove('open'); }
+window.addEventListener('resize', () => { if(window.innerWidth>980) closeMobileNav(); });
+
+// ── HELPERS ────────────────────────────────────────────────────
+function openModal(id) { document.getElementById('modal-'+id).classList.add('open'); }
+function closeModal(id) { document.getElementById('modal-'+id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', function(e) { if(e.target!==this) return; if(this.id==='listingDetailOverlay') closeListingDetail(true); else this.classList.remove('open'); }));
+document.addEventListener('keydown', e => { if(e.key==='Escape'&&document.getElementById('listingDetailOverlay')?.classList.contains('open')) closeListingDetail(); });
+
+function toast(msg, err=false) { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast'+(err?' err':'')+' show'; setTimeout(()=>t.classList.remove('show'),2800); }
+function copyText(v) { navigator.clipboard.writeText(v).then(()=>toast('Copied: '+v)); }
+function dot(s, type) { if(type==='lead'){const c=s==='hot'?'dot-hot':s==='warm'?'dot-warm':'dot-cold';return`<span class="status-dot ${c}"></span>`;}const c=s==='active'?'dot-active':s==='pending'?'dot-pending':'dot-sold';return`<span class="status-dot ${c}"></span>`;}
+function tagHtml(tag) { const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${htmlEscape(tag)}</span>`;}
+function fmt(n) { return Number(n||0).toLocaleString(); }
+function fmtBytes(b) { if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'; }
+function fileIcon(n) { const e=(n.split('.').pop()||'').toLowerCase(); return {pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',csv:'📋'}[e]||'📁'; }
+
+// ── START ──────────────────────────────────────────────────────
+document.getElementById('authEmail')?.addEventListener('keydown', e => { if(e.key==='Enter') handleSignIn(); });
+document.getElementById('authPassword')?.addEventListener('keydown', e => { if(e.key==='Enter') handleSignIn(); });
+document.getElementById('authSigninBtn')?.addEventListener('click', handleSignIn);
+document.getElementById('authSignupBtn')?.addEventListener('click', handleSignUp);
 
 init();
 bootAuth();
