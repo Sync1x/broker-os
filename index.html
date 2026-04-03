@@ -72,6 +72,7 @@
   .stat-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
   .stat-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 7px; }
   .stat-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; }
+  .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
   .stat-value.amber { color: var(--amber); } .stat-value.green { color: var(--green); } .stat-value.blue { color: var(--blue); }
 
   .table-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; overflow: hidden; }
@@ -442,7 +443,7 @@
     <div class="nav-item" onclick="nav('files')" id="nav-files"><span class="icon">▤</span> Documents <span class="nav-badge" id="badge-files">0</span></div>
     <div class="nav-item" onclick="nav('settings')" id="nav-settings"><span class="icon">⚙</span> Settings</div>
     <div class="mls-status disconnected" id="mlsBadge">
-      <span class="mls-dot off" id="mlsDot"></span><span id="mlsTxt" style="color:var(--red);">MLS Not Connected</span>
+      <span class="mls-dot off" id="mlsDot"></span><span id="mlsTxt" style="color:var(--red);">MLS Coming Soon</span>
     </div>
   </div>
 </div>
@@ -464,10 +465,11 @@
         <div style="font-size:18px;color:var(--green);">→</div>
       </div>
       <div class="stats-row">
-        <div class="stat-card"><div class="stat-label">Total Leads</div><div class="stat-value amber" id="s-leads">0</div></div>
-        <div class="stat-card"><div class="stat-label">Active Listings</div><div class="stat-value blue" id="s-listings">0</div></div>
-        <div class="stat-card"><div class="stat-label">Hot Leads</div><div class="stat-value green" id="s-hot">0</div></div>
-        <div class="stat-card"><div class="stat-label">MLS Synced</div><div class="stat-value" id="s-synced">—</div></div>
+        <div class="stat-card"><div class="stat-label">New Leads</div><div class="stat-value amber" id="s-new-leads">0</div><div class="stat-sub" id="s-new-leads-sub">0 unactioned</div></div>
+        <div class="stat-card"><div class="stat-label">Avg. Contact Attempts</div><div class="stat-value blue" id="s-contact-attempts">0</div></div>
+        <div class="stat-card"><div class="stat-label">Speed to Action</div><div class="stat-value green" id="s-speed-to-action">0.00</div></div>
+        <div class="stat-card"><div class="stat-label">Appts next 30 days</div><div class="stat-value" id="s-appts-next">N/A</div><div class="stat-sub">1 task</div></div>
+        <div class="stat-card"><div class="stat-label">Deals next 30 days</div><div class="stat-value" id="s-deals-next">0</div><div class="stat-sub">0 deals</div></div>
       </div>
       <div class="table-card"><div class="table-header"><div class="table-title">Recent Activity</div></div><div id="activityEl" style="padding:18px 20px;font-size:13px;color:var(--text-muted);">Sign in and add data to get started.</div></div>
     </div>
@@ -551,8 +553,7 @@
               <div class="listing-feed-sub" id="listingResultMeta">0 results.</div>
             </div>
             <div class="table-actions listing-toolbar">
-              <input class="search-input" type="text" placeholder="Search address, tag, MLS ID…" id="listingSearch" oninput="renderListings()">
-              <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
+              <input class="search-input" type="text" placeholder="Search address or tag…" id="listingSearch" oninput="renderListings()">
               <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
               <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
             </div>
@@ -561,12 +562,11 @@
               <button class="listing-filter-chip" type="button" id="listingFilter-active" onclick="setListingFilter('active')">Active</button>
               <button class="listing-filter-chip" type="button" id="listingFilter-pending" onclick="setListingFilter('pending')">Pending</button>
               <button class="listing-filter-chip" type="button" id="listingFilter-sold" onclick="setListingFilter('sold')">Sold</button>
-              <button class="listing-filter-chip" type="button" id="listingFilter-mls" onclick="setListingFilter('mls')">MLS</button>
               <button class="listing-filter-chip" type="button" id="listingFilter-manual" onclick="setListingFilter('manual')">Manual</button>
             </div>
           </div>
           <div class="listing-feed" id="listingsFeed"></div>
-          <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
+          <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Add listings manually or import them from CSV.</p></div>
         </div>
       </div>
     </div>
@@ -595,40 +595,10 @@
     <!-- SETTINGS -->
     <div class="view" id="view-settings">
       <div class="settings-section">
-        <div class="settings-section-title">🔗 PrimeMLS Connection</div>
-        <div class="settings-section-sub">Connect your proxy server and PrimeMLS credentials. Saved per-account to Supabase.</div>
-        <div class="form-group">
-          <div class="form-label">Your Proxy URL</div>
-          <input class="form-input" id="cfg-proxy" placeholder="https://your-proxy.up.railway.app">
-          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">The Railway/Render URL from your deployed broker-proxy.</div>
-        </div>
-        <div class="form-group">
-          <div class="form-label">PrimeMLS API Base URL</div>
-          <input class="form-input" id="cfg-url" placeholder="https://api.primemls.com/reso/odata" value="https://api.primemls.com/reso/odata">
-        </div>
-        <div class="form-row">
-          <div class="form-group"><div class="form-label">MLS Username</div><input class="form-input" id="cfg-user" placeholder="Your PrimeMLS username"></div>
-          <div class="form-group"><div class="form-label">MLS API Key / Password</div>
-            <div class="pw-wrap"><input class="form-input" id="cfg-key" type="password" placeholder="Your API key" style="width:100%;"><span class="pw-eye" onclick="togglePw('cfg-key')">👁</span></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="form-label">Area Filter (optional)</div>
-          <input class="form-input" id="cfg-area" placeholder="Northeast Kingdom, Caledonia County, VT">
-        </div>
-        <div style="display:flex;gap:9px;flex-wrap:wrap;">
-          <button class="btn btn-primary" onclick="saveMLS()">Save & Test Connection</button>
-          <button class="btn btn-secondary" onclick="loadDemo()">Load Demo Data</button>
-        </div>
-        <div id="mlsResult" style="display:none;margin-top:12px;font-size:12.5px;padding:10px 14px;border-radius:7px;"></div>
-      </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">✦ Auto-Match</div>
-        <div class="settings-section-sub">Auto-score leads against new MLS listings on sync.</div>
-        <div class="auto-match-row">
-          <div class="toggle on" id="tog-automatch" onclick="toggleAutoMatch()"></div>
-          <div><div style="font-size:13px;font-weight:500;">Auto-match on MLS sync</div><div style="font-size:11.5px;color:var(--text-muted);">Runs silently every sync</div></div>
+        <div class="settings-section-title">🔗 MLS Integration</div>
+        <div class="settings-section-sub">MLS access is not active in this build yet. The connection flow, sync tools, and credential fields have been removed for now.</div>
+        <div class="hint-box" style="margin-bottom:0;">
+          <strong>MLS coming soon.</strong> Broker OS currently supports manual listings and CSV imports. When MLS access returns, it will be reintroduced here with a cleaner setup flow.
         </div>
       </div>
 
@@ -743,9 +713,7 @@ let discoverFilter = 'all', currentTheme = 'light', currentListingFilter = 'all'
 let onboardingDismissed = false, autoMatchEnabled = true;
 let activeListingId = null, lastListingFocusEl = null;
 let currentUser = null;
-
-// cfg: MLS connection — loaded from Supabase user_settings + local for password (never sent to DB)
-let cfg = { proxy:'', url:'https://api.primemls.com/reso/odata', user:'', key:'', area:'', connected:false, lastSync:'' };
+let cfg = { connected:false };
 
 // ── BOOT ───────────────────────────────────────────────────────
 function init() {
@@ -761,8 +729,6 @@ function loadLocal() {
     newMatchCount = parseInt(localStorage.getItem('bos_nm') || '0');
     currentTheme = localStorage.getItem('bos_theme') || 'light';
     onboardingDismissed = localStorage.getItem('bos_onboard_dismissed') === 'true';
-    // MLS key stays local only (sensitive)
-    cfg.key = localStorage.getItem('bos_mls_key') || '';
   } catch(e) {}
 }
 
@@ -771,7 +737,6 @@ function persistLocal() {
   localStorage.setItem('bos_nm', newMatchCount);
   localStorage.setItem('bos_theme', currentTheme);
   localStorage.setItem('bos_onboard_dismissed', onboardingDismissed ? 'true' : 'false');
-  if (cfg.key) localStorage.setItem('bos_mls_key', cfg.key);
 }
 
 // ── SUPABASE DATA LAYER ────────────────────────────────────────
@@ -788,9 +753,10 @@ async function loadLeads() {
 async function insertLead(lead) {
   if (!currentUser) return null;
   const row = leadToRow(lead);
-  const { data, error } = await sb.from('leads').insert([row]).select().single();
+  const { error } = await sb.from('leads').insert([row]);
   if (error) throw error;
-  return mapDbLead(data);
+  const inserted = await findInsertedLead(row);
+  return inserted || makeOptimisticLead(lead);
 }
 
 async function deleteLead(id) {
@@ -822,6 +788,27 @@ function mapDbLead(row) {
   };
 }
 
+function makeTempId(prefix) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+}
+
+function makeOptimisticLead(lead) {
+  return {
+    id: lead.id || makeTempId('lead'),
+    dbId: null,
+    name: lead.name || '',
+    email: lead.email || '',
+    phone: lead.phone || '',
+    budgetMin: Number(lead.budgetMin || 0),
+    budgetMax: Number(lead.budgetMax || 999999),
+    status: lead.status || 'warm',
+    preferences: Array.isArray(lead.preferences) ? lead.preferences : [],
+    notes: lead.notes || '',
+    source: lead.fromContacts ? 'contacts' : (lead.source || 'manual'),
+    fromContacts: !!lead.fromContacts
+  };
+}
+
 function leadToRow(lead) {
   return {
     user_id: currentUser.id,
@@ -837,6 +824,19 @@ function leadToRow(lead) {
   };
 }
 
+async function findInsertedLead(row) {
+  try {
+    let query = sb.from('leads').select('*').eq('user_id', currentUser.id).eq('name', row.name).order('created_at', { ascending: false }).limit(1);
+    if (row.email) query = query.eq('email', row.email);
+    else if (row.phone) query = query.eq('phone', row.phone);
+    const { data, error } = await query;
+    if (error) return null;
+    return data?.[0] ? mapDbLead(data[0]) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
 // LISTINGS
 async function loadListings() {
   if (!currentUser) return;
@@ -850,18 +850,53 @@ async function loadListings() {
 async function insertListing(listing) {
   if (!currentUser) return null;
   const row = listingToRow(listing);
-  const { data, error } = await sb.from('listings').insert([row]).select().single();
+  const { error } = await sb.from('listings').insert([row]);
   if (error) throw error;
-  return mapDbListing(data);
+  const inserted = await findInsertedListing(row);
+  return inserted || makeOptimisticListing(listing);
 }
 
 async function upsertMLSListings(mlsListings) {
   if (!currentUser || !mlsListings.length) return 0;
-  const rows = mlsListings.map(l => ({ ...listingToRow(l), mls_id: l.mlsId || null }));
-  // upsert on mls_id+user_id to avoid duplicates
-  const { data, error } = await sb.from('listings').upsert(rows, { onConflict: 'user_id,mls_id', ignoreDuplicates: false }).select();
-  if (error) throw error;
-  return (data || []).length;
+  const rows = [];
+  const seen = new Set();
+  mlsListings.forEach(listing => {
+    const row = listingToRow(listing);
+    const key = row.mls_id ? `mls:${row.mls_id}` : `addr:${row.address}:${row.price}:${row.status}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    rows.push(row);
+  });
+
+  const existingByMlsId = new Map();
+  const mlsIds = rows.map(row => row.mls_id).filter(Boolean);
+  if (mlsIds.length) {
+    const { data, error } = await sb.from('listings').select('id, mls_id').eq('user_id', currentUser.id).in('mls_id', mlsIds);
+    if (error) throw error;
+    (data || []).forEach(row => { if (row.mls_id) existingByMlsId.set(row.mls_id, row.id); });
+  }
+
+  const inserts = [];
+  const updates = [];
+  rows.forEach(row => {
+    const existingId = row.mls_id ? existingByMlsId.get(row.mls_id) : null;
+    if (existingId) updates.push({ id: existingId, row });
+    else inserts.push(row);
+  });
+
+  if (inserts.length) {
+    const { error } = await sb.from('listings').insert(inserts);
+    if (error) throw error;
+  }
+
+  for (const item of updates) {
+    const updateRow = { ...item.row };
+    delete updateRow.user_id;
+    const { error } = await sb.from('listings').update(updateRow).eq('id', item.id).eq('user_id', currentUser.id);
+    if (error) throw error;
+  }
+
+  return inserts.length + updates.length;
 }
 
 async function deleteListing(id) {
@@ -902,6 +937,32 @@ function mapDbListing(row) {
   };
 }
 
+function makeOptimisticListing(listing) {
+  return {
+    id: listing.id || makeTempId('listing'),
+    dbId: null,
+    mlsId: listing.mlsId || '',
+    address: listing.address || '',
+    price: Number(listing.price || 0),
+    status: normalizeListingStatus(listing.status || 'active'),
+    beds: Number(listing.beds || 0),
+    baths: Number(listing.baths || 0),
+    tags: Array.isArray(listing.tags) ? listing.tags : [],
+    source: normalizeListingSource(listing.source || 'manual'),
+    city: listing.city || '',
+    state: listing.state || '',
+    zip: listing.zip || '',
+    sqft: Number(listing.sqft || 0),
+    lotSize: listing.lotSize || '',
+    yearBuilt: listing.yearBuilt || '',
+    description: listing.description || '',
+    propertyType: listing.propertyType || '',
+    image_url: listing.image_url || '',
+    photos: Array.isArray(listing.photos) ? listing.photos : [],
+    notes: listing.notes || ''
+  };
+}
+
 function listingToRow(listing) {
   return {
     user_id: currentUser.id,
@@ -927,6 +988,19 @@ function listingToRow(listing) {
   };
 }
 
+async function findInsertedListing(row) {
+  try {
+    let query = sb.from('listings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(1);
+    if (row.mls_id) query = query.eq('mls_id', row.mls_id);
+    else query = query.eq('address', row.address).eq('price', row.price);
+    const { data, error } = await query;
+    if (error) return null;
+    return data?.[0] ? mapDbListing(data[0]) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
 // USER SETTINGS + PROFILE
 async function loadUserSettings() {
   if (!currentUser) return;
@@ -934,14 +1008,9 @@ async function loadUserSettings() {
   if (error) { console.error('load settings:', error); return; }
   if (!data) return;
 
-  cfg.proxy = data.mls_proxy_url || '';
-  cfg.url = data.mls_url || 'https://api.primemls.com/reso/odata';
-  cfg.user = data.mls_username || '';
-  cfg.area = data.mls_area || '';
-  cfg.lastSync = data.mls_last_sync || '';
-  cfg.connected = !!(cfg.proxy && cfg.url && cfg.user);
+  cfg.connected = false;
   currentTheme = data.theme || 'light';
-  autoMatchEnabled = data.auto_match !== false;
+  autoMatchEnabled = false;
 
   // Profile fields
   const pName = data.broker_name || '';
@@ -957,20 +1026,16 @@ async function loadUserSettings() {
 
 async function saveUserSettings(patch = {}) {
   if (!currentUser) return;
-  const row = {
+  const { mls_proxy_url, mls_url, mls_api_url, mls_username, mls_area, mls_last_sync, ...restPatch } = patch;
+  const baseRow = {
     user_id: currentUser.id,
-    mls_proxy_url: cfg.proxy || '',
-    mls_url: cfg.url || '',
-    mls_username: cfg.user || '',
-    mls_area: cfg.area || '',
-    mls_last_sync: cfg.lastSync || '',
     theme: currentTheme,
-    auto_match: autoMatchEnabled,
+    auto_match: false,
     broker_name: document.getElementById('p-name')?.value?.trim() || '',
     brokerage: document.getElementById('p-brokerage')?.value?.trim() || '',
-    ...patch
+    ...restPatch
   };
-  const { error } = await sb.from('user_settings').upsert([row], { onConflict: 'user_id' });
+  const { error } = await sb.from('user_settings').upsert([baseRow], { onConflict: 'user_id' });
   if (error) throw error;
 }
 
@@ -1135,14 +1200,70 @@ function nav(name) {
 }
 
 // ── RENDER ALL ─────────────────────────────────────────────────
-function renderAll() { buildOnboard(); renderLeads(); renderListings(); renderFiles(); renderStats(); renderBadges(); renderActivity(); updateMLSBadge(); renderDiscover(); }
+function renderAll() { buildOnboard(); renderLeads(); renderListings(); renderFiles(); renderStats(); renderBadges(); renderActivity(); updateMLSBadge(); document.getElementById('matchBanner').style.display = 'none'; renderDiscover(); }
+
+function firstNumericValue(...values) {
+  for (const value of values) {
+    const n = Number(value);
+    if (Number.isFinite(n)) return n;
+  }
+  return null;
+}
+
+function firstDateValue(...values) {
+  for (const value of values) {
+    if (!value) continue;
+    const d = new Date(value);
+    if (!Number.isNaN(d.getTime())) return d;
+  }
+  return null;
+}
+
+function getLeadAttemptCount(lead = {}) {
+  return firstNumericValue(lead.contactAttempts, lead.contact_attempts, lead.attempts, lead.touches);
+}
+
+function getLeadActionTimestamps(lead = {}) {
+  const createdAt = firstDateValue(lead.createdAt, lead.created_at);
+  const actionAt = firstDateValue(lead.firstActionAt, lead.first_action_at, lead.lastContactedAt, lead.last_contacted_at);
+  return { createdAt, actionAt };
+}
+
+function getDashboardStats() {
+  const newLeads = leads.length;
+  const unactioned = leads.filter(lead => {
+    const attempts = getLeadAttemptCount(lead);
+    if (attempts !== null) return attempts <= 0;
+    return !(Array.isArray(lead.preferences) && lead.preferences.length) && !String(lead.notes || '').trim();
+  }).length;
+
+  const attemptValues = leads.map(getLeadAttemptCount).filter(v => v !== null);
+  const avgContactAttempts = attemptValues.length ? (attemptValues.reduce((sum, value) => sum + value, 0) / attemptValues.length) : 0;
+
+  const speedValues = leads.map(lead => {
+    const { createdAt, actionAt } = getLeadActionTimestamps(lead);
+    if (!createdAt || !actionAt) return null;
+    const diffHours = (actionAt.getTime() - createdAt.getTime()) / 36e5;
+    return diffHours >= 0 ? diffHours : null;
+  }).filter(v => v !== null);
+  const speedToAction = speedValues.length ? (speedValues.reduce((sum, value) => sum + value, 0) / speedValues.length) : 0;
+
+  return {
+    newLeads,
+    unactioned,
+    avgContactAttempts,
+    speedToAction
+  };
+}
 
 function renderStats() {
-  document.getElementById('s-leads').textContent = leads.length;
-  document.getElementById('s-listings').textContent = listings.filter(l => normalizeListingStatus(l.status) === 'active').length;
-  document.getElementById('s-hot').textContent = leads.filter(l => l.status === 'hot').length;
-  const n = listings.filter(l => normalizeListingSource(l.source) === 'mls').length;
-  document.getElementById('s-synced').textContent = n || '—';
+  const stats = getDashboardStats();
+  document.getElementById('s-new-leads').textContent = String(stats.newLeads);
+  document.getElementById('s-new-leads-sub').textContent = `${stats.unactioned} unactioned`;
+  document.getElementById('s-contact-attempts').textContent = stats.avgContactAttempts.toFixed(2).replace(/\.00$/, '');
+  document.getElementById('s-speed-to-action').textContent = stats.speedToAction.toFixed(2);
+  document.getElementById('s-appts-next').textContent = 'N/A';
+  document.getElementById('s-deals-next').textContent = '0';
 }
 
 function renderBadges() {
@@ -1162,9 +1283,11 @@ function log(m) { activityLog.push({ m, t: new Date().toLocaleTimeString([], { h
 
 function updateMLSBadge() {
   const badge = document.getElementById('mlsBadge'), dot = document.getElementById('mlsDot'), txt = document.getElementById('mlsTxt');
-  const live = !!(cfg.connected && cfg.proxy && cfg.url && cfg.user);
-  if (live) { badge.className = 'mls-status connected'; dot.className = 'mls-dot on'; txt.style.color = 'var(--green)'; txt.textContent = 'MLS Live'; }
-  else { badge.className = 'mls-status disconnected'; dot.className = 'mls-dot off'; txt.style.color = 'var(--red)'; txt.textContent = 'MLS Not Connected'; }
+  if (!badge || !dot || !txt) return;
+  badge.className = 'mls-status disconnected';
+  dot.className = 'mls-dot off';
+  txt.style.color = 'var(--red)';
+  txt.textContent = 'MLS Coming Soon';
 }
 
 function applyTheme(theme) {
@@ -1184,21 +1307,17 @@ function setTheme(theme) {
 
 function updateAutoMatchToggle() {
   const tog = document.getElementById('tog-automatch');
-  if (tog) tog.classList.toggle('on', autoMatchEnabled);
+  if (tog) tog.classList.remove('on');
 }
 
 function toggleAutoMatch() {
-  autoMatchEnabled = !autoMatchEnabled;
+  autoMatchEnabled = false;
   updateAutoMatchToggle();
-  saveUserSettings().catch(console.error);
+  toast('MLS coming soon…');
 }
 
 function populateSettingsFields() {
-  if (cfg.proxy) document.getElementById('cfg-proxy').value = cfg.proxy;
-  if (cfg.url) document.getElementById('cfg-url').value = cfg.url;
-  if (cfg.user) document.getElementById('cfg-user').value = cfg.user;
-  if (cfg.key) document.getElementById('cfg-key').value = cfg.key;
-  if (cfg.area) document.getElementById('cfg-area').value = cfg.area;
+  return;
 }
 
 // ── DISCOVER ───────────────────────────────────────────────────
@@ -1397,13 +1516,13 @@ function getListingTags(l = {}) { if (Array.isArray(l.tags)) return l.tags.filte
 function formatListingPrice(l = {}) { const p = Number(l.price||0); return p > 0 ? `$${fmt(p)}` : 'Price on request'; }
 function formatCountValue(v) { const n = Number(v); if (!Number.isFinite(n) || n <= 0) return '—'; return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/,''); }
 function formatSquareFeet(v) { const n = Number(v); return Number.isFinite(n) && n > 0 ? `${fmt(n)} sq ft` : ''; }
-function getListingLocationLine(l = {}) { const city = String(firstPresent(l.city,'')).trim(), state = String(firstPresent(l.state,'')).trim(), zip = String(firstPresent(l.zip,l.postalCode,'')).trim(), cs = [city,state].filter(Boolean).join(', '); if (cs && zip) return `${cs} ${zip}`; if (cs) return cs; if (zip) return zip; if (l.mlsId) return `MLS #${l.mlsId}`; return normalizeListingSource(l.source) === 'mls' ? 'PrimeMLS listing' : 'Manual listing'; }
+function getListingLocationLine(l = {}) { const city = String(firstPresent(l.city,'')).trim(), state = String(firstPresent(l.state,'')).trim(), zip = String(firstPresent(l.zip,l.postalCode,'')).trim(), cs = [city,state].filter(Boolean).join(', '); if (cs && zip) return `${cs} ${zip}`; if (cs) return cs; if (zip) return zip; if (l.mlsId) return `Listing Ref ${l.mlsId}`; return normalizeListingSource(l.source) === 'mls' ? 'Imported listing' : 'Manual listing'; }
 function getListingPhoto(l = {}) { const cands = []; if (Array.isArray(l.photos)) l.photos.forEach(p => { if (typeof p === 'string') cands.push(p); else if (p) cands.push(p.url, p.href, p.Uri, p.MediaURL); }); cands.push(l.image_url, l.imageUrl, l.image, l.photo); for (const c of cands) { const s = safeHref(c||''); if (s && s !== '#') return s; } return ''; }
 function getListingSummary(l = {}) { const existing = cleanSummary(firstPresent(l.description, l.publicRemarks, l.notes, '')); if (existing) return truncateText(existing, 210); const type = String(firstPresent(l.propertyType,l.property_type,'residence')).toLowerCase(); const beds = Number(l.beds||0) > 0 ? `${formatCountValue(l.beds)} bed${Number(l.beds)===1?'':'s'}` : ''; const baths = Number(l.baths||0) > 0 ? `${formatCountValue(l.baths)} bath${Number(l.baths)===1?'':'s'}` : ''; const sqft = formatSquareFeet(firstPresent(l.sqft, l.squareFeet, l.livingArea)); const facts = [beds, baths, sqft].filter(Boolean).join(', '); const tags = getListingTags(l).slice(0,3); let s = `${formatListingStatus(l.status)} ${type}`; if (facts) s += ` with ${facts}`; s += '.'; if (tags.length) s += ` Highlights: ${tags.join(', ')}.`; return truncateText(s, 210); }
 function getListingCardFacts(l = {}) { const f = [{label:'Beds',value:formatCountValue(l.beds)},{label:'Baths',value:formatCountValue(l.baths)}]; const type = String(firstPresent(l.propertyType,l.property_type,'')).trim(); const sqft = formatSquareFeet(firstPresent(l.sqft,l.squareFeet,l.livingArea)); if (type) f.push({label:'Type',value:type}); if (sqft) f.push({label:'Interior',value:sqft}); return f.filter(x=>x.value&&x.value!=='—').slice(0,4); }
-function getListingFacts(l = {}) { const f = [{label:'Status',value:formatListingStatus(l.status)},{label:'Source',value:normalizeListingSource(l.source)==='mls'?'MLS Sync':'Manual Entry'},{label:'Beds',value:formatCountValue(l.beds)},{label:'Baths',value:formatCountValue(l.baths)}]; const type = String(firstPresent(l.propertyType,l.property_type,'')).trim(); const sqft = formatSquareFeet(firstPresent(l.sqft,l.squareFeet,l.livingArea)); const lot = l.lotSize||l.lot_size||''; const year = String(firstPresent(l.yearBuilt,l.year_built,'')).trim(); const loc = getListingLocationLine(l); if (type) f.push({label:'Property Type',value:type}); if (sqft) f.push({label:'Interior',value:sqft}); if (lot) f.push({label:'Lot',value:lot}); if (year) f.push({label:'Year Built',value:year}); if (loc) f.push({label:'Location',value:loc}); if (l.mlsId) f.push({label:'MLS ID',value:String(l.mlsId)}); return f.filter(x=>x.value&&x.value!=='—'); }
+function getListingFacts(l = {}) { const f = [{label:'Status',value:formatListingStatus(l.status)},{label:'Source',value:normalizeListingSource(l.source)==='mls'?'Imported':'Manual Entry'},{label:'Beds',value:formatCountValue(l.beds)},{label:'Baths',value:formatCountValue(l.baths)}]; const type = String(firstPresent(l.propertyType,l.property_type,'')).trim(); const sqft = formatSquareFeet(firstPresent(l.sqft,l.squareFeet,l.livingArea)); const lot = l.lotSize||l.lot_size||''; const year = String(firstPresent(l.yearBuilt,l.year_built,'')).trim(); const loc = getListingLocationLine(l); if (type) f.push({label:'Property Type',value:type}); if (sqft) f.push({label:'Interior',value:sqft}); if (lot) f.push({label:'Lot',value:lot}); if (year) f.push({label:'Year Built',value:year}); if (loc) f.push({label:'Location',value:loc}); if (l.mlsId) f.push({label:'Reference',value:String(l.mlsId)}); return f.filter(x=>x.value&&x.value!=='—'); }
 function renderListingStatusBadge(status='') { const n = normalizeListingStatus(status); return `<span class="listing-status-badge ${n}">${dot(n,'listing')}<span>${htmlEscape(formatListingStatus(n))}</span></span>`; }
-function renderListingMedia(l={}, mode='card') { const photo = getListingPhoto(l); if (photo) return `<img src="${photo}" alt="${htmlEscape(getListingAddress(l))}" ${mode==='card'?'loading="lazy"':''}>`;  const title = htmlEscape(getListingAddress(l).split(',')[0]||'Property'); const label = normalizeListingSource(l.source)==='mls'?'PrimeMLS Sync':'Manual Listing'; const meta = l.mlsId?`MLS #${htmlEscape(String(l.mlsId))}`:htmlEscape(formatListingStatus(l.status)); return `<div class="listing-media-placeholder"><div class="listing-media-label">${htmlEscape(label)}</div><div class="listing-media-title">${title}</div><div class="listing-media-meta">${meta}</div></div>`; }
+function renderListingMedia(l={}, mode='card') { const photo = getListingPhoto(l); if (photo) return `<img src="${photo}" alt="${htmlEscape(getListingAddress(l))}" ${mode==='card'?'loading="lazy"':''}>`;  const title = htmlEscape(getListingAddress(l).split(',')[0]||'Property'); const label = normalizeListingSource(l.source)==='mls'?'Imported Listing':'Manual Listing'; const meta = l.mlsId?`Ref ${htmlEscape(String(l.mlsId))}`:htmlEscape(formatListingStatus(l.status)); return `<div class="listing-media-placeholder"><div class="listing-media-label">${htmlEscape(label)}</div><div class="listing-media-title">${title}</div><div class="listing-media-meta">${meta}</div></div>`; }
 
 function getFilteredListings() {
   const q = (document.getElementById('listingSearch')?.value||'').toLowerCase().trim();
@@ -1423,7 +1542,7 @@ function renderListingCard(listing) {
     <div class="listing-card-body">
       <div class="listing-card-top">
         <div style="min-width:0;"><div class="listing-card-address">${htmlEscape(getListingAddress(listing))}</div><div class="listing-card-location">${htmlEscape(getListingLocationLine(listing))}</div></div>
-        <div class="listing-card-meta"><span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>${listing.mlsId?`<span class="listing-mls-ref">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
+        <div class="listing-card-meta"><span class="listing-source-badge ${source}">${source==='mls'?'Imported':'Manual'}</span>${listing.mlsId?`<span class="listing-mls-ref">Ref ${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
       </div>
       <div class="listing-price-row"><div class="listing-price">${htmlEscape(formatListingPrice(listing))}</div>${renderListingStatusBadge(listing.status)}</div>
       <div class="listing-facts">${facts.map(f=>`<div class="listing-fact"><strong>${htmlEscape(f.label)}:</strong> ${htmlEscape(f.value)}</div>`).join('')}</div>
@@ -1446,7 +1565,7 @@ function renderListingDetailContent(listing) {
     <div class="listing-detail-body">
       <div class="listing-detail-top">
         <div style="min-width:0;">
-          <div class="listing-detail-kicker">${renderListingStatusBadge(listing.status)}<span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>${listing.mlsId?`<span class="mls-badge">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
+          <div class="listing-detail-kicker">${renderListingStatusBadge(listing.status)}<span class="listing-source-badge ${source}">${source==='mls'?'Imported':'Manual'}</span>${listing.mlsId?`<span class="mls-badge">Ref #${htmlEscape(String(listing.mlsId))}</span>`:''}</div>
           <h2 class="listing-detail-address" id="listingDetailTitle">${htmlEscape(getListingAddress(listing))}</h2>
           <div class="listing-detail-price">${htmlEscape(formatListingPrice(listing))}</div>
           <div class="listing-detail-meta"><span>${htmlEscape(getListingLocationLine(listing))}</span>${meta.map(m=>`<span>${htmlEscape(m)}</span>`).join('')}</div>
@@ -1488,7 +1607,7 @@ function renderListings() {
   const filtered = getFilteredListings();
   if (meta) meta.textContent = `${filtered.length} result${filtered.length===1?'':'s'}.`;
   if (activeListingId !== null) { const a = listings.find(l => l.id == activeListingId); if (a) renderListingDetailContent(a); else closeListingDetail(true); }
-  if (!filtered.length) { feed.innerHTML = ''; emp.style.display = 'block'; emp.innerHTML = listings.length ? '<div class="emoji">🔎</div><h3>No listings match</h3><p>Try different filters.</p>' : '<div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p>'; return; }
+  if (!filtered.length) { feed.innerHTML = ''; emp.style.display = 'block'; emp.innerHTML = listings.length ? '<div class="emoji">🔎</div><h3>No listings match</h3><p>Try different filters.</p>' : '<div class="emoji">🏠</div><h3>No listings yet</h3><p>Add listings manually or import them from CSV.</p>'; return; }
   emp.style.display = 'none';
   feed.innerHTML = filtered.map(renderListingCard).join('');
 }
@@ -1496,9 +1615,7 @@ function renderListings() {
 function renderListingsBanner() {
   const el = document.getElementById('listingsBanner');
   if (!el) return;
-  const live = !!(cfg.connected && cfg.proxy && cfg.url && cfg.user);
-  if (!live) el.innerHTML = `<div class="sync-banner info"><span style="font-size:16px;">🔗</span><div>MLS not connected. <strong style="cursor:pointer;text-decoration:underline;" onclick="nav('settings')">Set up in Settings →</strong></div></div>`;
-  else el.innerHTML = `<div class="sync-banner success"><span class="mls-dot on"></span>PrimeMLS connected${cfg.area?' · '+cfg.area:''}. Last sync: ${cfg.lastSync||'Never'} &nbsp;<button class="btn btn-green" style="font-size:11px;padding:4px 10px;" onclick="syncMLS()">Sync Now</button></div>`;
+  el.innerHTML = `<div class="sync-banner info"><span style="font-size:16px;">⌛</span><div>MLS coming soon. For now, manage listings manually or import them from CSV.</div></div>`;
 }
 
 // ── FILES ──────────────────────────────────────────────────────
@@ -1520,51 +1637,12 @@ async function uploadFiles(e) {
   toast(`${fileArr.length} file(s) uploaded ✓`);
 }
 
-// ── MLS ────────────────────────────────────────────────────────
 async function saveMLS() {
-  const proxy = document.getElementById('cfg-proxy').value.trim();
-  const url = document.getElementById('cfg-url').value.trim();
-  const user = document.getElementById('cfg-user').value.trim();
-  const key = document.getElementById('cfg-key').value.trim();
-  const area = document.getElementById('cfg-area').value.trim();
-  const res = document.getElementById('mlsResult');
-  if (!proxy) { res.style.display='block'; res.style.background='rgba(224,92,92,0.1)'; res.style.color='var(--red)'; res.textContent='⚠ Enter your proxy URL first.'; return; }
-  if (!url || !user || !key) { toast('Fill in all MLS fields.', true); return; }
-  res.style.display='block'; res.style.background='var(--amber-dim)'; res.style.color='var(--amber)'; res.textContent='⏳ Testing connection…';
-  try {
-    const r = await fetch(proxy.replace(/\/$/, '') + '/mls-test', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url, user, key }) });
-    const data = await r.json();
-    if (!r.ok || data.error) throw new Error(data.error || 'Bad response');
-    cfg = { proxy, url, user, key, area, connected: true, lastSync: new Date().toLocaleString() };
-    localStorage.setItem('bos_mls_key', key); // store key locally only
-    await saveUserSettings();
-    updateMLSBadge(); buildOnboard();
-    res.style.background='rgba(61,186,126,0.08)'; res.style.color='var(--green)';
-    res.innerHTML=`✓ Connected! ${data.sample?'Sample: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync now →</strong>`;
-    log('PrimeMLS connected');
-  } catch(e) {
-    res.style.background='rgba(224,92,92,0.08)'; res.style.color='var(--red)'; res.textContent='✗ Failed: ' + e.message;
-    cfg = { ...cfg, proxy, url, user, key, area, connected: false };
-  }
+  toast('MLS coming soon…');
 }
 
 async function syncMLS() {
-  if (!cfg.connected) { toast('Connect MLS in Settings first.', true); nav('settings'); return; }
-  toast('Syncing listings from PrimeMLS…');
-  try {
-    const r = await fetch(cfg.proxy.replace(/\/$/, '') + '/mls-sync', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url:cfg.url, user:cfg.user, key:cfg.key, area:cfg.area, top:100 }) });
-    if (!r.ok) throw new Error('Proxy returned ' + r.status);
-    const data = await r.json();
-    const props = data.value || [];
-    const mlsMapped = props.map(p => mapMLSListing(p));
-    const added = await upsertMLSListings(mlsMapped);
-    cfg.lastSync = new Date().toLocaleString();
-    await saveUserSettings();
-    await loadListings(); // refresh from DB
-    log(`MLS sync: ${added} listing${added!==1?'s':''} synced`);
-    toast(`Synced — ${added} listing${added!==1?'s':''} ✓`);
-    if (autoMatchEnabled && added > 0 && leads.length > 0) autoMatch(added);
-  } catch(e) { toast('Sync failed: ' + e.message, true); }
+  toast('MLS coming soon…');
 }
 
 function mlsTags(p) { const t = []; if (p.WaterfrontYN||p.WaterBodyName) t.push('lakefront','waterfront'); if (p.ViewYN) t.push('mountain view'); if (p.BedroomsTotal) t.push(p.BedroomsTotal+'BR'); if (p.ListPrice>600000) t.push('luxury'); if (Array.isArray(p.ListingFeatures)) p.ListingFeatures.forEach(f => { if(f) t.push(f.toLowerCase()); }); return [...new Set(t)]; }
@@ -1614,17 +1692,19 @@ async function loadDemo() {
     // Insert demo listings via upsert
     await upsertMLSListings(demo);
     // Insert demo leads
-    for (const l of demoLeads) { await insertLead(l).catch(()=>{}); }
+    let leadFailures = 0;
+    for (const l of demoLeads) {
+      try {
+        await insertLead(l);
+      } catch (err) {
+        leadFailures++;
+        console.error('demo lead insert failed:', err);
+      }
+    }
     await Promise.all([loadLeads(), loadListings()]);
-    cfg.connected = true; cfg.lastSync = new Date().toLocaleString();
-    await saveUserSettings();
-    updateMLSBadge(); buildOnboard(); populateMatchSel();
-    document.getElementById('mlsResult').style.display='block';
-    document.getElementById('mlsResult').style.background='rgba(61,186,126,0.08)';
-    document.getElementById('mlsResult').style.color='var(--green)';
-    document.getElementById('mlsResult').textContent='✓ Demo data loaded. Try the Match Engine.';
+    buildOnboard(); populateMatchSel();
     log('Demo data loaded');
-    toast('Demo ready — try the Match Engine ✓');
+    toast(leadFailures ? `Demo loaded with ${leadFailures} lead save issue${leadFailures!==1?'s':''}.` : 'Demo ready — try the Match Engine ✓', leadFailures>0);
   } catch(e) { toast('Demo load failed: ' + e.message, true); }
 }
 
@@ -1646,13 +1726,14 @@ async function openContactPicker() {
 
 async function importContactsDirect(contacts) {
   let added = 0;
+  let failed = 0;
   for (const c of contacts) {
     const name = (c.name&&c.name[0])||'Unknown', phone = (c.tel&&c.tel[0])||'', email = (c.email&&c.email[0])||'';
     if (leads.find(l => (phone && l.phone === phone) || (email && l.email === email))) continue;
     const lead = { name, email, phone, budgetMin:0, budgetMax:999999, status:'warm', preferences:[], notes:'', fromContacts:true };
-    try { const saved = await insertLead(lead); if (saved) leads.push(saved); added++; } catch(e) { console.error(e); }
+    try { const saved = await insertLead(lead); if (saved) leads.push(saved); added++; } catch(e) { failed++; console.error('contact import failed:', e); }
   }
-  renderAll(); log(`Imported ${added} contacts as leads`); toast(`${added} contact${added!==1?'s':''} added ✓`);
+  renderAll(); log(`Imported ${added} contacts as leads`); toast(failed ? `${added} contact${added!==1?'s':''} added, ${failed} failed.` : `${added} contact${added!==1?'s':''} added ✓`, failed>0);
 }
 
 // ── ADD LEAD / LISTING ─────────────────────────────────────────
@@ -1694,22 +1775,22 @@ async function parseCsv(file, type) {
   const r = new FileReader();
   r.onload = async e => {
     const lines=e.target.result.split('\n').filter(l=>l.trim()), hdrs=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
-    let count = 0;
+    let count = 0, failed = 0;
     for (let i=1; i<lines.length; i++) {
       const vals=csvSplit(lines[i]), row={};
       hdrs.forEach((h,idx) => row[h]=(vals[idx]||'').replace(/"/g,'').trim());
       if (type === 'leads') {
         const prefs=(row.preferences||row.tags||'').split(';').map(p=>p.trim()).filter(Boolean);
         const lead={name:row.name||'Unknown',email:row.email||'',phone:row.phone||'',budgetMin:parseInt(row.budget_min||0),budgetMax:parseInt(row.budget_max||999999),status:row.status||'warm',preferences:prefs,notes:row.notes||''};
-        try { const saved = await insertLead(lead); if(saved) leads.push(saved); count++; } catch(e){}
+        try { const saved = await insertLead(lead); if(saved) leads.push(saved); count++; } catch(e){ failed++; console.error('CSV lead import failed:', e, row); }
       } else {
         const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);
         const listing={address:row.address||'Unknown',price:parseInt(row.price||0),status:normalizeListingStatus(row.status||'active'),beds:parseFloat(row.beds||0)||0,baths:parseFloat(row.baths||0)||0,tags,source:normalizeListingSource(row.source||'manual'),city:row.city||'',state:row.state||'',zip:row.zip||'',sqft:parseInt(row.sqft||row.square_feet||0)||0,lotSize:row.lot_size||'',yearBuilt:row.year_built||'',description:row.description||row.notes||'',propertyType:row.property_type||'',image_url:row.image_url||''};
-        try { const saved = await insertListing(listing); if(saved) listings.push(saved); populateMatchSel(); count++; } catch(e){}
+        try { const saved = await insertListing(listing); if(saved) listings.push(saved); populateMatchSel(); count++; } catch(e){ failed++; console.error('CSV listing import failed:', e, row); }
       }
     }
-    const sel=type==='leads'?'lcsvStatus':'pcsvStatus'; document.getElementById(sel).style.display='block'; document.getElementById(sel).textContent=`✓ Imported ${count} ${type}`;
-    renderAll(); log(`CSV: ${count} ${type} imported`); toast(`${count} ${type} imported ✓`);
+    const sel=type==='leads'?'lcsvStatus':'pcsvStatus'; document.getElementById(sel).style.display='block'; document.getElementById(sel).textContent=failed ? `✓ Imported ${count} ${type}, ${failed} failed` : `✓ Imported ${count} ${type}`;
+    renderAll(); log(`CSV: ${count} ${type} imported`); toast(failed ? `${count} ${type} imported, ${failed} failed.` : `${count} ${type} imported ✓`, failed>0);
   };
   r.readAsText(file);
 }
@@ -1762,7 +1843,7 @@ function fallbackScore(listing) {
 function renderMatchResults(listing, results) {
   const out = document.getElementById('matchOutput');
   const strong = results.filter(r=>r.score>=50).length;
-  out.innerHTML = `<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${htmlEscape(getListingAddress(listing))}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${normalizeListingSource(listing.source)==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${getListingTags(listing).map(tagHtml).join('')}</div></div>
+  out.innerHTML = `<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${htmlEscape(getListingAddress(listing))}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${normalizeListingSource(listing.source)==='mls'?'· <span class="mls-badge">Imported</span>':''}</div><div>${getListingTags(listing).map(tagHtml).join('')}</div></div>
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;">${strong} strong match${strong!==1?'es':''} of ${leads.length} leads</div><div style="font-size:11.5px;color:var(--text-muted);">Sorted by fit score</div></div>
   <div class="match-results-grid">${results.map((r,i)=>{const lead=leads.find(l=>l.id==r.id);if(!lead)return'';return`<div class="match-card" style="animation-delay:${i*.05}s;opacity:${r.score<15?.4:1}"><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">${lead.name}</div><div style="font-size:11.5px;color:var(--text-muted);">${lead.email||lead.phone||''} · ${dot(lead.status,'lead')}${lead.status}</div></div><div style="text-align:right;flex-shrink:0;"><div class="match-score">${r.score}</div><div class="match-score-label">Match %</div></div></div><div class="match-reason">${r.reason}</div><div style="font-size:11px;color:var(--text-dim);margin-bottom:9px;">Budget: $${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div><div style="margin-bottom:11px;">${lead.preferences.map(tagHtml).join('')}</div><div style="display:flex;gap:7px;"><button style="flex:1;padding:7px;background:var(--amber);color:var(--navy);border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;" onclick="copyText('${lead.email||lead.phone}')">📋 Copy Contact</button></div></div>`;}).join('')}</div>`;
 }
@@ -1792,8 +1873,8 @@ function togglePw(id) { const el=document.getElementById(id); el.type=el.type===
 // ── ONBOARDING ─────────────────────────────────────────────────
 function buildOnboard() {
   const b = document.getElementById('onboardBlock'); if(!b) return;
-  if (cfg.connected || onboardingDismissed || (leads.length>0&&listings.length>0)) { b.innerHTML=''; return; }
-  b.innerHTML=`<div class="onboarding-card"><button class="onboarding-close" type="button" onclick="dismissOnboarding()">×</button><h2>Welcome to Broker OS</h2><p>Connect PrimeMLS to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo()">Try Demo First</button></div></div>`;
+  if (onboardingDismissed || (leads.length>0&&listings.length>0)) { b.innerHTML=''; return; }
+  b.innerHTML=`<div class="onboarding-card"><button class="onboarding-close" type="button" onclick="dismissOnboarding()">×</button><h2>Welcome to Broker OS</h2><p>Add listings manually, import contacts as leads, and use the Match Engine to keep your pipeline organized. MLS integration is coming soon.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('listings')">View Listings →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo()">Try Demo First</button></div></div>`;
 }
 
 function dismissOnboarding() { onboardingDismissed=true; persistLocal(); buildOnboard(); }
