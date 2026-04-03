@@ -191,14 +191,11 @@
   .new-matches-banner { background: linear-gradient(135deg, rgba(61,186,126,0.1), rgba(61,186,126,0.04)); border: 1px solid rgba(61,186,126,0.25); border-radius: 9px; padding: 14px 18px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .15s; }
   .new-matches-banner:hover { border-color: var(--green); }
 
-  .onboarding-card { background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
+  .onboarding-card { position: relative; background: linear-gradient(135deg, var(--navy-mid), rgba(232,160,48,0.06)); border: 1px solid rgba(232,160,48,0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 22px; }
   .onboarding-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
   .onboarding-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; max-width: 460px; margin-left: auto; margin-right: auto; }
-  .onboarding-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
-  .onboarding-step { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 9px; padding: 14px; text-align: left; }
-  .step-num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
-  .step-title { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
-  .step-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+  .onboarding-close { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 18px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .15s; }
+  .onboarding-close:hover { color: var(--text); border-color: var(--amber); }
 
   .toggle { width: 38px; height: 21px; border-radius: 11px; background: var(--navy-border); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
   .toggle.on { background: var(--green); }
@@ -208,6 +205,159 @@
 
   .mls-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(74,158,218,0.13); color: var(--blue); letter-spacing: .5px; }
   .match-listing-card { background: linear-gradient(135deg,var(--navy-light),rgba(232,160,48,0.04)); border: 1px solid rgba(232,160,48,0.22); border-radius: 10px; padding: 16px 18px; margin-bottom: 18px; }
+
+  .listing-results-shell { display: flex; flex-direction: column; gap: 16px; }
+  .listing-feed-shell { overflow: hidden; }
+  .listing-feed-header { align-items: flex-start; gap: 14px; }
+  .listing-feed-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.6; }
+  .listing-toolbar { width: 100%; justify-content: flex-end; }
+  .listing-filter-bar { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+  .listing-filter-chip {
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--navy-border);
+    background: var(--navy-light);
+    color: var(--text-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .14s;
+  }
+  .listing-filter-chip:hover { color: var(--text); border-color: rgba(232,160,48,0.28); }
+  .listing-filter-chip.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
+  .listing-feed { display: flex; flex-direction: column; gap: 16px; padding: 18px; }
+  .listing-card {
+    display: grid;
+    grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
+    gap: 18px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--navy-border);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    cursor: pointer;
+    transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+  }
+  .listing-card:hover { border-color: rgba(232,160,48,0.28); transform: translateY(-1px); box-shadow: 0 18px 32px rgba(0,0,0,0.10); }
+  .listing-card:focus-visible { outline: 2px solid rgba(232,160,48,0.35); outline-offset: 2px; }
+  .listing-card-media {
+    position: relative;
+    min-height: 220px;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(74,158,218,0.16), rgba(232,160,48,0.14) 56%, rgba(155,109,218,0.10));
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .listing-card-media img, .listing-detail-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .listing-card-media::after, .listing-detail-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.26) 100%);
+    pointer-events: none;
+  }
+  .listing-media-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+    color: #fff;
+  }
+  .listing-media-label { font-size: 10px; letter-spacing: 1.7px; text-transform: uppercase; opacity: .78; margin-bottom: 8px; }
+  .listing-media-title { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.06; max-width: 92%; }
+  .listing-media-meta { font-size: 11px; opacity: .8; margin-top: 8px; }
+  .listing-card-body { min-width: 0; display: flex; flex-direction: column; }
+  .listing-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .listing-card-address { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.15; margin-bottom: 5px; }
+  .listing-card-location { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .listing-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .listing-source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    border: 1px solid var(--navy-border);
+    background: var(--navy-light);
+    color: var(--text-muted);
+  }
+  .listing-source-badge.mls { background: rgba(74,158,218,0.13); border-color: rgba(74,158,218,0.22); color: var(--blue); }
+  .listing-source-badge.manual { background: rgba(255,255,255,0.04); color: var(--text-muted); }
+  .listing-mls-ref { font-size: 11px; color: var(--text-dim); }
+  .listing-price-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-price { font-family: 'Playfair Display', serif; font-size: 32px; line-height: 1; color: var(--amber); }
+  .listing-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+  }
+  .listing-status-badge.active { background: rgba(61,186,126,0.12); color: var(--green); border-color: rgba(61,186,126,0.22); }
+  .listing-status-badge.pending { background: rgba(232,160,48,0.12); color: var(--amber); border-color: rgba(232,160,48,0.22); }
+  .listing-status-badge.sold { background: rgba(255,255,255,0.04); color: var(--text-muted); border-color: rgba(255,255,255,0.06); }
+  .listing-status-badge .status-dot { width: 7px; height: 7px; margin-right: 0; box-shadow: none; }
+  .listing-facts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-fact {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--surface-0);
+    border: 1px solid rgba(255,255,255,0.04);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .listing-fact strong { color: var(--text); font-weight: 600; }
+  .listing-summary { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+  .listing-tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .listing-no-tags { font-size: 11.5px; color: var(--text-dim); }
+  .listing-card-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+  .listing-card-actions .btn { width: auto; min-width: 138px; }
+
+  .listing-detail-overlay { padding: 20px; }
+  .listing-detail-modal {
+    width: min(980px, calc(100vw - 40px));
+    max-width: 980px;
+    max-height: min(92vh, 960px);
+    padding: 0;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  .listing-detail-shell { display: grid; grid-template-columns: minmax(320px, .92fr) minmax(0, 1.08fr); min-height: 0; }
+  .listing-detail-hero {
+    position: relative;
+    min-height: 420px;
+    background: linear-gradient(145deg, rgba(74,158,218,0.18), rgba(232,160,48,0.15) 56%, rgba(155,109,218,0.12));
+    border-right: 1px solid var(--navy-border);
+    overflow: hidden;
+  }
+  .listing-detail-body { padding: 24px 24px 22px; max-height: min(92vh, 960px); overflow-y: auto; }
+  .listing-detail-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .listing-detail-close { width: auto; padding-left: 14px; padding-right: 14px; white-space: nowrap; }
+  .listing-detail-kicker { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .listing-detail-address { font-family: 'Playfair Display', serif; font-size: 30px; line-height: 1.12; margin-bottom: 10px; }
+  .listing-detail-price { font-family: 'Playfair Display', serif; font-size: 36px; line-height: 1; color: var(--amber); margin-bottom: 12px; }
+  .listing-detail-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .listing-detail-section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--navy-border); }
+  .listing-detail-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; }
+  .listing-detail-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .listing-detail-fact { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 12px; padding: 12px 13px; min-width: 0; }
+  .listing-detail-fact-label { font-size: 10px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+  .listing-detail-fact-value { font-size: 13px; color: var(--text); font-weight: 600; line-height: 1.45; margin-top: 4px; word-break: break-word; }
+  .listing-detail-note { font-size: 13px; color: var(--text-muted); line-height: 1.78; }
+  .listing-detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .listing-detail-actions .btn { width: auto; }
 
   .toast { position: fixed; bottom: 22px; right: 22px; background: var(--navy-light); border: 1px solid var(--navy-border); border-left: 3px solid var(--green); border-radius: 8px; padding: 11px 16px; font-size: 12.5px; z-index: 200; transform: translateX(130%); transition: transform .22s ease; max-width: 300px; }
   .toast.show { transform: translateX(0); }
@@ -222,7 +372,6 @@
   /* Proxy URL hint box */
   .hint-box { background: var(--glass-blue); border: 1px solid var(--glass-blue-border); border-radius: 7px; padding: 11px 14px; font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
   .hint-box strong { color: var(--blue); }
-  .step-badge { display: inline-block; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-right: 6px; }
 
 
   .mobile-menu-btn { display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--navy-border); background:var(--navy-light); color:var(--text); font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
@@ -252,7 +401,7 @@
     .topbar-title { font-size: 16px; }
     .topbar-sub { font-size: 11px; }
     .content { padding: 14px 14px calc(14px + env(safe-area-inset-bottom) + 96px); }
-    .stats-row, .onboarding-steps, .form-row { grid-template-columns: 1fr 1fr; }
+    .stats-row, .form-row { grid-template-columns: 1fr 1fr; }
     .match-hero, .new-matches-banner, .section-header, .auto-match-row { flex-wrap: wrap; }
     .table-header { padding: 12px 14px; }
     th, td { padding-left: 14px; padding-right: 14px; }
@@ -261,11 +410,19 @@
     .contacts-grid, .match-results-grid, .files-grid { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
     .modal { width: calc(100vw - 18px); padding: 18px; }
     .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+    .listing-feed { padding: 16px; gap: 14px; }
+    .listing-card { grid-template-columns: 1fr; padding: 16px; }
+    .listing-card-media { min-height: 230px; aspect-ratio: 16 / 10; }
+    .listing-detail-overlay { padding: 10px; }
+    .listing-detail-modal { width: calc(100vw - 20px); max-height: calc(100vh - 20px); }
+    .listing-detail-shell { grid-template-columns: 1fr; }
+    .listing-detail-hero { min-height: 260px; border-right: none; border-bottom: 1px solid var(--navy-border); }
+    .listing-detail-body { max-height: none; }
   }
 
   @media (max-width: 640px) {
     .content { padding: 12px 12px calc(12px + env(safe-area-inset-bottom) + 108px); }
-    .stats-row, .onboarding-steps, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
+    .stats-row, .form-row, .contacts-grid, .files-grid, .match-results-grid { grid-template-columns: 1fr; }
     .table-actions { margin-left: 0; width: 100%; }
     .table-actions > * { flex: 1 1 100%; }
     .search-input { width: 100%; }
@@ -281,7 +438,7 @@
     .modal-actions .btn { width: 100%; }
 
     .discover-hero { padding: 18px; margin-bottom: 14px; }
-    .discover-hero h2 { font-size: 20px; line-height: 1.2; }
+    .discover-hero h2 { font-size: 22px; line-height: 1.2; }
     .discover-hero p { font-size: 12.5px; line-height: 1.6; }
     .discover-kpis { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
     .discover-kpi { padding: 14px 16px; }
@@ -289,12 +446,37 @@
     .discover-filter-row { width: 100%; gap: 8px; }
     .discover-filter-row .pill-btn { flex: 1 1 calc(50% - 4px); text-align: center; }
     .discover-filter-row .btn { width: 100%; }
-    .news-card { padding: 14px; }
-    .news-title { font-size: 15px; line-height: 1.4; }
+    .discover-feed-title { font-size: 17px; }
+    .discover-feed-sub { font-size: 11.5px; }
+    .discover-feed-head { padding: 15px; }
+    .discover-list { padding: 12px; gap: 12px; }
+    .news-card { padding: 11px; border-radius: 14px; }
+    .news-meta { gap: 6px; }
+    .news-title { font-size: 17px; line-height: 1.4; }
     .news-summary { font-size: 12px; line-height: 1.6; }
+    .news-footer { align-items: flex-start; }
+    .news-link { width: 100%; justify-content: flex-start; }
+    .news-media { min-height: 200px; }
     .discover-side-card { padding: 16px; }
     .discover-side-title { font-size: 15px; }
-    .brief-item, .mini-item a { font-size: 11.5px; }
+    .brief-item { font-size: 11.5px; }
+    .market-panel { padding: 16px; border-radius: 18px; }
+    .market-panel-title { font-size: 22px; }
+    .market-panel-sub { margin-bottom: 12px; }
+    .market-card { padding: 11px; }
+    .market-card-value { font-size: 22px; }
+    .market-grid { grid-template-columns: 1fr; }
+    .listing-filter-chip { flex: 1 1 calc(50% - 4px); text-align: center; }
+    .listing-feed { padding: 12px; }
+    .listing-card { padding: 12px; border-radius: 16px; }
+    .listing-card-address { font-size: 20px; }
+    .listing-price { font-size: 28px; }
+    .listing-card-actions .btn { width: 100%; }
+    .listing-detail-body { padding: 18px; }
+    .listing-detail-address { font-size: 24px; }
+    .listing-detail-price { font-size: 30px; }
+    .listing-detail-facts { grid-template-columns: 1fr; }
+    .listing-detail-actions .btn, .listing-detail-close { width: 100%; }
   }
 
 
@@ -345,12 +527,14 @@
 
 
 
-  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, .95fr); gap: 18px; }
-  .discover-hero { background: linear-gradient(135deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 12px; padding: 24px; margin-bottom: 18px; }
-  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 760px; }
-  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .discover-kpi { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; }
+  .discover-shell { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, .8fr); gap: 22px; align-items: start; }
+  .discover-main { min-width: 0; }
+  .discover-aside { min-width: 0; position: sticky; top: 14px; }
+  .discover-hero { background: radial-gradient(circle at top right, rgba(232,160,48,0.14), transparent 38%), linear-gradient(160deg, var(--navy-mid), rgba(74,158,218,0.08)); border: 1px solid var(--navy-border); border-radius: 18px; padding: 26px; margin-bottom: 18px; overflow: hidden; }
+  .discover-hero h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .discover-hero p { font-size: 13px; color: var(--text-muted); line-height: 1.7; max-width: 760px; }
+  .discover-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0; }
+  .discover-kpi { background: rgba(0,0,0,0.14); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 16px 18px; backdrop-filter: blur(10px); }
   .discover-kpi .label { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
   .discover-kpi .value { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; }
   .discover-kpi .sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
@@ -358,35 +542,76 @@
   .pill-btn { padding: 7px 11px; border-radius: 999px; border: 1px solid var(--navy-border); background: var(--navy-light); color: var(--text-muted); font-size: 11.5px; cursor: pointer; transition: all .14s; }
   .pill-btn:hover { color: var(--text); border-color: var(--amber); }
   .pill-btn.active { background: var(--amber-dim); color: var(--amber); border-color: rgba(232,160,48,0.28); }
-  .discover-list { display: flex; flex-direction: column; gap: 12px; }
-  .news-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 18px; transition: border-color .14s, transform .14s; }
-  .news-card:hover { border-color: var(--amber); transform: translateY(-1px); }
-  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 9px; }
+  .discover-feed-shell { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; overflow: hidden; }
+  .discover-feed-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 20px 16px; border-bottom: 1px solid var(--navy-border); flex-wrap: wrap; }
+  .discover-feed-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; }
+  .discover-feed-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .discover-list { display: flex; flex-direction: column; gap: 18px; padding: 20px; }
+  .news-card { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: 18px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border: 1px solid var(--navy-border); border-radius: 18px; padding: 16px; transition: border-color .14s, transform .14s, box-shadow .14s; }
+  .news-card:hover { border-color: rgba(232,160,48,0.32); transform: translateY(-1px); box-shadow: 0 14px 28px rgba(0,0,0,0.14); }
+  .news-media { position: relative; min-height: 188px; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, rgba(74,158,218,0.16), rgba(232,160,48,0.12)); border: 1px solid rgba(255,255,255,0.04); }
+  .news-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .news-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.22) 100%); pointer-events: none; }
+  .news-media-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff; }
+  .news-media-label { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; opacity: .76; margin-bottom: 6px; }
+  .news-media-title { font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.1; max-width: 90%; }
+  .news-body { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .news-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .news-source { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
   .news-source.news { background: rgba(74,158,218,0.13); color: var(--blue); }
   .news-source.rates { background: rgba(61,186,126,0.13); color: var(--green); }
   .news-time { font-size: 11px; color: var(--text-dim); }
-  .news-title { font-size: 16px; font-weight: 600; line-height: 1.45; margin-bottom: 8px; }
+  .news-title { font-size: 20px; font-weight: 600; line-height: 1.35; margin-bottom: 10px; }
   .news-title a { color: var(--text); text-decoration: none; }
   .news-title a:hover { color: var(--amber); }
-  .news-summary { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
-  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 18px; margin-bottom: 14px; }
+  .news-summary { font-size: 13px; color: var(--text-muted); line-height: 1.72; margin-bottom: 12px; }
+  .news-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; flex-wrap: wrap; }
+  .news-tagline { font-size: 11px; color: var(--text-dim); }
+  .news-link { display: inline-flex; align-items: center; gap: 7px; color: var(--amber); text-decoration: none; font-size: 12px; font-weight: 600; }
+  .news-link:hover { color: var(--amber-light); }
+  .discover-side-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
   .discover-side-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 10px; }
   .brief-list { display: flex; flex-direction: column; gap: 10px; }
-  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 10px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.55; }
-  .mini-list { display: flex; flex-direction: column; gap: 9px; }
-  .mini-item { padding-bottom: 9px; border-bottom: 1px solid rgba(36,54,80,0.52); }
-  .mini-item:last-child { padding-bottom: 0; border-bottom: none; }
-  .mini-item a { color: var(--text); text-decoration: none; font-size: 12.5px; line-height: 1.45; }
-  .mini-item a:hover { color: var(--amber); }
-  .mini-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 4px; }
-  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; }
+  .brief-item { background: rgba(0,0,0,0.14); border-left: 3px solid var(--amber); border-radius: 0 7px 7px 0; padding: 11px 13px; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .market-panel { background: #181716; color: #f2f1ef; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 18px; margin-bottom: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .market-panel-title { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+  .market-panel-sub { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 14px; line-height: 1.55; }
+  .market-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .market-card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px 12px 10px; min-width: 0; }
+  .market-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+  .market-card-name { font-size: 14px; color: rgba(255,255,255,0.94); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .market-card-change { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .market-card-change.down { color: #ff6f8c; }
+  .market-card-change.up { color: #5fd470; }
+  .market-card-value { font-size: 24px; font-weight: 500; line-height: 1.1; margin-bottom: 2px; }
+  .market-card-dollar { font-size: 12px; color: rgba(255,255,255,0.54); margin-bottom: 10px; }
+  .market-chart { width: 100%; height: 46px; display: block; }
+  .market-chart path.line.down { stroke: #ff6f8c; }
+  .market-chart path.line.up { stroke: #5fd470; }
+  .market-chart path.fill.down { fill: rgba(255,111,140,0.14); }
+  .market-chart path.fill.up { fill: rgba(95,212,112,0.14); }
+  .market-footnote { margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.48); line-height: 1.5; }
+  .discover-empty { text-align: center; padding: 50px 18px; background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 18px; }
   .discover-empty .emoji { font-size: 30px; margin-bottom: 10px; }
+
+  @media (max-width: 1200px) {
+    .discover-shell { grid-template-columns: minmax(0, 1fr) minmax(280px, 330px); gap: 18px; }
+    .discover-feed-head { padding: 18px 18px 15px; }
+    .discover-list { padding: 18px; gap: 16px; }
+    .news-card { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); gap: 14px; padding: 14px; }
+    .news-title { font-size: 18px; }
+    .market-grid { grid-template-columns: 1fr; }
+  }
 
   @media (max-width: 980px) {
     .discover-shell { grid-template-columns: 1fr; gap: 14px; }
     .discover-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .discover-aside { position: static; }
     .discover-side-card { margin-bottom: 12px; }
+    .news-card { grid-template-columns: 1fr; }
+    .news-media { min-height: 220px; aspect-ratio: 16 / 10; }
+    .discover-feed-head { padding: 18px 18px 14px; }
+    .discover-list { padding: 16px; gap: 14px; }
   }
 
 </style>
@@ -395,7 +620,7 @@
 <div class="auth-shell" id="authShell">
   <div class="auth-card">
     <div class="auth-brand">
-      <div class="wordmark">Broker OS</div>
+      <div class="wordmark">Broker OS TEST 999</div>
       <div class="tagline">Deal Intelligence</div>
     </div>
     <div class="auth-title">Sign in to Broker OS</div>
@@ -424,7 +649,7 @@
 
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="wordmark">Broker OS</div>
+    <div class="wordmark">Broker OS TEST 999</div>
     <div class="tagline">Deal Intelligence</div>
   </div>
   <div class="sidebar-nav">
@@ -474,45 +699,46 @@
       <div class="discover-hero">
         <h2>Your real estate morning brief</h2>
         <p>Wake up, open Broker OS, and scan what actually changed. Discover is wired to your Mortgage News Daily RSS feed so you can check daily market movement, mortgage-rate coverage, and fresh housing headlines in one clean place.</p>
-      </div>
-      <div class="discover-kpis">
-        <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
-        <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
-        <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+        <div class="discover-kpis">
+          <div class="discover-kpi"><div class="label">Articles Loaded</div><div class="value amber" id="discoverTotal">0</div><div class="sub">Latest items in your feed</div></div>
+          <div class="discover-kpi"><div class="label">News Items</div><div class="value" id="discoverNewsCount">0</div><div class="sub">General market and housing news</div></div>
+          <div class="discover-kpi"><div class="label">Rate Watch</div><div class="value green" id="discoverRatesCount">0</div><div class="sub">Mortgage and rate coverage</div></div>
+        </div>
       </div>
       <div class="discover-shell">
-        <div>
-          <div class="table-card" style="margin-bottom:16px;">
-            <div class="table-header">
-              <div class="table-title">Market feed</div>
-              <div class="table-actions discover-filter-row">
+        <div class="discover-main">
+          <div class="discover-feed-shell">
+            <div class="discover-feed-head">
+              <div>
+                <div class="discover-feed-title">Latest market stories</div>
+                <div class="discover-feed-sub">Pictures and story details now stack cleanly one-by-one down the page.</div>
+              </div>
+              <div class="discover-filter-row">
                 <button class="pill-btn active" id="discoverFilter-all" onclick="setDiscoverFilter('all')">All</button>
                 <button class="pill-btn" id="discoverFilter-news" onclick="setDiscoverFilter('news')">Daily News</button>
                 <button class="pill-btn" id="discoverFilter-rates" onclick="setDiscoverFilter('rates')">Rates</button>
                 <button class="btn btn-secondary" onclick="refreshDiscoverFeed()">Refresh</button>
               </div>
             </div>
+            <div class="discover-list" id="discoverList"></div>
           </div>
-          <div class="discover-list" id="discoverList"></div>
           <div id="discoverEmpty" class="discover-empty" style="display:none;">
             <div class="emoji">📰</div>
             <h3 style="font-size:15px;color:var(--text-muted);margin-bottom:6px;">No Discover items yet</h3>
             <p style="font-size:12.5px;color:var(--text-dim);line-height:1.6;">Broker OS will try your live Mortgage News Daily feed directly here. If the feed is blocked by browser CORS, the next clean upgrade is a Supabase Edge Function cache into <strong style="color:var(--amber);">discover_items</strong>.</p>
           </div>
         </div>
-        <div>
+        <div class="discover-aside">
+          <div class="market-panel" id="marketRatesPanel"></div>
           <div class="discover-side-card">
             <div class="discover-side-title">This morning</div>
             <div class="brief-list" id="discoverBriefs"></div>
-          </div>
-          <div class="discover-side-card">
-            <div class="discover-side-title">Rate watch</div>
-            <div class="mini-list" id="discoverRatesMini"></div>
           </div>
           <div class="discover-side-card" style="margin-bottom:0;">
             <div class="discover-side-title">Sources</div>
             <div style="font-size:12px;color:var(--text-muted);line-height:1.7;">
               <div style="margin-bottom:7px;"><strong style="color:var(--text);">Mortgage News Daily</strong><br>Live custom RSS feed connected through your RSS.app link.</div>
+              <div style="margin-bottom:7px;"><strong style="color:var(--text);">Market Rates Placeholder</strong><br>Styled like your reference image now and ready to become live quotes later.</div>
               <div><strong style="color:var(--text);">Broker OS Discover</strong><br>Same app style, same flow, but now with a live market feed layered into your workspace.</div>
             </div>
           </div>
@@ -540,18 +766,31 @@
     <!-- LISTINGS -->
     <div class="view" id="view-listings">
       <div id="listingsBanner"></div>
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">All Listings</div>
-          <div class="table-actions">
-            <input class="search-input" type="text" placeholder="Search…" id="listingSearch" oninput="renderListings()">
-            <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
-            <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
-            <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
+      <div class="listing-results-shell">
+        <div class="table-card listing-feed-shell">
+          <div class="table-header listing-feed-header">
+            <div>
+              <div class="table-title">All Listings</div>
+              <div class="listing-feed-sub" id="listingResultMeta">0 results curated across your inventory.</div>
+            </div>
+            <div class="table-actions listing-toolbar">
+              <input class="search-input" type="text" placeholder="Search address, tag, MLS ID…" id="listingSearch" oninput="renderListings()">
+              <button class="btn btn-green" onclick="syncMLS()">⟳ Sync MLS</button>
+              <button class="btn btn-secondary" onclick="openModal('importListings')">↑ CSV</button>
+              <button class="btn btn-primary" onclick="openModal('addListing')">+ Add</button>
+            </div>
+            <div class="listing-filter-bar" id="listingFilters">
+              <button class="listing-filter-chip active" type="button" id="listingFilter-all" onclick="setListingFilter('all')">All</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-active" onclick="setListingFilter('active')">Active</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-pending" onclick="setListingFilter('pending')">Pending</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-sold" onclick="setListingFilter('sold')">Sold</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-mls" onclick="setListingFilter('mls')">MLS</button>
+              <button class="listing-filter-chip" type="button" id="listingFilter-manual" onclick="setListingFilter('manual')">Manual</button>
+            </div>
           </div>
+          <div class="listing-feed" id="listingsFeed"></div>
+          <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
         </div>
-        <table><thead><tr><th>Address</th><th>Price</th><th>Status</th><th>Beds/Baths</th><th>Source</th><th>Tags</th><th></th></tr></thead><tbody id="listingsTable"></tbody></table>
-        <div id="listingsEmpty" class="empty-state" style="display:none;"><div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p></div>
       </div>
     </div>
 
@@ -582,13 +821,7 @@
       <!-- PROXY + MLS -->
       <div class="settings-section">
         <div class="settings-section-title">🔗 PrimeMLS Connection</div>
-        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. You need two things: your proxy server URL (from Railway/Render — free) and your PrimeMLS credentials. See the steps below.</div>
-
-        <div class="hint-box">
-          <span class="step-badge">Step 1</span> <strong>Deploy the proxy</strong> — Upload the <code>broker-proxy</code> folder to GitHub, then connect it to Railway or Render (free). They give you a URL like <code>https://broker-proxy-xxx.up.railway.app</code><br><br>
-          <span class="step-badge">Step 2</span> <strong>Get MLS credentials</strong> — Log into PrimeMLS → Member Tools → IDX/API Access. If no API tab, call them at (603) 930-3220 and ask for RESO Web API credentials.<br><br>
-          <span class="step-badge">Step 3</span> <strong>Paste both below</strong> and hit Save & Test.
-        </div>
+        <div class="settings-section-sub">This connects your live MLS listings to Broker OS. Enter your proxy server URL and PrimeMLS credentials below, then save and test the connection.</div>
 
         <div class="form-group">
           <div class="form-label">Your Proxy URL</div>
@@ -641,10 +874,10 @@
       <!-- APPEARANCE -->
       <div class="settings-section">
         <div class="settings-section-title">◐ Appearance</div>
-        <div class="settings-section-sub">Switch between the original dark look and a matching light theme. Your choice saves automatically on this device.</div>
+        <div class="settings-section-sub">White theme is the default look, and you can switch to dark anytime. Your choice saves automatically on this device.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
-          <button class="btn btn-secondary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-primary" type="button" id="theme-light-btn" onclick="setTheme('light')">White Theme</button>
+          <button class="btn btn-secondary" type="button" id="theme-dark-btn" onclick="setTheme('dark')">Dark Theme</button>
         </div>
       </div>
 
@@ -718,6 +951,12 @@
   </div>
 </div>
 
+<div class="modal-overlay listing-detail-overlay" id="listingDetailOverlay" aria-hidden="true">
+  <div class="modal listing-detail-modal" role="dialog" aria-modal="true" aria-labelledby="listingDetailTitle">
+    <div class="listing-detail-shell" id="listingDetailContent"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -731,7 +970,11 @@
 // ── STATE ──────────────────────────────────────────────────────
 let leads=[], listings=[], files=[], discoverItems=[], leadTags=[], listingTags=[], pendingContacts=[], selectedContacts=new Set(), activityLog=[], newMatchCount=0;
 let discoverFilter='all';
-let currentTheme='dark';
+let currentTheme='light';
+let onboardingDismissed=false;
+let currentListingFilter='all';
+let activeListingId=null;
+let lastListingFocusEl=null;
 let cfg = { proxy:'', url:'', user:'', key:'', area:'', connected:false, lastSync:'' };
 
 function hasRecognizedMLSConnection(){
@@ -757,7 +1000,8 @@ function load() {
     if(!(cfg && cfg.connected && cfg.proxy && cfg.url && cfg.user && cfg.key)) cfg.connected=false;
     activityLog = JSON.parse(localStorage.getItem('bos_log')||'[]');
     newMatchCount = parseInt(localStorage.getItem('bos_nm')||'0');
-    currentTheme = localStorage.getItem('bos_theme') || 'dark';
+    currentTheme = localStorage.getItem('bos_theme') || 'light';
+    onboardingDismissed = localStorage.getItem('bos_onboard_dismissed') === 'true';
     const p = JSON.parse(localStorage.getItem('bos_profile')||'{}');
     if(p.name) document.getElementById('p-name').value=p.name;
     if(p.brokerage) document.getElementById('p-brokerage').value=p.brokerage;
@@ -779,6 +1023,7 @@ function persist() {
   localStorage.setItem('bos_log',JSON.stringify(activityLog.slice(-60)));
   localStorage.setItem('bos_nm',newMatchCount);
   localStorage.setItem('bos_theme',currentTheme);
+  localStorage.setItem('bos_onboard_dismissed', onboardingDismissed ? 'true' : 'false');
 }
 
 function applyTheme(theme){
@@ -808,6 +1053,7 @@ const titles = {dashboard:'Dashboard',discover:'Discover',leads:'Leads',listings
 const subs = {dashboard:'Overview',discover:'Real estate news and market pulse',leads:'All contacts',listings:'All properties',match:'AI-powered lead matching',files:'Contracts & documents',settings:'Configuration'};
 
 function nav(name) {
+  if(name!=='listings' && document.getElementById('listingDetailOverlay')?.classList.contains('open')) closeListingDetail(true);
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
@@ -823,13 +1069,13 @@ function nav(name) {
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
-function renderAll(){renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
+function renderAll(){buildOnboard();renderLeads();renderListings();renderFiles();renderStats();renderBadges();renderActivity();updateMLSBadge();renderDiscover();}
 
 function renderStats(){
   document.getElementById('s-leads').textContent=leads.length;
-  document.getElementById('s-listings').textContent=listings.filter(l=>l.status==='active').length;
+  document.getElementById('s-listings').textContent=listings.filter(l=>normalizeListingStatus(l.status)==='active').length;
   document.getElementById('s-hot').textContent=leads.filter(l=>l.status==='hot').length;
-  const n=listings.filter(l=>l.source==='mls').length;
+  const n=listings.filter(l=>normalizeListingSource(l.source)==='mls').length;
   document.getElementById('s-synced').textContent=n||'—';
 }
 
@@ -889,6 +1135,11 @@ function cleanSummary(text=''){
   return String(text || '').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 }
 
+function extractImageFromHtml(text=''){
+  const match = String(text || '').match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match ? safeHref(match[1]) : '';
+}
+
 function htmlEscape(str=''){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -910,11 +1161,13 @@ function normalizeDiscoverType(item={}){
 
 function normalizeDiscoverItem(item={}){
   const type = normalizeDiscoverType(item);
+  const image = safeHref(item.image_url || item.image || item.thumbnail || extractImageFromHtml(item.summary || item.description || ''));
   return {
     source_name: item.source_name || DISCOVER_RSS_SOURCE_NAME,
     source_type: type,
     title: String(item.title || 'Untitled item').trim(),
     summary: cleanSummary(item.summary || item.description || ''),
+    image_url: image && image !== '#' ? image : '',
     link: safeHref(item.link || item.url || '#'),
     published_at: item.published_at || item.pubDate || item.isoDate || null,
     category: item.category || '',
@@ -937,12 +1190,46 @@ function discoverDisplayItems(){
   return discoverItems.filter(item => (item.source_type || 'news') === discoverFilter);
 }
 
+function discoverFallbackVisual(item, type){
+  const label = type === 'rates' ? 'Rate Watch' : 'Daily Brief';
+  return `<div class="news-media-placeholder"><div class="news-media-label">${label}</div><div class="news-media-title">${htmlEscape((item.title || 'Market update').split(' ').slice(0,4).join(' '))}</div></div>`;
+}
+
+function marketPath(points, width, height){
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const range = Math.max(max - min, 1);
+  const step = width / Math.max(points.length - 1, 1);
+  return points.map((value, index) => {
+    const x = Number((index * step).toFixed(2));
+    const y = Number((height - ((value - min) / range) * height).toFixed(2));
+    return `${index === 0 ? 'M' : 'L'}${x} ${y}`;
+  }).join(' ');
+}
+
+function renderMarketRatesPanel(){
+  const panel = document.getElementById('marketRatesPanel');
+  if(!panel) return;
+
+  const cards = [
+    { name:'S&P Futures', value:'6,543.25', dollar:'-$97.50', change:'↘ 1.47%', trend:'down', points:[76,74,73,71,69,68,66,65,63,60,58,59,57,58,56] },
+    { name:'NASDAQ Fut.', value:'23,855.00', dollar:'-$512.75', change:'↘ 2.10%', trend:'down', points:[84,82,81,79,78,76,74,73,72,69,67,66,65,64,63] },
+    { name:'Bitcoin', value:'$68,966.25', dollar:'-$1,795.41', change:'↘ 2.54%', trend:'down', points:[88,86,85,84,82,80,79,77,75,73,71,70,68,67,66] },
+    { name:'VIX', value:'27.44', dollar:'+2.11', change:'↗ 8.33%', trend:'up', points:[22,23,22,24,25,26,27,27,29,30,31,33,32,33,34] }
+  ];
+
+  panel.innerHTML = `<div class="market-panel-title">Market Outlook</div><div class="market-panel-sub">Placeholder market rates on the right, ready to become live quotes later.</div><div class="market-grid">${cards.map(card => {
+    const path = marketPath(card.points, 132, 34);
+    const area = `${path} L 132 34 L 0 34 Z`;
+    return `<div class="market-card"><div class="market-card-head"><div class="market-card-name">${htmlEscape(card.name)}</div><div class="market-card-change ${card.trend}">${card.change}</div></div><div class="market-card-value">${htmlEscape(card.value)}</div><div class="market-card-dollar">${htmlEscape(card.dollar)}</div><svg class="market-chart" viewBox="0 0 132 34" preserveAspectRatio="none" aria-hidden="true"><path class="fill ${card.trend}" d="${area}"></path><path class="line ${card.trend}" d="${path}" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>`;
+  }).join('')}</div><div class="market-footnote">This panel is a styled placeholder for now. The live Discover news feed remains on the left.</div>`;
+}
+
 function renderDiscover(){
   const list=document.getElementById('discoverList');
   const empty=document.getElementById('discoverEmpty');
   const briefs=document.getElementById('discoverBriefs');
-  const ratesMini=document.getElementById('discoverRatesMini');
-  if(!list || !empty || !briefs || !ratesMini) return;
+  if(!list || !empty || !briefs) return;
 
   const items = discoverDisplayItems();
   const newsCount = discoverItems.filter(i => (i.source_type || 'news') === 'news').length;
@@ -957,6 +1244,7 @@ function renderDiscover(){
   if(newsEl) newsEl.textContent = newsCount;
   if(ratesEl) ratesEl.textContent = ratesCount;
   if(lastEl) lastEl.textContent = latestPublished ? relativeTime(latestPublished) : '—';
+  renderMarketRatesPanel();
 
   if(!items.length){
     list.innerHTML='';
@@ -969,15 +1257,14 @@ function renderDiscover(){
       const summary = htmlEscape(cleanSummary(item.summary).slice(0, 280) || 'No summary available yet.');
       const title = htmlEscape(item.title || 'Untitled item');
       const link = safeHref(item.link || '#');
-      return `<article class="news-card"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div></article>`;
+      const category = htmlEscape(item.category || (type === 'rates' ? 'Rates and yields' : 'Housing and brokerage'));
+      const media = item.image_url ? `<img src="${item.image_url}" alt="${title}" loading="lazy">` : discoverFallbackVisual(item, type);
+      return `<article class="news-card"><div class="news-media">${media}</div><div class="news-body"><div class="news-meta"><span class="news-source ${type}">${source}</span><span class="news-time">${relativeTime(item.published_at)}</span></div><div class="news-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div><div class="news-summary">${summary}</div><div class="news-footer"><div class="news-tagline">${category}</div><a class="news-link" href="${link}" target="_blank" rel="noopener noreferrer">Open story <span aria-hidden="true">→</span></a></div></div></article>`;
     }).join('');
   }
 
   const latest = discoverItems.slice(0,3);
   briefs.innerHTML = latest.length ? latest.map((item, idx)=>`<div class="brief-item">${idx+1}. <strong style="color:var(--text);">${htmlEscape(item.title || 'Untitled item')}</strong><br>${htmlEscape(cleanSummary(item.summary).slice(0, 120) || 'Fresh market coverage is available in your feed.')}</div>`).join('') : '<div class="brief-item">Your daily brief will appear here once the live feed loads.</div>' ;
-
-  const rateItems = discoverItems.filter(i => (i.source_type || 'news') === 'rates').slice(0,4);
-  ratesMini.innerHTML = rateItems.length ? rateItems.map(item => `<div class="mini-item"><a href="${safeHref(item.link || '#')}" target="_blank" rel="noopener noreferrer">${htmlEscape(item.title || 'Untitled rate item')}</a><div class="mini-sub">${relativeTime(item.published_at)}</div></div>`).join('') : '<div class="mini-item"><div class="mini-sub">No rate-watch items yet.</div></div>' ;
 }
 
 function getCachedDiscoverItems(){
@@ -1014,10 +1301,14 @@ function parseFeedText(xmlText=''){
     };
     const linkNode = node.querySelector('link');
     const href = linkNode?.getAttribute?.('href');
+    const mediaNode = node.querySelector('media\\:content, media\\:thumbnail, enclosure[url], content[url]');
+    const mediaUrl = mediaNode?.getAttribute?.('url');
+    const descriptionHtml = getText('description','summary','content');
     return normalizeDiscoverItem({
       source_name: DISCOVER_RSS_SOURCE_NAME,
       title: getText('title'),
-      summary: getText('description','summary','content'),
+      summary: descriptionHtml,
+      image_url: mediaUrl || extractImageFromHtml(descriptionHtml),
       link: href || getText('link'),
       published_at: getText('pubDate','published','updated'),
       category: [...node.querySelectorAll('category')].map(el => el.textContent.trim()).filter(Boolean).join(', '),
@@ -1097,21 +1388,343 @@ function renderLeads(){
 function deleteLead(id){leads=leads.filter(l=>l.id!==id);persist();renderAll();}
 
 // ── LISTINGS RENDER ────────────────────────────────────────────
+function firstPresent(...values){
+  for(const value of values){
+    if(value===undefined || value===null) continue;
+    if(typeof value==='string' && !value.trim()) continue;
+    return value;
+  }
+  return '';
+}
+
+function truncateText(text='', max=180){
+  const clean = String(text || '').trim();
+  if(clean.length <= max) return clean;
+  return clean.slice(0, max - 1).trimEnd() + '…';
+}
+
+function normalizeListingStatus(status=''){
+  const s=String(status || '').toLowerCase();
+  if(s.includes('pend') || s.includes('under contract') || s.includes('conting')) return 'pending';
+  if(s.includes('sold') || s.includes('close')) return 'sold';
+  return 'active';
+}
+
+function formatListingStatus(status=''){
+  const value = normalizeListingStatus(status);
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function normalizeListingSource(source=''){
+  return String(source || '').toLowerCase()==='mls' ? 'mls' : 'manual';
+}
+
+function getListingAddress(listing={}){
+  const composed = [listing.street, listing.city, listing.state].filter(Boolean).join(', ');
+  return String(firstPresent(listing.address, listing.UnparsedAddress, composed, 'Address unavailable')).trim();
+}
+
+function getListingTags(listing={}){
+  if(Array.isArray(listing.tags)) return listing.tags.filter(Boolean);
+  if(typeof listing.tags === 'string') return listing.tags.split(/[;,]/).map(t=>t.trim()).filter(Boolean);
+  return [];
+}
+
+function formatListingPrice(listing={}){
+  const price = Number(listing.price || 0);
+  return price > 0 ? `$${fmt(price)}` : 'Price on request';
+}
+
+function formatCountValue(value){
+  const n = Number(value);
+  if(!Number.isFinite(n) || n <= 0) return '—';
+  return Number.isInteger(n) ? String(n) : n.toFixed(1).replace(/\.0$/,'');
+}
+
+function formatSquareFeet(value){
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? `${fmt(n)} sq ft` : '';
+}
+
+function formatLotSize(listing={}){
+  const explicit = firstPresent(listing.lotSize, listing.lot_size);
+  if(explicit) return String(explicit);
+  const acres = Number(firstPresent(listing.lotAcres, listing.lot_acres, listing.LotSizeAcres));
+  if(Number.isFinite(acres) && acres > 0){
+    return `${String(acres.toFixed(2)).replace(/\.00$/,'').replace(/0$/,'')} acres`;
+  }
+  const sqft = Number(firstPresent(listing.lotSqft, listing.lot_sqft, listing.lotSquareFeet, listing.LotSizeSquareFeet));
+  if(Number.isFinite(sqft) && sqft > 0) return `${fmt(sqft)} sq ft lot`;
+  return '';
+}
+
+function getListingLocationLine(listing={}){
+  const city = String(firstPresent(listing.city, '')).trim();
+  const state = String(firstPresent(listing.state, '')).trim();
+  const zip = String(firstPresent(listing.zip, listing.postalCode, '')).trim();
+  const cityState = [city, state].filter(Boolean).join(', ');
+  if(cityState && zip) return `${cityState} ${zip}`;
+  if(cityState) return cityState;
+  if(zip) return zip;
+  if(listing.mlsId) return `MLS #${listing.mlsId}`;
+  return normalizeListingSource(listing.source)==='mls' ? 'PrimeMLS listing' : 'Manual listing';
+}
+
+function getListingPhoto(listing={}){
+  const candidates = [];
+  if(Array.isArray(listing.photos)){
+    listing.photos.forEach(photo=>{
+      if(typeof photo === 'string') candidates.push(photo);
+      else if(photo && typeof photo === 'object') candidates.push(photo.url, photo.href, photo.Uri, photo.uri, photo.media_url, photo.MediaURL);
+    });
+  }
+  candidates.push(listing.image_url, listing.imageUrl, listing.image, listing.photo, listing.photo_url);
+  for(const candidate of candidates){
+    const safe = safeHref(candidate || '');
+    if(safe && safe !== '#') return safe;
+  }
+  return '';
+}
+
+function getListingSummary(listing={}){
+  const existing = cleanSummary(firstPresent(listing.description, listing.publicRemarks, listing.remarks, listing.notes, ''));
+  if(existing) return truncateText(existing, 210);
+
+  const type = String(firstPresent(listing.propertyType, listing.property_type, 'residence')).trim().toLowerCase();
+  const bedText = Number(listing.beds || 0) > 0 ? `${formatCountValue(listing.beds)} bedroom${Number(listing.beds || 0)===1?'':'s'}` : '';
+  const bathText = Number(listing.baths || 0) > 0 ? `${formatCountValue(listing.baths)} bath${Number(listing.baths || 0)===1?'':'s'}` : '';
+  const sizeText = formatSquareFeet(firstPresent(listing.sqft, listing.squareFeet, listing.livingArea));
+  const facts = [bedText, bathText, sizeText].filter(Boolean).join(', ');
+  const tags = getListingTags(listing).slice(0,3);
+  let summary = `${formatListingStatus(listing.status)} ${type}`;
+  if(facts) summary += ` with ${facts}`;
+  summary += '.';
+  if(tags.length) summary += ` Highlights include ${tags.join(', ')}.`;
+  else summary += normalizeListingSource(listing.source)==='mls' ? ' Synced from PrimeMLS and ready for matching.' : ' Added manually and ready for matching.';
+  return truncateText(summary, 210);
+}
+
+function getListingCardFacts(listing={}){
+  const facts = [
+    {label:'Beds', value:formatCountValue(listing.beds)},
+    {label:'Baths', value:formatCountValue(listing.baths)}
+  ];
+  const type = String(firstPresent(listing.propertyType, listing.property_type, '')).trim();
+  const sqft = formatSquareFeet(firstPresent(listing.sqft, listing.squareFeet, listing.livingArea));
+  if(type) facts.push({label:'Type', value:type});
+  if(sqft) facts.push({label:'Interior', value:sqft});
+  return facts.filter(f=>f.value && f.value !== '—').slice(0,4);
+}
+
+function getListingFacts(listing={}){
+  const facts = [
+    {label:'Status', value:formatListingStatus(listing.status)},
+    {label:'Source', value:normalizeListingSource(listing.source)==='mls' ? 'MLS Sync' : 'Manual Entry'},
+    {label:'Beds', value:formatCountValue(listing.beds)},
+    {label:'Baths', value:formatCountValue(listing.baths)}
+  ];
+  const type = String(firstPresent(listing.propertyType, listing.property_type, '')).trim();
+  const sqft = formatSquareFeet(firstPresent(listing.sqft, listing.squareFeet, listing.livingArea));
+  const lot = formatLotSize(listing);
+  const yearBuilt = String(firstPresent(listing.yearBuilt, listing.year_built, '')).trim();
+  const location = getListingLocationLine(listing);
+  if(type) facts.push({label:'Property Type', value:type});
+  if(sqft) facts.push({label:'Interior', value:sqft});
+  if(lot) facts.push({label:'Lot', value:lot});
+  if(yearBuilt) facts.push({label:'Year Built', value:yearBuilt});
+  if(location) facts.push({label:'Location', value:location});
+  if(listing.mlsId) facts.push({label:'MLS ID', value:String(listing.mlsId)});
+  return facts.filter(f=>f.value && f.value !== '—');
+}
+
+function renderListingStatusBadge(status=''){
+  const normalized = normalizeListingStatus(status);
+  return `<span class="listing-status-badge ${normalized}">${dot(normalized,'listing')}<span>${htmlEscape(formatListingStatus(normalized))}</span></span>`;
+}
+
+function renderListingMedia(listing={}, mode='card'){
+  const photo = getListingPhoto(listing);
+  if(photo) return `<img src="${photo}" alt="${htmlEscape(getListingAddress(listing))}" ${mode==='card'?'loading="lazy"':''}>`;
+  const title = htmlEscape(getListingAddress(listing).split(',')[0] || 'Property');
+  const label = normalizeListingSource(listing.source)==='mls' ? 'PrimeMLS Sync' : 'Manual Listing';
+  const meta = listing.mlsId ? `MLS #${htmlEscape(String(listing.mlsId))}` : htmlEscape(formatListingStatus(listing.status));
+  return `<div class="listing-media-placeholder"><div class="listing-media-label">${htmlEscape(label)}</div><div class="listing-media-title">${title}</div><div class="listing-media-meta">${meta}</div></div>`;
+}
+
+function getFilteredListings(){
+  const q=(document.getElementById('listingSearch')?.value || '').toLowerCase().trim();
+  return listings.filter(listing=>{
+    const haystack = [
+      getListingAddress(listing),
+      getListingLocationLine(listing),
+      listing.mlsId,
+      listing.description,
+      listing.notes,
+      listing.propertyType,
+      listing.property_type,
+      normalizeListingSource(listing.source),
+      normalizeListingStatus(listing.status),
+      getListingTags(listing).join(' ')
+    ].map(v=>String(v || '').toLowerCase()).join(' ');
+    const status = normalizeListingStatus(listing.status);
+    const source = normalizeListingSource(listing.source);
+    const matchesQuery = !q || haystack.includes(q);
+    const matchesFilter = currentListingFilter==='all' || currentListingFilter===status || currentListingFilter===source;
+    return matchesQuery && matchesFilter;
+  }).slice().sort((a,b)=>{
+    const aId = Number(a.id);
+    const bId = Number(b.id);
+    if(Number.isFinite(aId) && Number.isFinite(bId)) return bId - aId;
+    return 0;
+  });
+}
+
+function renderListingCard(listing){
+  const source = normalizeListingSource(listing.source);
+  const tags = getListingTags(listing);
+  const cardFacts = getListingCardFacts(listing);
+  const id = JSON.stringify(listing.id);
+  return `<article class="listing-card" tabindex="0" role="button" aria-haspopup="dialog" aria-label="View details for ${htmlEscape(getListingAddress(listing))}" onclick='openListingDetail(${id})' onkeydown='handleListingCardKey(event, ${id})'>
+    <div class="listing-card-media">${renderListingMedia(listing,'card')}</div>
+    <div class="listing-card-body">
+      <div class="listing-card-top">
+        <div style="min-width:0;">
+          <div class="listing-card-address">${htmlEscape(getListingAddress(listing))}</div>
+          <div class="listing-card-location">${htmlEscape(getListingLocationLine(listing))}</div>
+        </div>
+        <div class="listing-card-meta">
+          <span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>
+          ${listing.mlsId?`<span class="listing-mls-ref">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}
+        </div>
+      </div>
+      <div class="listing-price-row">
+        <div class="listing-price">${htmlEscape(formatListingPrice(listing))}</div>
+        ${renderListingStatusBadge(listing.status)}
+      </div>
+      <div class="listing-facts">${cardFacts.map(f=>`<div class="listing-fact"><strong>${htmlEscape(f.label)}:</strong> ${htmlEscape(f.value)}</div>`).join('')}</div>
+      <div class="listing-summary">${htmlEscape(getListingSummary(listing))}</div>
+      <div class="listing-tag-row">${tags.length ? tags.slice(0,6).map(tagHtml).join('') : '<span class="listing-no-tags">No tags added yet.</span>'}</div>
+      <div class="listing-card-actions">
+        <button class="btn btn-secondary" type="button" onclick='event.stopPropagation();openListingDetail(${id})'>View Details</button>
+        <button class="btn btn-primary" type="button" onclick='event.stopPropagation();matchFrom(${id})'>Match ✦</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderListingDetailContent(listing){
+  const content = document.getElementById('listingDetailContent');
+  if(!content || !listing) return;
+  const source = normalizeListingSource(listing.source);
+  const tags = getListingTags(listing);
+  const facts = getListingFacts(listing);
+  const id = JSON.stringify(listing.id);
+  const meta = [
+    formatCountValue(listing.beds) !== '—' ? `${formatCountValue(listing.beds)} bd` : '',
+    formatCountValue(listing.baths) !== '—' ? `${formatCountValue(listing.baths)} ba` : '',
+    String(firstPresent(listing.propertyType, listing.property_type, '')).trim()
+  ].filter(v=>v && v !== '—');
+  content.innerHTML = `<div class="listing-detail-hero">${renderListingMedia(listing,'detail')}</div>
+    <div class="listing-detail-body">
+      <div class="listing-detail-top">
+        <div style="min-width:0;">
+          <div class="listing-detail-kicker">
+            ${renderListingStatusBadge(listing.status)}
+            <span class="listing-source-badge ${source}">${source==='mls'?'MLS':'Manual'}</span>
+            ${listing.mlsId?`<span class="mls-badge">MLS #${htmlEscape(String(listing.mlsId))}</span>`:''}
+          </div>
+          <h2 class="listing-detail-address" id="listingDetailTitle">${htmlEscape(getListingAddress(listing))}</h2>
+          <div class="listing-detail-price">${htmlEscape(formatListingPrice(listing))}</div>
+          <div class="listing-detail-meta">
+            <span>${htmlEscape(getListingLocationLine(listing))}</span>
+            ${meta.map(item=>`<span>${htmlEscape(item)}</span>`).join('')}
+          </div>
+        </div>
+        <button class="btn btn-secondary listing-detail-close" type="button" id="listingDetailCloseBtn" onclick="closeListingDetail()">Back to Results</button>
+      </div>
+      <div class="listing-tag-row">${tags.length ? tags.map(tagHtml).join('') : '<span class="listing-no-tags">No tags on file yet.</span>'}</div>
+      <div class="listing-detail-section">
+        <div class="listing-detail-label">Property Facts</div>
+        <div class="listing-detail-facts">${facts.map(f=>`<div class="listing-detail-fact"><div class="listing-detail-fact-label">${htmlEscape(f.label)}</div><div class="listing-detail-fact-value">${htmlEscape(f.value)}</div></div>`).join('')}</div>
+      </div>
+      <div class="listing-detail-section">
+        <div class="listing-detail-label">Notes & Summary</div>
+        <div class="listing-detail-note">${htmlEscape(getListingSummary(listing))}</div>
+      </div>
+      <div class="listing-detail-actions">
+        <button class="btn btn-primary" type="button" onclick='closeListingDetail(true);matchFrom(${id})'>Match ✦</button>
+        <button class="btn btn-secondary" type="button" onclick="closeListingDetail()">Close</button>
+      </div>
+    </div>`;
+}
+
+function setListingFilter(type){
+  currentListingFilter = type;
+  ['all','active','pending','sold','mls','manual'].forEach(key=>{
+    const el = document.getElementById('listingFilter-'+key);
+    if(el) el.classList.toggle('active', key===type);
+  });
+  renderListings();
+}
+
+function openListingDetail(id){
+  const listing = listings.find(l=>l.id==id);
+  const overlay = document.getElementById('listingDetailOverlay');
+  if(!listing || !overlay) return;
+  activeListingId = listing.id;
+  lastListingFocusEl = document.activeElement;
+  renderListingDetailContent(listing);
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  setTimeout(()=>document.getElementById('listingDetailCloseBtn')?.focus(), 20);
+}
+
+function closeListingDetail(skipFocus=false){
+  const overlay = document.getElementById('listingDetailOverlay');
+  if(!overlay) return;
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+  activeListingId = null;
+  if(!skipFocus && lastListingFocusEl && typeof lastListingFocusEl.focus === 'function'){
+    try { lastListingFocusEl.focus(); } catch(_){}
+  }
+  lastListingFocusEl = null;
+}
+
+function handleListingCardKey(e,id){
+  if(e.key==='Enter' || e.key===' '){
+    e.preventDefault();
+    openListingDetail(id);
+  }
+}
+
 function renderListings(){
-  const q=(document.getElementById('listingSearch')?.value||'').toLowerCase();
-  const tb=document.getElementById('listingsTable'),emp=document.getElementById('listingsEmpty');
-  const f=listings.filter(l=>!q||l.address.toLowerCase().includes(q)||l.tags.join(' ').toLowerCase().includes(q));
-  if(!f.length){tb.innerHTML='';emp.style.display='block';return;}
+  const feed=document.getElementById('listingsFeed'),emp=document.getElementById('listingsEmpty'),meta=document.getElementById('listingResultMeta');
+  if(!feed || !emp) return;
+  const filtered=getFilteredListings();
+  if(meta){
+    meta.textContent=`${filtered.length} result${filtered.length===1?'':'s'} curated across your inventory.`;
+  }
+
+  if(activeListingId!==null){
+    const active = listings.find(l=>l.id==activeListingId);
+    if(active) renderListingDetailContent(active);
+    else closeListingDetail(true);
+  }
+
+  if(!filtered.length){
+    feed.innerHTML='';
+    emp.style.display='block';
+    if(listings.length){
+      emp.innerHTML='<div class="emoji">🔎</div><h3>No listings match this view</h3><p>Try another search term or switch filters to widen the feed.</p>';
+    } else {
+      emp.innerHTML='<div class="emoji">🏠</div><h3>No listings yet</h3><p>Connect PrimeMLS in Settings or add manually.</p>';
+    }
+    return;
+  }
+
   emp.style.display='none';
-  tb.innerHTML=f.map(l=>`<tr>
-    <td><strong style="font-size:12.5px;">${l.address}</strong></td>
-    <td style="color:var(--amber);font-weight:600;">$${fmt(l.price)}</td>
-    <td>${dot(l.status,'listing')} <span style="font-size:12px;text-transform:capitalize;">${l.status}</span></td>
-    <td style="font-size:12px;color:var(--text-muted);">${l.beds}bd/${l.baths}ba</td>
-    <td>${l.source==='mls'?'<span class="mls-badge">MLS</span>':'<span style="font-size:11px;color:var(--text-dim);">Manual</span>'}</td>
-    <td>${l.tags.slice(0,4).map(tagHtml).join('')}</td>
-    <td><button class="btn btn-secondary" style="font-size:11px;padding:4px 9px;white-space:nowrap;" onclick="matchFrom(${l.id})">Match ✦</button></td>
-  </tr>`).join('');
+  feed.innerHTML=filtered.map(renderListingCard).join('');
 }
 
 function renderListingsBanner(){
@@ -1154,7 +1767,7 @@ async function saveMLS(){
     if(!r.ok||data.error) throw new Error(data.error||'Bad response');
 
     cfg={proxy,url,user,key,area,connected:true,lastSync:new Date().toLocaleString()};
-    persist();updateMLSBadge();
+    persist();buildOnboard();updateMLSBadge();
     res.style.background='rgba(61,186,126,0.08)';res.style.color='var(--green)';
     res.innerHTML=`✓ Connected to PrimeMLS! ${data.sample?'Sample listing: <strong>'+data.sample.UnparsedAddress+'</strong>':''} — <strong style="cursor:pointer;text-decoration:underline;" onclick="syncMLS()">Sync listings now →</strong>`;
     log('PrimeMLS connected successfully');
@@ -1177,11 +1790,13 @@ async function syncMLS(){
     if(!r.ok) throw new Error('Proxy returned '+r.status);
     const data=await r.json();
     const props=data.value||[];
-    const existing=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
+    const existing=new Set(listings.filter(l=>normalizeListingSource(l.source)==='mls').map(l=>l.mlsId));
     let added=0;
     props.forEach(p=>{
-      if(existing.has(p.ListingId)) return;
-      listings.push({id:Date.now()+Math.random(),mlsId:p.ListingId,address:p.UnparsedAddress||'Unknown',price:p.ListPrice||0,status:(p.StandardStatus||'Active').toLowerCase(),beds:p.BedroomsTotal||0,baths:p.BathroomsFullCount||0,tags:mlsTags(p),source:'mls'});
+      const mapped = mapMLSListing(p);
+      if(mapped.mlsId && existing.has(mapped.mlsId)) return;
+      listings.push(mapped);
+      if(mapped.mlsId) existing.add(mapped.mlsId);
       added++;
     });
     cfg.lastSync=new Date().toLocaleString();
@@ -1202,8 +1817,53 @@ function mlsTags(p){
   return [...new Set(t)];
 }
 
+function extractMLSPhotos(p={}){
+  const photos = [];
+  if(Array.isArray(p.Media)){
+    p.Media.forEach(item=>photos.push(item?.MediaURL, item?.Uri, item?.url));
+  }
+  if(Array.isArray(p.Photos)){
+    p.Photos.forEach(item=>{
+      if(typeof item === 'string') photos.push(item);
+      else photos.push(item?.url, item?.href, item?.Uri);
+    });
+  }
+  if(p.MediaURL) photos.push(p.MediaURL);
+  return photos.filter(Boolean);
+}
+
+function mapMLSListing(p={}){
+  const address = firstPresent(
+    p.UnparsedAddress,
+    [p.StreetNumberNumeric, p.StreetName, p.StreetSuffix, p.UnitNumber].filter(Boolean).join(' '),
+    'Unknown'
+  );
+  const lotSize = p.LotSizeArea ? `${p.LotSizeArea} ${p.LotSizeUnits || ''}`.trim() : firstPresent(p.LotSizeAcres, p.LotSizeSquareFeet, '');
+  return {
+    id: Date.now() + Math.random(),
+    mlsId: firstPresent(p.ListingId, p.ListingKey, ''),
+    address,
+    price: Number(p.ListPrice || 0),
+    status: normalizeListingStatus(p.StandardStatus || p.MlsStatus || 'active'),
+    beds: Number(p.BedroomsTotal || p.Bedrooms || 0),
+    baths: Number(p.BathroomsFullCount || p.BathroomsTotalInteger || p.BathroomsTotalDecimal || 0),
+    tags: mlsTags(p),
+    source: 'mls',
+    city: firstPresent(p.City, p.CityName, ''),
+    state: firstPresent(p.StateOrProvince, p.State, ''),
+    zip: firstPresent(p.PostalCode, ''),
+    sqft: Number(firstPresent(p.LivingArea, p.AboveGradeFinishedArea, p.BuildingAreaTotal, 0)) || 0,
+    lotSize,
+    yearBuilt: firstPresent(p.YearBuilt, ''),
+    description: firstPresent(p.PublicRemarks, p.PrivateRemarks, ''),
+    propertyType: firstPresent(p.PropertyType, p.PropertySubType, ''),
+    image_url: firstPresent(p.MediaURL, ''),
+    photos: extractMLSPhotos(p)
+  };
+}
+
 async function autoMatch(newCount){
-  const recent=listings.filter(l=>l.source==='mls').slice(-newCount);
+  const recent=listings.filter(l=>normalizeListingSource(l.source)==='mls').slice(-newCount);
   let found=0;
   recent.forEach(l=>{found+=fallbackScore(l).filter(r=>r.score>=50).length;});
   if(found>0){newMatchCount+=found;persist();renderBadges();document.getElementById('matchBannerCount').textContent=newMatchCount;document.getElementById('matchBanner').style.display='flex';log(`Auto-match: ${found} strong match${found!==1?'es':''} found`);}
@@ -1212,13 +1872,13 @@ async function autoMatch(newCount){
 // DEMO DATA
 function loadDemo(){
   const demo=[
-    {id:Date.now()+1,mlsId:'ML001',address:'14 Willoughby Lake Rd, Westmore, VT',price:489000,status:'active',beds:3,baths:2,tags:['lakefront','dock','mountain view','3BR','garage'],source:'mls'},
-    {id:Date.now()+2,mlsId:'ML002',address:'88 Mountain View Dr, Burke, VT',price:275000,status:'active',beds:4,baths:2,tags:['mountain view','rural','4BR','land'],source:'mls'},
-    {id:Date.now()+3,mlsId:'ML003',address:'5 Maple St #2B, St. Johnsbury, VT',price:189000,status:'active',beds:2,baths:1,tags:['condo','in-town','walkable'],source:'mls'},
-    {id:Date.now()+4,mlsId:'ML004',address:'220 Echo Lake Rd, Charleston, VT',price:625000,status:'active',beds:5,baths:3,tags:['lakefront','dock','luxury','5BR','garage','waterfront'],source:'mls'},
-    {id:Date.now()+5,mlsId:'ML005',address:'37 Kingdom Farm Rd, Craftsbury, VT',price:340000,status:'active',beds:3,baths:2,tags:['rural','barn','land','mountain view','3BR'],source:'mls'},
+    {id:Date.now()+1,mlsId:'ML001',address:'14 Willoughby Lake Rd, Westmore, VT',price:489000,status:'active',beds:3,baths:2,tags:['lakefront','dock','mountain view','3BR','garage'],source:'mls',city:'Westmore',state:'VT',zip:'05860',sqft:2140,lotSize:'0.68 acres',yearBuilt:'1998',propertyType:'Single Family',description:'Refined lakefront home with a private dock, warm natural light, and direct water access for summer and winter recreation.'},
+    {id:Date.now()+2,mlsId:'ML002',address:'88 Mountain View Dr, Burke, VT',price:275000,status:'active',beds:4,baths:2,tags:['mountain view','rural','4BR','land'],source:'mls',city:'Burke',state:'VT',zip:'05832',sqft:1860,lotSize:'2.4 acres',yearBuilt:'1987',propertyType:'Single Family',description:'A quietly positioned Burke property with broad mountain views, generous yard space, and room for year-round living or a ski-weekend base.'},
+    {id:Date.now()+3,mlsId:'ML003',address:'5 Maple St #2B, St. Johnsbury, VT',price:189000,status:'pending',beds:2,baths:1,tags:['condo','in-town','walkable'],source:'mls',city:'St. Johnsbury',state:'VT',zip:'05819',sqft:980,yearBuilt:'2005',propertyType:'Condo',description:'Bright in-town condo with easy walkability, efficient living space, and low-maintenance ownership for first-time or downsizing buyers.'},
+    {id:Date.now()+4,mlsId:'ML004',address:'220 Echo Lake Rd, Charleston, VT',price:625000,status:'active',beds:5,baths:3,tags:['lakefront','dock','luxury','5BR','garage','waterfront'],source:'mls',city:'Charleston',state:'VT',zip:'05872',sqft:3220,lotSize:'1.1 acres',yearBuilt:'2008',propertyType:'Lakefront Estate',description:'Large waterfront retreat with a dock, expansive entertaining spaces, and the kind of lake exposure that suits premium second-home buyers.'},
+    {id:Date.now()+5,mlsId:'ML005',address:'37 Kingdom Farm Rd, Craftsbury, VT',price:340000,status:'sold',beds:3,baths:2,tags:['rural','barn','land','mountain view','3BR'],source:'mls',city:'Craftsbury',state:'VT',zip:'05826',sqft:1740,lotSize:'5.2 acres',yearBuilt:'1979',propertyType:'Farmhouse',description:'Classic Northeast Kingdom farmhouse setting with barn space, open land, and distant mountain views.'},
   ];
-  const ex=new Set(listings.filter(l=>l.source==='mls').map(l=>l.mlsId));
+  const ex=new Set(listings.filter(l=>normalizeListingSource(l.source)==='mls').map(l=>l.mlsId));
   listings.push(...demo.filter(d=>!ex.has(d.mlsId)));
   if(!leads.length) leads=[
     {id:1,name:'Michael Torres',email:'mtorres@email.com',phone:'(802) 555-0141',budgetMin:300000,budgetMax:550000,status:'hot',preferences:['lakefront','dock','3BR','mountain view'],notes:'Vacation property'},
@@ -1330,7 +1990,7 @@ function saveLead(){
 
 function saveListing(){
   const addr=document.getElementById('p-ad').value.trim();if(!addr){toast('Address required.',true);return;}
-  listings.push({id:Date.now(),address:addr,price:parseInt(document.getElementById('p-pr').value)||0,status:document.getElementById('p-st').value,beds:parseInt(document.getElementById('p-bd').value)||0,baths:parseInt(document.getElementById('p-ba').value)||0,tags:[...listingTags],source:'manual'});
+  listings.push({id:Date.now(),address:addr,price:parseInt(document.getElementById('p-pr').value)||0,status:normalizeListingStatus(document.getElementById('p-st').value),beds:parseFloat(document.getElementById('p-bd').value)||0,baths:parseFloat(document.getElementById('p-ba').value)||0,tags:[...listingTags],source:'manual'});
   listingTags=[];document.getElementById('pTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
   ['p-ad','p-pr','p-bd','p-ba'].forEach(id=>document.getElementById(id).value='');
   closeModal('addListing');persist();renderAll();populateMatchSel();log('Listing added: '+addr);toast('Listing added ✓');
@@ -1360,7 +2020,30 @@ function parseCsv(file,type){
       const vals=csvSplit(lines[i]),row={};
       hdrs.forEach((h,idx)=>row[h]=(vals[idx]||'').replace(/"/g,'').trim());
       if(type==='leads'){const prefs=(row.preferences||row.tags||'').split(';').map(p=>p.trim()).filter(Boolean);leads.push({id:Date.now()+i,name:row.name||'Unknown',email:row.email||'',phone:row.phone||'',budgetMin:parseInt(row.budget_min||0),budgetMax:parseInt(row.budget_max||999999),status:row.status||'warm',preferences:prefs,notes:row.notes||''});}
-      else{const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);listings.push({id:Date.now()+i,address:row.address||'Unknown',price:parseInt(row.price||0),status:row.status||'active',beds:parseInt(row.beds||0),baths:parseInt(row.baths||0),tags,source:'manual'});}
+      else{
+        const tags=(row.tags||'').split(';').map(t=>t.trim()).filter(Boolean);
+        const photos=(row.photos||'').split(';').map(t=>t.trim()).filter(Boolean);
+        listings.push({
+          id:Date.now()+i,
+          address:row.address||'Unknown',
+          price:parseInt(row.price||0),
+          status:normalizeListingStatus(row.status||'active'),
+          beds:parseFloat(row.beds||0)||0,
+          baths:parseFloat(row.baths||0)||0,
+          tags,
+          source:normalizeListingSource(row.source||'manual'),
+          city:row.city||'',
+          state:row.state||'',
+          zip:row.zip||row.postal_code||'',
+          sqft:parseInt(row.sqft||row.square_feet||0)||0,
+          lotSize:row.lot_size||'',
+          yearBuilt:row.year_built||'',
+          description:row.description||row.notes||'',
+          propertyType:row.property_type||'',
+          image_url:row.image_url||'',
+          photos
+        });
+      }
       count++;
     }
     const sel=type==='leads'?'lcsvStatus':'pcsvStatus';document.getElementById(sel).style.display='block';document.getElementById(sel).textContent=`✓ Imported ${count} ${type}`;
@@ -1373,7 +2056,7 @@ function csvSplit(line){const r=[];let cur='',q=false;for(const c of line){if(c=
 function populateMatchSel(){
   const s=document.getElementById('matchSel');if(!s) return;
   s.innerHTML='<option value="">— Choose a listing —</option>';
-  listings.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=`${l.address} — $${fmt(l.price)}`;s.appendChild(o);});
+  listings.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=`${getListingAddress(l)} — ${formatListingPrice(l)}`;s.appendChild(o);});
 }
 
 function matchFrom(id){nav('match');setTimeout(()=>{document.getElementById('matchSel').value=id;runMatch();},120);}
@@ -1384,9 +2067,10 @@ async function runMatch(){
   const listing=listings.find(l=>l.id==id);
   if(!listing||!leads.length){toast('Need at least one lead.',true);return;}
   const out=document.getElementById('matchOutput');
-  out.innerHTML=`<div class="sync-banner info"><div class="spinner"></div>AI analyzing ${leads.length} leads against: ${listing.tags.join(', ')}…</div>`;
+  const listingTagsText = getListingTags(listing).join(', ') || 'listing details';
+  out.innerHTML=`<div class="sync-banner info"><div class="spinner"></div>AI analyzing ${leads.length} leads against: ${listingTagsText}…</div>`;
   const prompt=`You are a real estate CRM assistant. Score each lead's fit for this listing.
-LISTING: ${listing.address} | $${listing.price} | ${listing.beds}bd/${listing.baths}ba | Tags: ${listing.tags.join(', ')}
+LISTING: ${getListingAddress(listing)} | $${listing.price} | ${listing.beds}bd/${listing.baths}ba | Tags: ${listingTagsText}
 LEADS:
 ${leads.map(l=>`ID:${l.id} | ${l.name} | Budget:$${l.budgetMin}-$${l.budgetMax} | Prefs:${l.preferences.join(',')} | Status:${l.status} | Notes:${l.notes}`).join('\n')}
 Return ONLY a JSON array. Each object: {id,score(0-100),reason(1-2 sentences specific to tag/budget match)}. Order by score desc. No markdown.`;
@@ -1400,7 +2084,7 @@ Return ONLY a JSON array. Each object: {id,score(0-100),reason(1-2 sentences spe
 
 function fallbackScore(listing){
   return leads.map(lead=>{
-    const lt=listing.tags.map(t=>t.toLowerCase()),lp=lead.preferences.map(p=>p.toLowerCase());
+    const lt=getListingTags(listing).map(t=>t.toLowerCase()),lp=lead.preferences.map(p=>p.toLowerCase());
     const matched=lp.filter(p=>lt.some(t=>t.includes(p)||p.includes(t)));
     let score=Math.round((matched.length/Math.max(lp.length,1))*60);
     if(listing.price>=lead.budgetMin&&listing.price<=lead.budgetMax)score+=30;else if(listing.price<=lead.budgetMax*1.1)score+=10;
@@ -1414,7 +2098,7 @@ function fallbackScore(listing){
 function renderMatchResults(listing,results){
   const out=document.getElementById('matchOutput');
   const strong=results.filter(r=>r.score>=50).length;
-  out.innerHTML=`<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${listing.address}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${listing.source==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${listing.tags.map(tagHtml).join('')}</div></div>
+  out.innerHTML=`<div class="match-listing-card"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;margin-bottom:5px;">${htmlEscape(getListingAddress(listing))}</div><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">$${fmt(listing.price)} · ${listing.beds}bd/${listing.baths}ba ${normalizeListingSource(listing.source)==='mls'?'· <span class="mls-badge">MLS</span>':''}</div><div>${getListingTags(listing).map(tagHtml).join('')}</div></div>
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:600;">${strong} strong match${strong!==1?'es':''} of ${leads.length} leads</div><div style="font-size:11.5px;color:var(--text-muted);">Sorted by fit score</div></div>
   <div class="match-results-grid">${results.map((r,i)=>{const lead=leads.find(l=>l.id==r.id);if(!lead)return'';return`<div class="match-card" style="animation-delay:${i*.05}s;opacity:${r.score<15?.4:1}"><div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:14px;font-weight:600;margin-bottom:2px;">${lead.name}</div><div style="font-size:11.5px;color:var(--text-muted);">${lead.email||lead.phone||''} · ${dot(lead.status,'lead')}${lead.status}</div></div><div style="text-align:right;flex-shrink:0;"><div class="match-score">${r.score}</div><div class="match-score-label">Match %</div></div></div><div class="match-reason">${r.reason}</div><div style="font-size:11px;color:var(--text-dim);margin-bottom:9px;">Budget: $${fmt(lead.budgetMin)}–$${fmt(lead.budgetMax)}</div><div style="margin-bottom:11px;">${lead.preferences.map(tagHtml).join('')}</div><div style="display:flex;gap:7px;"><button style="flex:1;padding:7px;background:var(--amber);color:var(--navy);border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;" onclick="copyText('${lead.email||lead.phone}')">📋 Copy Contact</button><button style="flex:1;padding:7px;background:var(--navy-light);color:var(--text-muted);border:1px solid var(--navy-border);border-radius:6px;font-size:11.5px;cursor:pointer;">Notes</button></div></div>`;}).join('')}</div>`;
 }
@@ -1427,8 +2111,15 @@ function togglePw(id){const el=document.getElementById(id);el.type=el.type==='pa
 // ── ONBOARDING ─────────────────────────────────────────────────
 function buildOnboard(){
   const b=document.getElementById('onboardBlock');
-  if(leads.length>0&&listings.length>0){b.innerHTML='';return;}
-  b.innerHTML=`<div class="onboarding-card"><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div class="onboarding-steps"><div class="onboarding-step"><div class="step-num">01</div><div class="step-title">Deploy Proxy + Connect MLS</div><div class="step-desc">Deploy the proxy server to Railway (free), then enter your PrimeMLS credentials in Settings.</div></div><div class="onboarding-step"><div class="step-num">02</div><div class="step-title">Import Leads</div><div class="step-desc">Pull from your phone contacts or upload a CSV of your existing client database.</div></div><div class="onboarding-step"><div class="step-num">03</div><div class="step-title">Run Matches</div><div class="step-desc">New listing hits MLS → Broker OS surfaces your best prospects automatically.</div></div></div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo();document.getElementById('onboardBlock').innerHTML=''">Try Demo First</button></div></div>`;
+  if(!b) return;
+  if(hasRecognizedMLSConnection() || onboardingDismissed || (leads.length>0&&listings.length>0)){b.innerHTML='';return;}
+  b.innerHTML=`<div class="onboarding-card"><button class="onboarding-close" type="button" aria-label="Close welcome panel" onclick="dismissOnboarding()">×</button><h2>Welcome to Broker OS</h2><p>Connect your PrimeMLS account to auto-sync listings, import your contacts as leads, and let the Match Engine do the rest.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" style="padding:10px 22px;" onclick="nav('settings')">Set Up MLS →</button><button class="btn btn-secondary" style="padding:10px 22px;" onclick="loadDemo()">Try Demo First</button></div></div>`;
+}
+
+function dismissOnboarding(){
+  onboardingDismissed=true;
+  persist();
+  buildOnboard();
 }
 
 
@@ -1447,12 +2138,19 @@ window.addEventListener('resize',()=>{ if(window.innerWidth>980) closeMobileNav(
 // ── HELPERS ────────────────────────────────────────────────────
 function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',function(e){
+  if(e.target!==this) return;
+  if(this.id==='listingDetailOverlay') closeListingDetail(true);
+  else this.classList.remove('open');
+}));
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape' && document.getElementById('listingDetailOverlay')?.classList.contains('open')) closeListingDetail();
+});
 
 function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'')+' show';setTimeout(()=>t.classList.remove('show'),2800);}
 function copyText(v){navigator.clipboard.writeText(v).then(()=>toast('Copied: '+v));}
 function dot(s,type){if(type==='lead'){const c=s==='hot'?'dot-hot':s==='warm'?'dot-warm':'dot-cold';return`<span class="status-dot ${c}"></span>`;}const c=s==='active'?'dot-active':s==='pending'?'dot-pending':'dot-sold';return`<span class="status-dot ${c}"></span>`;}
-function tagHtml(tag){const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${tag}</span>`;}
+function tagHtml(tag){const t=(tag||'').toLowerCase();let c='tag-default';if(t.includes('lake')||t.includes('water')||t.includes('dock'))c='tag-lake';else if(t.includes('mountain')||t.includes('rural')||t.includes('land')||t.includes('barn'))c='tag-mountain';else if(t.includes('luxury'))c='tag-luxury';else if(t.includes('family')||t.includes('yard'))c='tag-family';else if(t.includes('condo')||t.includes('town')||t.includes('walk'))c='tag-condo';return`<span class="tag ${c}">${htmlEscape(tag)}</span>`;}
 function fmt(n){return Number(n||0).toLocaleString();}
 function fmtBytes(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
 function fileIcon(n){const e=(n.split('.').pop()||'').toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',jpg:'🖼️',jpeg:'🖼️',png:'🖼️',csv:'📋'}[e]||'📁';}
