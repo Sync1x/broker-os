@@ -31,28 +31,28 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   html { -webkit-text-size-adjust: 100%; overflow: hidden; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; overflow: hidden; overscroll-behavior: none; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; flex-direction: column; overflow: hidden; overscroll-behavior: none; }
 
-  .sidebar { width: 224px; min-width: 224px; background: var(--navy-mid); border-right: 1px solid var(--navy-border); display: flex; flex-direction: column; }
-  .sidebar-logo { padding: 26px 22px 18px; border-bottom: 1px solid var(--navy-border); }
+  .sidebar { width: 100%; min-width: 0; background: var(--navy-mid); border-bottom: 1px solid var(--navy-border); display: flex; align-items: center; gap: 18px; padding: 0 20px; flex-shrink: 0; }
+  .sidebar-logo { padding: 16px 0; border-bottom: none; flex-shrink: 0; }
   .sidebar-logo .wordmark { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
   .sidebar-logo .tagline { font-size: 9px; color: var(--amber); letter-spacing: 2.5px; text-transform: uppercase; margin-top: 3px; font-weight: 600; }
-  .sidebar-nav { padding: 14px 10px; flex: 1; overflow-y: auto; }
-  .nav-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 12px 5px; font-weight: 700; }
-  .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: 7px; cursor: pointer; font-size: 13.5px; color: var(--text-muted); transition: all .14s; margin-bottom: 1px; }
+  .sidebar-nav { padding: 0; flex: 1; overflow-x: auto; overflow-y: hidden; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .nav-label { display: none; }
+  .nav-item { display: inline-flex; align-items: center; gap: 9px; padding: 10px 12px; border-radius: 999px; cursor: pointer; font-size: 13.5px; color: var(--text-muted); transition: all .14s; margin-bottom: 0; white-space: nowrap; flex-shrink: 0; }
   .nav-item:hover { background: var(--navy-light); color: var(--text); }
   .nav-item.active { background: var(--amber-dim); color: var(--amber); font-weight: 500; }
   .nav-item .icon { font-size: 14px; width: 17px; text-align: center; }
   .nav-badge { margin-left: auto; background: var(--amber); color: var(--navy); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 20px; min-width: 18px; text-align: center; }
   .nav-badge.green { background: var(--green); color: #fff; }
-  .mls-status { margin: 12px 10px 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--navy-border); font-size: 11px; }
+  .mls-status { margin-left: auto; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--navy-border); font-size: 11px; flex-shrink: 0; }
   .mls-status.connected { border-color: rgba(61,186,126,0.3); background: var(--contact-selected); }
   .mls-status.disconnected { border-color: rgba(224,92,92,0.3); background: rgba(224,92,92,0.08); }
   .mls-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
   .mls-dot.on { background: var(--green); box-shadow: 0 0 5px var(--green); }
   .mls-dot.off { background: var(--red); box-shadow: 0 0 5px rgba(224,92,92,0.45); }
 
-  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; min-height: 0; height: 100%; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; min-height: 0; height: 100%; width: 100%; }
   .topbar { height: 58px; border-bottom: 1px solid var(--navy-border); display: flex; align-items: center; padding: max(env(safe-area-inset-top), 0px) 26px 0; gap: 14px; background: var(--navy-mid); flex-shrink: 0; position: sticky; top: 0; z-index: 30; }
   .topbar-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; }
   .topbar-sub { font-size: 12px; color: var(--text-muted); }
@@ -354,9 +354,14 @@
 
   @media (max-width: 980px) {
     body { overflow: hidden; min-height: 100svh; min-height: 100dvh; }
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; transform: translateX(-100%); transition: transform .22s ease; box-shadow: var(--sidebar-shadow); }
+    .sidebar { width: 224px; min-width: 224px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 50; transform: translateX(-100%); transition: transform .22s ease; box-shadow: var(--sidebar-shadow); border-bottom: none; border-right: 1px solid var(--navy-border); flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
     body.mobile-nav-open .sidebar { transform: translateX(0); }
     .mobile-sidebar-overlay { display:block; }
+    .sidebar-logo { padding: 26px 22px 18px; border-bottom: 1px solid var(--navy-border); }
+    .sidebar-nav { padding: 14px 10px; flex: 1; overflow-y: auto; overflow-x: hidden; display: block; }
+    .nav-label { display: block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 12px 5px; font-weight: 700; }
+    .nav-item { display: flex; padding: 9px 12px; border-radius: 7px; margin-bottom: 1px; }
+    .mls-status { margin: 12px 10px 0; }
     .main { width:100%; min-width:0; height:100%; min-height:0; }
     .mobile-menu-btn { display:inline-flex; }
     .form-input, .form-select, .search-input, .match-select { font-size: 16px; }
@@ -645,7 +650,7 @@
     <div class="form-group"><div class="form-label">Status</div><select class="form-select" id="l-st"><option value="hot">🔥 Hot</option><option value="warm" selected>✅ Warm</option><option value="cold">❄️ Cold</option></select></div>
     <div class="form-group"><div class="form-label">Preferences (Enter to add)</div><div class="tag-input-area" id="lTagArea" onclick="document.getElementById('lTagIn').focus()"><input type="text" class="tag-text-input" id="lTagIn" placeholder="lakefront, 3BR, garage…" onkeydown="addTag(event,'lead')"></div></div>
     <div class="form-group"><div class="form-label">Notes</div><input class="form-input" id="l-no" placeholder="Any context…"></div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addLead')">Cancel</button><button class="btn btn-primary" onclick="saveLead()">Save Lead</button></div>
+    <div class="modal-actions"><button class="btn btn-secondary" type="button" onclick="closeModal('addLead')">Cancel</button><button class="btn btn-primary" type="button" id="saveLeadBtn" onclick="saveLead()">Save Lead</button></div>
   </div>
 </div>
 
@@ -656,7 +661,7 @@
     <div class="form-row"><div class="form-group"><div class="form-label">Price ($)</div><input class="form-input" id="p-pr" placeholder="450000"></div><div class="form-group"><div class="form-label">Status</div><select class="form-select" id="p-st"><option value="active">Active</option><option value="pending">Pending</option><option value="sold">Sold</option></select></div></div>
     <div class="form-row"><div class="form-group"><div class="form-label">Beds</div><input class="form-input" id="p-bd" placeholder="3"></div><div class="form-group"><div class="form-label">Baths</div><input class="form-input" id="p-ba" placeholder="2"></div></div>
     <div class="form-group"><div class="form-label">Tags (Enter to add)</div><div class="tag-input-area" id="pTagArea" onclick="document.getElementById('pTagIn').focus()"><input type="text" class="tag-text-input" id="pTagIn" placeholder="lakefront, dock, mountain view…" onkeydown="addTag(event,'listing')"></div></div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addListing')">Cancel</button><button class="btn btn-primary" onclick="saveListing()">Save Listing</button></div>
+    <div class="modal-actions"><button class="btn btn-secondary" type="button" onclick="closeModal('addListing')">Cancel</button><button class="btn btn-primary" type="button" id="saveListingBtn" onclick="saveListing()">Save Listing</button></div>
   </div>
 </div>
 
@@ -713,6 +718,8 @@ let discoverFilter = 'all', currentTheme = 'light', currentListingFilter = 'all'
 let onboardingDismissed = false, autoMatchEnabled = true;
 let activeListingId = null, lastListingFocusEl = null;
 let currentUser = null;
+let authBootResolved = false;
+let authHydrationPromise = null;
 let cfg = { connected:false };
 
 // ── BOOT ───────────────────────────────────────────────────────
@@ -741,10 +748,41 @@ function persistLocal() {
 
 // ── SUPABASE DATA LAYER ────────────────────────────────────────
 
+async function selectRowsWithOptionalCreatedAtOrder(table, userId, ascending = false) {
+  let query = sb.from(table).select('*').eq('user_id', userId);
+  let result = await query.order('created_at', { ascending });
+  if (!result.error) return result;
+  const orderErr = String(result.error.message || result.error.details || '').toLowerCase();
+  if (orderErr.includes('created_at') || orderErr.includes('column')) {
+    console.warn(`load ${table}: falling back to unordered select`, result.error);
+    return sb.from(table).select('*').eq('user_id', userId);
+  }
+  return result;
+}
+
+async function selectRecentRowWithOptionalCreatedAtOrder(table, filters = [], ascending = false) {
+  let query = sb.from(table).select('*');
+  filters.forEach(filter => {
+    query = query.eq(filter.column, filter.value);
+  });
+  let result = await query.order('created_at', { ascending }).limit(1);
+  if (!result.error) return result;
+  const orderErr = String(result.error.message || result.error.details || '').toLowerCase();
+  if (orderErr.includes('created_at') || orderErr.includes('column')) {
+    console.warn(`find inserted ${table}: falling back to unordered select`, result.error);
+    let fallbackQuery = sb.from(table).select('*');
+    filters.forEach(filter => {
+      fallbackQuery = fallbackQuery.eq(filter.column, filter.value);
+    });
+    return fallbackQuery.limit(1);
+  }
+  return result;
+}
+
 // LEADS
 async function loadLeads() {
   if (!currentUser) return;
-  const { data, error } = await sb.from('leads').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: true });
+  const { data, error } = await selectRowsWithOptionalCreatedAtOrder('leads', currentUser.id, true);
   if (error) { console.error('load leads:', error); return; }
   leads = (data || []).map(mapDbLead);
   renderAll();
@@ -753,9 +791,9 @@ async function loadLeads() {
 async function insertLead(lead) {
   if (!currentUser) return null;
   const row = leadToRow(lead);
-  const { error } = await sb.from('leads').insert([row]);
+  const { data, error } = await sb.from('leads').insert([row]).select('*').limit(1);
   if (error) throw error;
-  const inserted = await findInsertedLead(row);
+  const inserted = data?.[0] ? mapDbLead(data[0]) : await findInsertedLead(row);
   return inserted || makeOptimisticLead(lead);
 }
 
@@ -826,10 +864,10 @@ function leadToRow(lead) {
 
 async function findInsertedLead(row) {
   try {
-    let query = sb.from('leads').select('*').eq('user_id', currentUser.id).eq('name', row.name).order('created_at', { ascending: false }).limit(1);
-    if (row.email) query = query.eq('email', row.email);
-    else if (row.phone) query = query.eq('phone', row.phone);
-    const { data, error } = await query;
+    const filters = [{ column:'user_id', value: currentUser.id }, { column:'name', value: row.name }];
+    if (row.email) filters.push({ column:'email', value: row.email });
+    else if (row.phone) filters.push({ column:'phone', value: row.phone });
+    const { data, error } = await selectRecentRowWithOptionalCreatedAtOrder('leads', filters, false);
     if (error) return null;
     return data?.[0] ? mapDbLead(data[0]) : null;
   } catch (_) {
@@ -840,7 +878,7 @@ async function findInsertedLead(row) {
 // LISTINGS
 async function loadListings() {
   if (!currentUser) return;
-  const { data, error } = await sb.from('listings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+  const { data, error } = await selectRowsWithOptionalCreatedAtOrder('listings', currentUser.id, false);
   if (error) { console.error('load listings:', error); return; }
   listings = (data || []).map(mapDbListing);
   renderAll();
@@ -850,9 +888,9 @@ async function loadListings() {
 async function insertListing(listing) {
   if (!currentUser) return null;
   const row = listingToRow(listing);
-  const { error } = await sb.from('listings').insert([row]);
+  const { data, error } = await sb.from('listings').insert([row]).select('*').limit(1);
   if (error) throw error;
-  const inserted = await findInsertedListing(row);
+  const inserted = data?.[0] ? mapDbListing(data[0]) : await findInsertedListing(row);
   return inserted || makeOptimisticListing(listing);
 }
 
@@ -990,10 +1028,13 @@ function listingToRow(listing) {
 
 async function findInsertedListing(row) {
   try {
-    let query = sb.from('listings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(1);
-    if (row.mls_id) query = query.eq('mls_id', row.mls_id);
-    else query = query.eq('address', row.address).eq('price', row.price);
-    const { data, error } = await query;
+    const filters = [{ column:'user_id', value: currentUser.id }];
+    if (row.mls_id) filters.push({ column:'mls_id', value: row.mls_id });
+    else {
+      filters.push({ column:'address', value: row.address });
+      filters.push({ column:'price', value: row.price });
+    }
+    const { data, error } = await selectRecentRowWithOptionalCreatedAtOrder('listings', filters, false);
     if (error) return null;
     return data?.[0] ? mapDbListing(data[0]) : null;
   } catch (_) {
@@ -1042,7 +1083,7 @@ async function saveUserSettings(patch = {}) {
 // DOCUMENTS (metadata only — no binary storage here)
 async function loadDocuments() {
   if (!currentUser) return;
-  const { data, error } = await sb.from('documents').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+  const { data, error } = await selectRowsWithOptionalCreatedAtOrder('documents', currentUser.id, false);
   if (error) { console.error('load docs:', error); return; }
   files = (data || []).map(row => ({
     id: row.id,
@@ -1111,9 +1152,7 @@ async function handleSignIn() {
     setAuthStatus('Signing in…', '');
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    currentUser = data.user;
-    await afterSignIn();
-    hideAuth();
+    await hydrateSessionUser(data.user);
   } catch (err) {
     setAuthStatus(err.message || 'Sign in failed.', 'error');
   }
@@ -1128,9 +1167,7 @@ async function handleSignUp() {
     const { data, error } = await sb.auth.signUp({ email, password });
     if (error) throw error;
     if (data?.session?.user) {
-      currentUser = data.session.user;
-      await afterSignIn();
-      hideAuth();
+      await hydrateSessionUser(data.session.user);
     } else {
       setAuthStatus('Account created! Check your email to confirm, then sign in.', 'success');
     }
@@ -1147,6 +1184,32 @@ async function afterSignIn() {
   buildOnboard();
 }
 
+async function hydrateSessionUser(user) {
+  if (!user) return;
+  const sameUser = currentUser?.id === user.id;
+  currentUser = user;
+  hideAuth();
+  if (sameUser && authBootResolved) return;
+  if (!authHydrationPromise) {
+    authHydrationPromise = (async () => {
+      try {
+        await afterSignIn();
+      } finally {
+        authHydrationPromise = null;
+      }
+    })();
+  }
+  await authHydrationPromise;
+}
+
+function clearSessionState() {
+  currentUser = null;
+  leads = [];
+  listings = [];
+  files = [];
+  renderAll();
+}
+
 async function ensureProfile() {
   if (!currentUser) return;
   await sb.from('profiles').upsert([{ id: currentUser.id, email: currentUser.email || '' }]);
@@ -1156,26 +1219,34 @@ async function bootAuth() {
   try {
     const { data } = await sb.auth.getUser();
     if (data?.user) {
-      currentUser = data.user;
-      hideAuth();
-      await afterSignIn();
+      await hydrateSessionUser(data.user);
     } else {
+      clearSessionState();
       showAuth();
     }
   } catch (e) {
+    clearSessionState();
     showAuth('Could not verify session.', 'error');
+  } finally {
+    authBootResolved = true;
   }
 }
 
 sb.auth.onAuthStateChange(async (event, session) => {
-  if (session?.user && !currentUser) {
-    currentUser = session.user;
-    hideAuth();
-    await afterSignIn();
-  } else if (!session) {
-    currentUser = null;
-    leads = []; listings = []; files = [];
-    renderAll();
+  if (session?.user) {
+    await hydrateSessionUser(session.user);
+    authBootResolved = true;
+    return;
+  }
+  if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+    clearSessionState();
+    authBootResolved = true;
+    showAuth();
+    return;
+  }
+  if (!authBootResolved) return;
+  if (!session) {
+    clearSessionState();
     showAuth();
   }
 });
@@ -1673,6 +1744,7 @@ function autoMatch(newCount) {
 
 // DEMO DATA
 async function loadDemo() {
+  if (!currentUser) { toast('Sign in before loading demo data.', true); return; }
   const demo = [
     { mlsId:'ML001', address:'14 Willoughby Lake Rd, Westmore, VT', price:489000, status:'active', beds:3, baths:2, tags:['lakefront','dock','mountain view','3BR','garage'], source:'mls', city:'Westmore', state:'VT', zip:'05860', sqft:2140, lotSize:'0.68 acres', yearBuilt:'1998', propertyType:'Single Family', description:'Refined lakefront home with private dock and direct water access.' },
     { mlsId:'ML002', address:'88 Mountain View Dr, Burke, VT', price:275000, status:'active', beds:4, baths:2, tags:['mountain view','rural','4BR','land'], source:'mls', city:'Burke', state:'VT', zip:'05832', sqft:1860, lotSize:'2.4 acres', yearBuilt:'1987', propertyType:'Single Family', description:'Burke property with broad mountain views and generous yard space.' },
@@ -1738,12 +1810,13 @@ async function importContactsDirect(contacts) {
 
 // ── ADD LEAD / LISTING ─────────────────────────────────────────
 async function saveLead() {
+  if (!currentUser) { toast('Sign in before saving a lead.', true); return; }
   const name = (document.getElementById('l-fn').value + ' ' + document.getElementById('l-ln').value).trim();
   if (!name) { toast('Name required.', true); return; }
   const lead = { name, email:document.getElementById('l-em').value.trim(), phone:document.getElementById('l-ph').value.trim(), budgetMin:parseInt(document.getElementById('l-bmin').value)||0, budgetMax:parseInt(document.getElementById('l-bmax').value)||999999, status:document.getElementById('l-st').value, preferences:[...leadTags], notes:document.getElementById('l-no').value.trim() };
   try {
-    const saved = await insertLead(lead);
-    if (saved) leads.push(saved);
+    await insertLead(lead);
+    await loadLeads();
     leadTags = []; document.getElementById('lTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
     ['l-fn','l-ln','l-em','l-ph','l-bmin','l-bmax','l-no'].forEach(id => document.getElementById(id).value='');
     closeModal('addLead'); renderAll(); log('Lead added: '+name); toast(name+' added ✓');
@@ -1751,12 +1824,13 @@ async function saveLead() {
 }
 
 async function saveListing() {
+  if (!currentUser) { toast('Sign in before saving a listing.', true); return; }
   const addr = document.getElementById('p-ad').value.trim();
   if (!addr) { toast('Address required.', true); return; }
   const listing = { address:addr, price:parseInt(document.getElementById('p-pr').value)||0, status:normalizeListingStatus(document.getElementById('p-st').value), beds:parseFloat(document.getElementById('p-bd').value)||0, baths:parseFloat(document.getElementById('p-ba').value)||0, tags:[...listingTags], source:'manual' };
   try {
-    const saved = await insertListing(listing);
-    if (saved) listings.push(saved);
+    await insertListing(listing);
+    await loadListings();
     listingTags = []; document.getElementById('pTagArea').querySelectorAll('.tag-pill').forEach(e=>e.remove());
     ['p-ad','p-pr','p-bd','p-ba'].forEach(id => document.getElementById(id).value='');
     closeModal('addListing'); renderAll(); populateMatchSel(); log('Listing added: '+addr); toast('Listing added ✓');
